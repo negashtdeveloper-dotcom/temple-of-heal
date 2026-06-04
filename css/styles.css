@@ -1464,6 +1464,22 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--f-head); line-height: 1.2; }
 }
 .footer-legal a { font-size: .82rem; color: rgba(255,255,255,.4); transition: color var(--trans-fast); }
 .footer-legal a:hover { color: rgba(255,255,255,.75); }
+.hoorak-credit {
+  display: inline-flex; align-items: center; gap: .4rem;
+  color: rgba(255,255,255,.38); font-size: .75rem;
+  text-decoration: none; letter-spacing: .01em;
+  transition: color var(--trans-fast), opacity var(--trans-fast);
+  opacity: .7;
+}
+.hoorak-credit:hover { color: rgba(255,255,255,.75); opacity: 1; }
+.hoorak-logo {
+  height: 16px; width: auto;
+  filter: brightness(0) invert(1);
+  opacity: .7;
+  transition: opacity var(--trans-fast);
+}
+.hoorak-credit:hover .hoorak-logo { opacity: 1; }
+.hoorak-tagline { font-size: .7rem; color: rgba(255,255,255,.3); }
 
 /* ── AI AGENT WIDGET ─────────────────────────────────────────── */
 .ai-widget {
