@@ -377,9 +377,8 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--f-head); line-height: 1.2; }
   position: absolute;
   inset: 0;
   background:
-    linear-gradient(to right,  rgba(12,32,21,.88) 0%, rgba(12,32,21,.60) 55%, rgba(12,32,21,.28) 100%),
-    linear-gradient(to top,    rgba(8,24,16,.80)  0%, transparent 55%),
-    linear-gradient(to bottom, rgba(8,24,16,.35)  0%, transparent 25%);
+    linear-gradient(to right, rgba(8,20,14,.72) 0%, rgba(8,20,14,.45) 38%, rgba(8,20,14,.10) 62%, transparent 80%),
+    linear-gradient(to top,   rgba(8,20,14,.35) 0%, transparent 40%);
 }
 
 /* ── Mute button ───────────────────────────────── */
@@ -412,6 +411,11 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--f-head); line-height: 1.2; }
   z-index: 1;
   padding-block: 5rem;
   max-width: 700px;
+  padding: 3rem 2.5rem 3.5rem;
+  border-radius: 1rem;
+  background: rgba(8, 20, 14, 0.30);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
 }
 .hero-badge {
   display: inline-flex;
