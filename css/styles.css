@@ -176,15 +176,16 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--f-head); line-height: 1.2; }
   position: fixed;
   top: 0; left: 0; right: 0;
   z-index: 1000;
-  background: var(--nav-bg);
+  background: var(--white);
+  border-bottom: 1px solid var(--border);
   transition: box-shadow var(--trans);
 }
-.site-header.scrolled { box-shadow: 0 2px 20px rgba(0,0,0,.3); }
+.site-header.scrolled { box-shadow: 0 2px 16px rgba(0,0,0,.08); }
 .nav {
   display: flex;
   align-items: center;
   gap: 2rem;
-  padding-block: 1rem;
+  padding-block: .75rem;
 }
 .nav-logo {
   display: flex;
@@ -194,11 +195,8 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--f-head); line-height: 1.2; }
 }
 .nav-logo:hover { opacity: .88; }
 .nav-logo-img {
-  height: 42px;
+  height: 48px;
   width: auto;
-  /* Logo is full-color on light bg; invert to white for dark nav */
-  filter: brightness(0) invert(1);
-  opacity: .95;
 }
 .nav-links {
   display: flex;
@@ -207,15 +205,15 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--f-head); line-height: 1.2; }
   margin-left: auto;
 }
 .nav-links a {
-  color: rgba(255,255,255,.80);
+  color: var(--nav-bg);
   font-size: .9rem;
   font-weight: 400;
   letter-spacing: .02em;
   transition: color var(--trans-fast);
   position: relative;
 }
-.nav-links a:hover { color: var(--white); }
-.nav-links a.active { color: var(--white); }
+.nav-links a:hover { color: var(--primary); }
+.nav-links a.active { color: var(--primary); }
 .nav-links a.nav-cta {
   background: var(--pink);
   color: var(--text);
@@ -229,15 +227,15 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--f-head); line-height: 1.2; }
 .nav-account-wrap { position: relative; }
 .nav-account-btn {
   display: inline-flex; align-items: center; gap: .35rem;
-  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.18);
+  background: transparent; border: 1px solid var(--border);
   border-radius: var(--radius-pill); padding: .35rem .75rem .35rem .55rem;
-  color: var(--white); font-size: .82rem; font-weight: 400;
+  color: var(--nav-bg); font-size: .82rem; font-weight: 400;
   font-family: var(--f-body); cursor: pointer;
   transition: background var(--trans-fast), border-color var(--trans-fast);
 }
 .nav-account-btn svg { width: 1.05rem; height: 1.05rem; }
 .nav-account-btn:hover,
-.nav-account-btn.active { background: rgba(255,255,255,.2); border-color: rgba(255,255,255,.35); }
+.nav-account-btn.active { background: var(--cream); border-color: var(--primary); color: var(--primary); }
 .nav-account-dropdown {
   position: absolute; top: calc(100% + .6rem); right: 0;
   width: 280px; background: var(--white);
@@ -277,13 +275,13 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--f-head); line-height: 1.2; }
 .nav-mega-wrap { position: relative; display: flex; align-items: center; }
 .nav-mega-trigger {
   display: inline-flex; align-items: center; gap: .3rem;
-  color: rgba(255,255,255,.80); font-size: .9rem; font-weight: 400;
+  color: var(--nav-bg); font-size: .9rem; font-weight: 400;
   letter-spacing: .02em; background: none; border: none; cursor: pointer;
   padding: 0; font-family: var(--f-body);
   transition: color var(--trans-fast);
 }
 .nav-mega-trigger:hover,
-.nav-mega-trigger.active { color: var(--white); }
+.nav-mega-trigger.active { color: var(--primary); }
 .mega-chevron {
   width: .85rem; height: .85rem;
   transition: transform .3s cubic-bezier(.22,1,.36,1);
@@ -389,11 +387,11 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--f-head); line-height: 1.2; }
   display: flex;
   align-items: center;
   justify-content: center;
-  color: rgba(255,255,255,.75);
+  color: var(--nav-bg);
   border-radius: 50%;
   transition: var(--trans-fast);
 }
-.nav-icon-btn:hover { background: rgba(255,255,255,.1); color: var(--white); }
+.nav-icon-btn:hover { background: var(--cream); color: var(--primary); }
 .nav-icon-btn svg { width: 1.1rem; height: 1.1rem; }
 .nav-hamburger {
   display: none;
@@ -406,7 +404,7 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--f-head); line-height: 1.2; }
   display: block;
   width: 22px;
   height: 2px;
-  background: var(--white);
+  background: var(--nav-bg);
   border-radius: 2px;
   transition: var(--trans);
 }
