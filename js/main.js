@@ -15,6 +15,41 @@
 
   backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
+  /* ── Mega menu ──────────────────────────────────────────── */
+  const megaTrigger = document.getElementById('mega-trigger');
+  const megaMenu    = document.getElementById('mega-menu');
+  let megaTimeout;
+
+  function openMega() {
+    clearTimeout(megaTimeout);
+    megaTrigger.classList.add('active');
+    megaTrigger.setAttribute('aria-expanded', 'true');
+    megaMenu.classList.add('open');
+    megaMenu.setAttribute('aria-hidden', 'false');
+  }
+  function closeMega() {
+    megaTimeout = setTimeout(() => {
+      megaTrigger.classList.remove('active');
+      megaTrigger.setAttribute('aria-expanded', 'false');
+      megaMenu.classList.remove('open');
+      megaMenu.setAttribute('aria-hidden', 'true');
+    }, 120);
+  }
+
+  if (megaTrigger && megaMenu) {
+    megaTrigger.addEventListener('mouseenter', openMega);
+    megaTrigger.addEventListener('mouseleave', closeMega);
+    megaMenu.addEventListener('mouseenter', () => clearTimeout(megaTimeout));
+    megaMenu.addEventListener('mouseleave', closeMega);
+    megaTrigger.addEventListener('click', () => {
+      megaMenu.classList.contains('open') ? closeMega() : openMega();
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMega(); });
+    document.addEventListener('click', e => {
+      if (!megaTrigger.contains(e.target) && !megaMenu.contains(e.target)) closeMega();
+    });
+  }
+
   /* ── Mobile nav ─────────────────────────────────────────── */
   const hamburger = document.getElementById('nav-hamburger');
   const mobileNav = document.getElementById('mobile-nav');

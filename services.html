@@ -407,6 +407,12 @@
     </a>
     <div class="nav-links" role="list">
       <a href="index.html#find-session" role="listitem">Find a Session</a>
+      <div class="nav-mega-wrap" role="listitem">
+        <button class="nav-mega-trigger active" id="mega-trigger" aria-haspopup="true" aria-expanded="false">
+          Services
+          <svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+      </div>
       <a href="index.html#our-experts" role="listitem">Experts</a>
       <a href="index.html#why-us" role="listitem">About</a>
       <a href="index.html#faq" role="listitem">FAQ</a>
@@ -425,6 +431,54 @@
       <span></span><span></span><span></span>
     </button>
   </nav>
+
+  <!-- ── MEGA MENU ── -->
+  <div class="mega-menu" id="mega-menu" role="navigation" aria-label="Services navigation" aria-hidden="true">
+    <div class="container">
+      <div class="mega-inner">
+        <div class="mega-col mega-categories">
+          <p class="mega-label">Browse by Category</p>
+          <a href="services.html" class="mega-cat" data-cat="counseling">
+            <div class="mega-cat-icon" style="--ci:#4F8EF7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+            <div class="mega-cat-text"><strong>Counselling &amp; Coaching</strong><span>1-on-1 therapy, NLP &amp; life coaching</span></div>
+            <svg class="mega-cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a href="services.html" class="mega-cat" data-cat="mind">
+            <div class="mega-cat-icon" style="--ci:#3CB880"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+            <div class="mega-cat-text"><strong>Mind &amp; Body Practices</strong><span>Yoga, meditation &amp; mindfulness</span></div>
+            <svg class="mega-cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a href="services.html" class="mega-cat" data-cat="wellness">
+            <div class="mega-cat-icon" style="--ci:#E07B3E"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/></svg></div>
+            <div class="mega-cat-text"><strong>Wellness &amp; Lifestyle</strong><span>Massage, energy healing &amp; nutrition</span></div>
+            <svg class="mega-cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+          <a href="services.html" class="mega-cat" data-cat="community">
+            <div class="mega-cat-icon" style="--ci:#9B6FD0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div>
+            <div class="mega-cat-text"><strong>Community &amp; Events</strong><span>Workshops, circles &amp; retreats</span></div>
+            <svg class="mega-cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </a>
+        </div>
+        <div class="mega-divider" aria-hidden="true"></div>
+        <div class="mega-col mega-featured">
+          <p class="mega-label">Popular Right Now</p>
+          <a href="services.html" class="mega-service">
+            <img src="assets/sessions/session-coaching.png" alt="Life Coaching" class="mega-service-img">
+            <div class="mega-service-body"><strong>Life Coaching Session</strong><span>Shohreh Bashar</span><span class="mega-service-price mega-price-free">Free intro</span></div>
+          </a>
+          <a href="services.html" class="mega-service">
+            <img src="assets/sessions/session-meditation.png" alt="Sound Healing" class="mega-service-img">
+            <div class="mega-service-body"><strong>Sound Healing</strong><span>Shohreh Bashar</span><span class="mega-service-price">$80 / session</span></div>
+          </a>
+          <a href="services.html" class="mega-service">
+            <img src="assets/sessions/session-retreat.png" alt="Wellness Retreat" class="mega-service-img">
+            <div class="mega-service-body"><strong>Wellness Retreat</strong><span>Temple of Times</span><span class="mega-service-price">from $500</span></div>
+          </a>
+          <a href="services.html" class="mega-view-all">View All Services <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        </div>
+      </div>
+    </div>
+  </div>
 </header>
 
 <!-- Mobile nav drawer -->
