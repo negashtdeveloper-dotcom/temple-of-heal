@@ -16,38 +16,41 @@
     /* ── SERVICES HERO WAVE BANNER ───────────────────── */
     .services-hero {
       position: relative;
-      background: linear-gradient(160deg, #deeade 0%, #e8f0e2 40%, #f0ede4 100%);
       padding: 3.5rem 0 5rem;
       overflow: hidden;
       text-align: center;
+      min-height: 360px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
     }
-    /* Botanical left leaf */
-    .services-hero::before {
-      content: '';
+    .services-hero-bg {
       position: absolute;
-      left: -20px; top: -10px;
-      width: 320px; height: 320px;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 320'%3E%3Cg opacity='0.18' fill='%234a7a4a'%3E%3Cellipse cx='60' cy='200' rx='18' ry='60' transform='rotate(-40 60 200)'/%3E%3Cellipse cx='90' cy='170' rx='15' ry='55' transform='rotate(-25 90 170)'/%3E%3Cellipse cx='120' cy='150' rx='14' ry='50' transform='rotate(-10 120 150)'/%3E%3Cellipse cx='145' cy='145' rx='13' ry='45' transform='rotate(5 145 145)'/%3E%3Cellipse cx='165' cy='150' rx='12' ry='40' transform='rotate(20 165 150)'/%3E%3Cellipse cx='50' cy='230' rx='16' ry='52' transform='rotate(-55 50 230)'/%3E%3Crect x='95' y='140' width='6' height='100' rx='3' transform='rotate(-5 95 140)'/%3E%3C/g%3E%3C/svg%3E") no-repeat center;
-      background-size: contain;
-      pointer-events: none;
+      inset: 0;
+      z-index: 0;
     }
-    /* Botanical right leaves */
-    .services-hero::after {
-      content: '';
-      position: absolute;
-      right: -10px; top: 10px;
-      width: 220px; height: 220px;
-      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'%3E%3Cg opacity='0.15' fill='%234a7a4a'%3E%3Cellipse cx='160' cy='80' rx='12' ry='38' transform='rotate(30 160 80)'/%3E%3Cellipse cx='140' cy='100' rx='11' ry='34' transform='rotate(15 140 100)'/%3E%3Cellipse cx='175' cy='110' rx='10' ry='30' transform='rotate(45 175 110)'/%3E%3Cellipse cx='130' cy='60' rx='10' ry='28' transform='rotate(5 130 60)'/%3E%3Crect x='148' y='60' width='4' height='80' rx='2' transform='rotate(20 148 60)'/%3E%3C/g%3E%3C/svg%3E") no-repeat center;
-      background-size: contain;
-      pointer-events: none;
+    .services-hero-bg img {
+      display: block;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center top;
+      animation: svcHeroZoom 18s ease-in-out infinite;
+      transform-origin: center center;
     }
+    @keyframes svcHeroZoom {
+      0%   { transform: scale(1);    }
+      50%  { transform: scale(1.06); }
+      100% { transform: scale(1);    }
+    }
+    .services-hero::before { display: none; }
+    .services-hero::after  { display: none; }
     .hero-wave {
       position: absolute;
       bottom: -1px; left: 0; right: 0;
       line-height: 0; pointer-events: none;
     }
     .hero-wave svg { display: block; width: 100%; }
-    .services-hero .container { position: relative; z-index: 1; }
+    .services-hero .container { position: relative; z-index: 2; }
     .svc-breadcrumb {
       display: inline-flex; align-items: center; gap: .5rem;
       font-size: .78rem; color: var(--text-mid);
@@ -449,6 +452,9 @@
 
 <!-- ── SERVICES HERO WAVE BANNER ─────────────────── -->
 <section class="services-hero" aria-label="Services page header">
+  <div class="services-hero-bg" aria-hidden="true">
+    <img src="assets/services-hero.png" alt="">
+  </div>
   <div class="container">
     <nav class="svc-breadcrumb" aria-label="Breadcrumb">
       <a href="index.html">Home</a>
@@ -482,7 +488,7 @@
   <!-- Wave bottom edge -->
   <div class="hero-wave">
     <svg viewBox="0 0 1440 72" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
-      <path d="M0,36 C180,72 360,0 540,36 C720,72 900,0 1080,36 C1260,72 1380,18 1440,36 L1440,72 L0,72 Z" fill="#F7F2EA"/>
+      <path d="M0,36 C180,72 360,0 540,36 C720,72 900,0 1080,36 C1260,72 1380,18 1440,36 L1440,72 L0,72 Z" fill="var(--cream)"/>
     </svg>
   </div>
 </section>
