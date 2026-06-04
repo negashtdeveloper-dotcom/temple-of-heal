@@ -1,0 +1,964 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Services — Temple of Heal</title>
+  <meta name="description" content="Browse verified wellness practitioners across counselling, coaching, yoga, meditation, massage, and retreats. Book directly — same-day availability on many listings.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    /* ── PAGE-LEVEL OVERRIDES ─────────────────────────── */
+    body { background: var(--cream); }
+
+    /* ── SERVICES HERO WAVE BANNER ───────────────────── */
+    .services-hero {
+      position: relative;
+      background: linear-gradient(160deg, #deeade 0%, #e8f0e2 40%, #f0ede4 100%);
+      padding: 3.5rem 0 5rem;
+      overflow: hidden;
+      text-align: center;
+    }
+    /* Botanical left leaf */
+    .services-hero::before {
+      content: '';
+      position: absolute;
+      left: -20px; top: -10px;
+      width: 320px; height: 320px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 320 320'%3E%3Cg opacity='0.18' fill='%234a7a4a'%3E%3Cellipse cx='60' cy='200' rx='18' ry='60' transform='rotate(-40 60 200)'/%3E%3Cellipse cx='90' cy='170' rx='15' ry='55' transform='rotate(-25 90 170)'/%3E%3Cellipse cx='120' cy='150' rx='14' ry='50' transform='rotate(-10 120 150)'/%3E%3Cellipse cx='145' cy='145' rx='13' ry='45' transform='rotate(5 145 145)'/%3E%3Cellipse cx='165' cy='150' rx='12' ry='40' transform='rotate(20 165 150)'/%3E%3Cellipse cx='50' cy='230' rx='16' ry='52' transform='rotate(-55 50 230)'/%3E%3Crect x='95' y='140' width='6' height='100' rx='3' transform='rotate(-5 95 140)'/%3E%3C/g%3E%3C/svg%3E") no-repeat center;
+      background-size: contain;
+      pointer-events: none;
+    }
+    /* Botanical right leaves */
+    .services-hero::after {
+      content: '';
+      position: absolute;
+      right: -10px; top: 10px;
+      width: 220px; height: 220px;
+      background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 220 220'%3E%3Cg opacity='0.15' fill='%234a7a4a'%3E%3Cellipse cx='160' cy='80' rx='12' ry='38' transform='rotate(30 160 80)'/%3E%3Cellipse cx='140' cy='100' rx='11' ry='34' transform='rotate(15 140 100)'/%3E%3Cellipse cx='175' cy='110' rx='10' ry='30' transform='rotate(45 175 110)'/%3E%3Cellipse cx='130' cy='60' rx='10' ry='28' transform='rotate(5 130 60)'/%3E%3Crect x='148' y='60' width='4' height='80' rx='2' transform='rotate(20 148 60)'/%3E%3C/g%3E%3C/svg%3E") no-repeat center;
+      background-size: contain;
+      pointer-events: none;
+    }
+    .hero-wave {
+      position: absolute;
+      bottom: -1px; left: 0; right: 0;
+      line-height: 0; pointer-events: none;
+    }
+    .hero-wave svg { display: block; width: 100%; }
+    .services-hero .container { position: relative; z-index: 1; }
+    .svc-breadcrumb {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-size: .78rem; color: var(--text-mid);
+      text-transform: uppercase; letter-spacing: .08em;
+      margin-bottom: 1.25rem;
+    }
+    .svc-breadcrumb a { color: var(--text-mid); text-decoration: none; }
+    .svc-breadcrumb a:hover { color: var(--primary); }
+    .svc-breadcrumb svg { width: .7rem; height: .7rem; opacity: .5; }
+    .svc-hero-title {
+      font-family: var(--f-head);
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 400;
+      color: var(--nav-bg);
+      line-height: 1.05;
+      margin-bottom: 1rem;
+      letter-spacing: -.01em;
+    }
+    .svc-hero-title em { font-style: italic; color: var(--primary); font-weight: 300; }
+    .svc-hero-desc {
+      font-size: .95rem; color: var(--text-mid);
+      max-width: 500px; margin: 0 auto 2rem;
+      line-height: 1.75;
+    }
+    .svc-hero-stats {
+      display: inline-flex; gap: 2.5rem;
+      padding: 1rem 2rem;
+      background: rgba(255,255,255,.55);
+      backdrop-filter: blur(10px);
+      border-radius: var(--radius-pill);
+      border: 1px solid rgba(255,255,255,.7);
+    }
+    .svc-stat { display: flex; flex-direction: column; align-items: center; }
+    .svc-stat-num {
+      font-family: var(--f-head);
+      font-size: 1.6rem; font-weight: 500;
+      color: var(--nav-bg); line-height: 1;
+    }
+    .svc-stat-label {
+      font-size: .68rem; text-transform: uppercase;
+      letter-spacing: .08em; color: var(--text-mid);
+      margin-top: .2rem;
+    }
+    .svc-stat-divider { width: 1px; background: var(--border); }
+
+    /* ── SERVICES LAYOUT ─────────────────────────────── */
+    .services-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 2.5rem;
+      padding-block: 3rem 5rem;
+    }
+
+    /* ── SIDEBAR ─────────────────────────────────────── */
+    .svc-sidebar {
+      position: sticky; top: 5.5rem;
+      height: fit-content;
+    }
+    .svc-search-wrap {
+      position: relative; margin-bottom: 2rem;
+    }
+    .svc-search-wrap svg {
+      position: absolute; left: .9rem; top: 50%;
+      transform: translateY(-50%);
+      width: 1rem; height: 1rem;
+      color: var(--text-light); pointer-events: none;
+    }
+    .svc-search-wrap input {
+      width: 100%; padding: .65rem 1rem .65rem 2.5rem;
+      border: 1.5px solid var(--border); border-radius: var(--radius-pill);
+      font-size: .875rem; font-family: var(--f-body);
+      background: var(--white); color: var(--text);
+      outline: none; transition: border-color var(--trans-fast), box-shadow var(--trans-fast);
+    }
+    .svc-search-wrap input:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(46,107,74,.1);
+    }
+    .svc-search-wrap input::placeholder { color: var(--text-light); }
+
+    .sidebar-section { margin-bottom: 1.75rem; }
+    .sidebar-label {
+      font-size: .68rem; text-transform: uppercase;
+      letter-spacing: .1em; font-weight: 600;
+      color: var(--text-light);
+      padding-bottom: .6rem;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: .85rem;
+    }
+    .cat-list { list-style: none; }
+    .svc-cat-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: .5rem .5rem; border-radius: var(--radius-sm);
+      cursor: pointer; transition: background var(--trans-fast);
+    }
+    .svc-cat-item:hover { background: rgba(46,107,74,.06); }
+    .svc-cat-item.active { background: rgba(46,107,74,.09); }
+    .svc-cat-left { display: flex; align-items: center; gap: .6rem; }
+    .svc-cat-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: var(--border); flex-shrink: 0;
+      transition: background var(--trans-fast);
+    }
+    .svc-cat-item.active .svc-cat-dot { background: var(--primary); }
+    .svc-cat-name { font-size: .85rem; color: var(--text-mid); }
+    .svc-cat-item.active .svc-cat-name { color: var(--primary); font-weight: 500; }
+    .svc-cat-count {
+      font-size: .7rem; color: var(--text-light);
+      background: var(--cream); padding: .1rem .5rem;
+      border-radius: 20px; border: 1px solid var(--border);
+    }
+
+    .provider-list { display: flex; flex-direction: column; gap: .4rem; }
+    .provider-chip {
+      display: flex; align-items: center; gap: .6rem;
+      padding: .5rem .75rem; border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border);
+      background: var(--white); cursor: pointer;
+      font-size: .82rem; color: var(--text-mid);
+      transition: all var(--trans-fast);
+    }
+    .provider-chip:hover { border-color: var(--primary); color: var(--text); }
+    .provider-chip.active {
+      background: rgba(46,107,74,.08);
+      border-color: var(--primary);
+      color: var(--primary); font-weight: 500;
+    }
+    .provider-avatar {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--primary); color: var(--white);
+      font-size: .65rem; font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .price-range-wrap { display: flex; flex-direction: column; gap: .5rem; }
+    .price-range-labels { display: flex; justify-content: space-between; font-size: .75rem; color: var(--text-light); }
+    .price-range-wrap input[type="range"] {
+      width: 100%; accent-color: var(--primary);
+    }
+    .price-range-value { font-size: .78rem; color: var(--text-mid); }
+    .price-range-value strong { color: var(--primary); }
+
+    /* ── PRODUCTS AREA ───────────────────────────────── */
+    .products-area {}
+    .products-toolbar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-bottom: 1.1rem; margin-bottom: 1.25rem;
+      border-bottom: 1px solid var(--border);
+      flex-wrap: wrap; gap: .75rem;
+    }
+    .results-count { font-size: .85rem; color: var(--text-mid); }
+    .results-count strong { color: var(--text); font-weight: 600; }
+    .toolbar-right { display: flex; align-items: center; gap: .75rem; }
+    .svc-sort-select {
+      border: 1.5px solid var(--border); border-radius: var(--radius-pill);
+      padding: .45rem 2rem .45rem .9rem;
+      font-size: .82rem; font-family: var(--f-body);
+      color: var(--text-mid); background: var(--white);
+      outline: none; cursor: pointer;
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='none' stroke='%239a9a9a' stroke-width='1.5' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right 10px center;
+      transition: border-color var(--trans-fast);
+    }
+    .svc-sort-select:focus { border-color: var(--primary); }
+    .view-toggle { display: flex; gap: .25rem; }
+    .view-btn {
+      width: 30px; height: 30px; border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); background: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-light); transition: all var(--trans-fast);
+    }
+    .view-btn.active { background: var(--nav-bg); border-color: var(--nav-bg); color: var(--white); }
+    .view-btn:hover:not(.active) { border-color: var(--primary); color: var(--primary); }
+
+    .active-filters {
+      display: flex; align-items: center; gap: .5rem;
+      flex-wrap: wrap; margin-bottom: 1.25rem;
+    }
+    .af-pill {
+      display: inline-flex; align-items: center; gap: .4rem;
+      background: rgba(46,107,74,.09); border: 1px solid rgba(46,107,74,.25);
+      color: var(--primary); font-size: .78rem;
+      padding: .25rem .75rem; border-radius: 40px; cursor: pointer;
+    }
+    .af-pill-x { font-size: .9rem; line-height: 1; }
+    .af-clear { font-size: .78rem; color: var(--text-light); background: none; border: none; cursor: pointer; text-decoration: underline; }
+    .af-clear:hover { color: var(--primary); }
+
+    /* ── PRODUCT GRID ─────────────────────────────────── */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+      gap: 1.5rem;
+    }
+    .product-card {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform var(--trans), box-shadow var(--trans), border-color var(--trans);
+      animation: fadeUpCard .4s ease both;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 16px 40px rgba(0,0,0,.09);
+      border-color: rgba(46,107,74,.3);
+    }
+    .product-card:nth-child(2) { animation-delay: .05s; }
+    .product-card:nth-child(3) { animation-delay: .10s; }
+    .product-card:nth-child(4) { animation-delay: .15s; }
+    .product-card:nth-child(5) { animation-delay: .20s; }
+    .product-card:nth-child(6) { animation-delay: .25s; }
+    @keyframes fadeUpCard {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card-img-wrap {
+      position: relative; aspect-ratio: 4/3; overflow: hidden;
+      background: var(--cream);
+    }
+    .card-img-wrap img {
+      width: 100%; height: 100%; object-fit: cover;
+      transition: transform .55s ease;
+    }
+    .product-card:hover .card-img-wrap img { transform: scale(1.05); }
+    .card-img-badge {
+      position: absolute; top: .75rem; left: .75rem;
+      background: rgba(255,255,255,.92); backdrop-filter: blur(8px);
+      color: var(--primary); font-size: .68rem; font-weight: 500;
+      text-transform: uppercase; letter-spacing: .07em;
+      padding: .25rem .65rem; border-radius: 40px;
+      border: 1px solid rgba(46,107,74,.2);
+    }
+    .card-img-free {
+      position: absolute; top: .75rem; right: .75rem;
+      background: rgba(196,155,60,.12);
+      color: var(--gold); font-size: .68rem; font-weight: 600;
+      padding: .25rem .65rem; border-radius: 40px;
+      border: 1px solid rgba(196,155,60,.35);
+    }
+    .card-img-verified {
+      position: absolute; bottom: .75rem; right: .75rem;
+      background: rgba(255,255,255,.92); backdrop-filter: blur(8px);
+      color: var(--primary); font-size: .65rem; font-weight: 500;
+      padding: .2rem .55rem; border-radius: 40px;
+      display: flex; align-items: center; gap: .3rem;
+      border: 1px solid rgba(46,107,74,.2);
+    }
+    .card-img-verified svg { width: .7rem; height: .7rem; }
+
+    .card-body { padding: 1.1rem 1.25rem 1.25rem; }
+    .card-category {
+      font-size: .68rem; text-transform: uppercase;
+      letter-spacing: .09em; color: var(--text-light);
+      font-weight: 500; margin-bottom: .35rem;
+    }
+    .card-title {
+      font-family: var(--f-head);
+      font-size: 1.2rem; font-weight: 500; line-height: 1.2;
+      color: var(--nav-bg); margin-bottom: .5rem;
+    }
+    .card-provider {
+      display: flex; align-items: center; gap: .45rem;
+      font-size: .78rem; color: var(--text-light); margin-bottom: .9rem;
+    }
+    .card-provider-avatar {
+      width: 20px; height: 20px; border-radius: 50%;
+      background: var(--primary); color: var(--white);
+      font-size: .6rem; font-weight: 600;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-footer {
+      display: flex; align-items: center; justify-content: space-between;
+      padding-top: .85rem; border-top: 1px solid var(--border);
+    }
+    .card-price {
+      font-family: var(--f-head);
+      font-size: 1.35rem; font-weight: 500; color: var(--nav-bg);
+    }
+    .card-price-from { font-size: .72rem; color: var(--text-light); font-family: var(--f-body); margin-right: .15rem; }
+    .card-price-unit { font-size: .75rem; color: var(--text-light); font-family: var(--f-body); }
+    .card-price-free { color: var(--gold); }
+    .btn-book {
+      background: var(--primary); color: var(--white);
+      border: none; cursor: pointer;
+      padding: .5rem 1rem; border-radius: var(--radius-pill);
+      font-size: .78rem; font-weight: 500;
+      font-family: var(--f-body);
+      transition: background var(--trans-fast), transform var(--trans-fast);
+      white-space: nowrap;
+    }
+    .btn-book:hover { background: var(--primary-h); transform: scale(1.03); }
+
+    /* No results */
+    .no-results {
+      grid-column: 1/-1; text-align: center;
+      padding: 4rem 1rem; color: var(--text-light);
+    }
+    .no-results svg { width: 3rem; height: 3rem; margin-bottom: 1rem; opacity: .4; }
+    .no-results h3 { font-family: var(--f-head); font-size: 1.5rem; color: var(--text); margin-bottom: .5rem; }
+
+    /* Mobile filter btn */
+    .mobile-filter-btn {
+      display: none; align-items: center; gap: .5rem;
+      background: var(--nav-bg); color: var(--white);
+      border: none; padding: .65rem 1.25rem; border-radius: var(--radius-pill);
+      font-size: .85rem; font-weight: 500; cursor: pointer;
+      font-family: var(--f-body); margin-bottom: 1rem;
+    }
+
+    /* ── MOBILE DRAWER ───────────────────────────────── */
+    .filter-overlay {
+      display: none; position: fixed; inset: 0; z-index: 300;
+      background: rgba(0,0,0,.45); backdrop-filter: blur(4px);
+    }
+    .filter-drawer {
+      position: absolute; left: 0; top: 0; bottom: 0; width: 300px;
+      background: var(--white); padding: 1.5rem; overflow-y: auto;
+      transform: translateX(-100%); transition: transform .3s ease;
+    }
+    .filter-overlay.open { display: flex; }
+    .filter-overlay.open .filter-drawer { transform: translateX(0); }
+    .drawer-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+    .drawer-title { font-family: var(--f-head); font-size: 1.5rem; color: var(--nav-bg); }
+    .drawer-close { background: none; border: none; font-size: 1.2rem; cursor: pointer; color: var(--text-light); }
+
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 900px) {
+      .services-layout { grid-template-columns: 1fr; }
+      .svc-sidebar { display: none; position: static; }
+      .mobile-filter-btn { display: flex; }
+      .svc-hero-stats { gap: 1.25rem; padding: .75rem 1.25rem; }
+    }
+    @media (max-width: 560px) {
+      .product-grid { grid-template-columns: 1fr; }
+      .svc-hero-title { font-size: 2.4rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV (matches homepage) ────────────────────── -->
+<header class="site-header" id="site-header">
+  <nav class="nav container" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo" aria-label="Temple of Heal – Home">
+      <img src="assets/logo.png" alt="Temple of Heal" class="nav-logo-img">
+    </a>
+    <div class="nav-links" role="list">
+      <a href="index.html#find-session" role="listitem">Find a Session</a>
+      <a href="index.html#our-experts" role="listitem">Experts</a>
+      <a href="index.html#why-us" role="listitem">About</a>
+      <a href="index.html#faq" role="listitem">FAQ</a>
+      <a href="index.html#contact" role="listitem">Contact</a>
+      <a href="index.html#become-provider" class="nav-cta" role="listitem">Become a Provider</a>
+    </div>
+    <div class="nav-icons" aria-label="Site actions">
+      <button class="nav-icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <button class="nav-icon-btn" aria-label="My account">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+      </button>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+</header>
+
+<!-- Mobile nav drawer -->
+<div class="mobile-nav" id="mobile-nav" aria-hidden="true">
+  <div class="mobile-nav-backdrop" id="mobile-backdrop"></div>
+  <div class="mobile-nav-drawer" role="dialog" aria-label="Navigation menu">
+    <div style="margin-bottom:1.5rem">
+      <a href="index.html" aria-label="Temple of Heal – Home">
+        <img src="assets/logo.png" alt="Temple of Heal" style="height:36px;width:auto;filter:brightness(0) invert(1);opacity:.9">
+      </a>
+    </div>
+    <nav class="mobile-nav-links">
+      <a href="index.html#find-session">Find a Session</a>
+      <a href="index.html#our-experts">Experts</a>
+      <a href="index.html#why-us">About</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+    <div class="mobile-nav-ctas">
+      <a href="index.html#find-session" class="btn btn-primary">Get Started</a>
+      <a href="index.html#become-provider" class="btn btn-outline-white">Become a Provider</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── SERVICES HERO WAVE BANNER ─────────────────── -->
+<section class="services-hero" aria-label="Services page header">
+  <div class="container">
+    <nav class="svc-breadcrumb" aria-label="Breadcrumb">
+      <a href="index.html">Home</a>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+      <span>Services</span>
+    </nav>
+    <h1 class="svc-hero-title">Find your path to <em>wellness</em></h1>
+    <p class="svc-hero-desc">Browse verified practitioners across counselling, holistic healing, yoga, nutrition, and more. Book directly — same-day availability on many listings.</p>
+    <div class="svc-hero-stats">
+      <div class="svc-stat">
+        <span class="svc-stat-num">20+</span>
+        <span class="svc-stat-label">Service Types</span>
+      </div>
+      <div class="svc-stat-divider"></div>
+      <div class="svc-stat">
+        <span class="svc-stat-num">50+</span>
+        <span class="svc-stat-label">Verified Pros</span>
+      </div>
+      <div class="svc-stat-divider"></div>
+      <div class="svc-stat">
+        <span class="svc-stat-num">4.9★</span>
+        <span class="svc-stat-label">Avg Rating</span>
+      </div>
+      <div class="svc-stat-divider"></div>
+      <div class="svc-stat">
+        <span class="svc-stat-num">Toronto</span>
+        <span class="svc-stat-label">Based In</span>
+      </div>
+    </div>
+  </div>
+  <!-- Wave bottom edge -->
+  <div class="hero-wave">
+    <svg viewBox="0 0 1440 72" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none">
+      <path d="M0,36 C180,72 360,0 540,36 C720,72 900,0 1080,36 C1260,72 1380,18 1440,36 L1440,72 L0,72 Z" fill="#F7F2EA"/>
+    </svg>
+  </div>
+</section>
+
+<!-- ── MAIN CONTENT ───────────────────────────────── -->
+<main>
+  <div class="container">
+    <div class="services-layout">
+
+      <!-- SIDEBAR -->
+      <aside class="svc-sidebar" aria-label="Filter services">
+
+        <div class="svc-search-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+          <input type="search" id="svc-search" placeholder="Search services…" aria-label="Search services" oninput="applyFilters()">
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-label">Categories</div>
+          <ul class="cat-list" id="cat-list">
+            <li class="svc-cat-item active" data-cat="all" onclick="setCategory('all',this)">
+              <div class="svc-cat-left"><div class="svc-cat-dot"></div><span class="svc-cat-name">All Services</span></div>
+              <span class="svc-cat-count" id="count-all">6</span>
+            </li>
+            <li class="svc-cat-item" data-cat="counseling" onclick="setCategory('counseling',this)">
+              <div class="svc-cat-left"><div class="svc-cat-dot"></div><span class="svc-cat-name">Counselling &amp; Coaching</span></div>
+              <span class="svc-cat-count">2</span>
+            </li>
+            <li class="svc-cat-item" data-cat="mind" onclick="setCategory('mind',this)">
+              <div class="svc-cat-left"><div class="svc-cat-dot"></div><span class="svc-cat-name">Mind &amp; Body Practices</span></div>
+              <span class="svc-cat-count">2</span>
+            </li>
+            <li class="svc-cat-item" data-cat="wellness" onclick="setCategory('wellness',this)">
+              <div class="svc-cat-left"><div class="svc-cat-dot"></div><span class="svc-cat-name">Wellness &amp; Lifestyle</span></div>
+              <span class="svc-cat-count">1</span>
+            </li>
+            <li class="svc-cat-item" data-cat="community" onclick="setCategory('community',this)">
+              <div class="svc-cat-left"><div class="svc-cat-dot"></div><span class="svc-cat-name">Community &amp; Events</span></div>
+              <span class="svc-cat-count">1</span>
+            </li>
+          </ul>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-label">Filter by Provider</div>
+          <div class="provider-list">
+            <div class="provider-chip active" data-prov="all" onclick="setProvider('all',this)">
+              <div class="provider-avatar" style="background:var(--primary)">All</div>
+              All Providers
+            </div>
+            <div class="provider-chip" data-prov="shohreh" onclick="setProvider('shohreh',this)">
+              <div class="provider-avatar" style="background:#5b8a7a">SB</div>
+              Shohreh Bashar
+            </div>
+            <div class="provider-chip" data-prov="temple" onclick="setProvider('temple',this)">
+              <div class="provider-avatar" style="background:var(--gold)">TT</div>
+              Temple of Times
+            </div>
+          </div>
+        </div>
+
+        <div class="sidebar-section">
+          <div class="sidebar-label">Price Range</div>
+          <div class="price-range-wrap">
+            <div class="price-range-labels"><span>Free</span><span>$500+</span></div>
+            <input type="range" min="0" max="500" value="500" id="price-range" oninput="updatePrice(this.value)">
+            <div class="price-range-value">Up to: <strong id="price-label">All prices</strong></div>
+          </div>
+        </div>
+
+      </aside>
+
+      <!-- PRODUCTS -->
+      <section aria-label="Service listings">
+
+        <button class="mobile-filter-btn" onclick="openDrawer()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="11" y1="18" x2="13" y2="18"/></svg>
+          Filter &amp; Sort
+        </button>
+
+        <div class="products-toolbar">
+          <span class="results-count">Showing <strong id="result-count">6</strong> services</span>
+          <div class="toolbar-right">
+            <select class="svc-sort-select" id="sort-select" onchange="sortCards()">
+              <option value="default">Featured</option>
+              <option value="price-asc">Price: Low to High</option>
+              <option value="price-desc">Price: High to Low</option>
+              <option value="name-asc">Name A–Z</option>
+            </select>
+            <div class="view-toggle">
+              <button class="view-btn active" title="Grid view" onclick="setView('grid',this)">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="0" y="0" width="5" height="5" rx="1" fill="currentColor"/><rect x="7" y="0" width="5" height="5" rx="1" fill="currentColor"/><rect x="0" y="7" width="5" height="5" rx="1" fill="currentColor"/><rect x="7" y="7" width="5" height="5" rx="1" fill="currentColor"/></svg>
+              </button>
+              <button class="view-btn" title="List view" onclick="setView('list',this)">
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><rect x="0" y="1" width="12" height="2" rx="1" fill="currentColor"/><rect x="0" y="5" width="12" height="2" rx="1" fill="currentColor"/><rect x="0" y="9" width="12" height="2" rx="1" fill="currentColor"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div id="active-filters" class="active-filters" style="display:none">
+          <span id="filter-pills"></span>
+          <button class="af-clear" onclick="clearFilters()">Clear all</button>
+        </div>
+
+        <div class="product-grid" id="product-grid">
+
+          <!-- Card 1: Life Coaching -->
+          <article class="product-card" data-category="counseling" data-provider="shohreh" data-price="0" data-name="Life Coaching Session">
+            <div class="card-img-wrap">
+              <img src="assets/sessions/session-coaching.png" alt="Life Coaching" loading="lazy">
+              <span class="card-img-badge">Coaching</span>
+              <span class="card-img-free">Free Intro</span>
+              <span class="card-img-verified">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Verified
+              </span>
+            </div>
+            <div class="card-body">
+              <div class="card-category">Counselling &amp; Coaching</div>
+              <h2 class="card-title">Life Coaching Session</h2>
+              <div class="card-provider">
+                <div class="card-provider-avatar" style="background:#5b8a7a">SB</div>
+                Shohreh Bashar
+              </div>
+              <div class="card-footer">
+                <div class="card-price card-price-free">Free</div>
+                <button class="btn-book">Book Session</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 2: Healing Workshop -->
+          <article class="product-card" data-category="community" data-provider="shohreh" data-price="100" data-name="Healing Workshop">
+            <div class="card-img-wrap">
+              <img src="assets/sessions/session-retreat.png" alt="Healing Workshop" loading="lazy">
+              <span class="card-img-badge">Community</span>
+              <span class="card-img-verified">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Verified
+              </span>
+            </div>
+            <div class="card-body">
+              <div class="card-category">Community &amp; Events</div>
+              <h2 class="card-title">Healing Workshop</h2>
+              <div class="card-provider">
+                <div class="card-provider-avatar" style="background:#5b8a7a">SB</div>
+                Shohreh Bashar
+              </div>
+              <div class="card-footer">
+                <div class="card-price">$100<span class="card-price-unit"> /session</span></div>
+                <button class="btn-book">Book Session</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 3: Meditation & Mindfulness -->
+          <article class="product-card" data-category="mind" data-provider="shohreh" data-price="60" data-name="Meditation & Mindfulness">
+            <div class="card-img-wrap">
+              <img src="assets/sessions/session-meditation.png" alt="Meditation" loading="lazy">
+              <span class="card-img-badge">Mind &amp; Body</span>
+            </div>
+            <div class="card-body">
+              <div class="card-category">Mind &amp; Body Practices</div>
+              <h2 class="card-title">Meditation &amp; Mindfulness</h2>
+              <div class="card-provider">
+                <div class="card-provider-avatar" style="background:#5b8a7a">SB</div>
+                Shohreh Bashar
+              </div>
+              <div class="card-footer">
+                <div class="card-price">$60<span class="card-price-unit"> /session</span></div>
+                <button class="btn-book">Book Session</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 4: Sound Healing -->
+          <article class="product-card" data-category="mind" data-provider="shohreh" data-price="80" data-name="Sound Healing">
+            <div class="card-img-wrap">
+              <img src="assets/sessions/session-therapy.png" alt="Sound Healing" loading="lazy">
+              <span class="card-img-badge">Mind &amp; Body</span>
+              <span class="card-img-verified">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Verified
+              </span>
+            </div>
+            <div class="card-body">
+              <div class="card-category">Mind &amp; Body Practices</div>
+              <h2 class="card-title">Sound Healing</h2>
+              <div class="card-provider">
+                <div class="card-provider-avatar" style="background:#5b8a7a">SB</div>
+                Shohreh Bashar
+              </div>
+              <div class="card-footer">
+                <div class="card-price">$80<span class="card-price-unit"> /session</span></div>
+                <button class="btn-book">Book Session</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 5: Wellness Retreat -->
+          <article class="product-card" data-category="community" data-provider="temple" data-price="500" data-name="Wellness Retreat">
+            <div class="card-img-wrap">
+              <img src="assets/sessions/session-yoga.png" alt="Wellness Retreat" loading="lazy">
+              <span class="card-img-badge">Retreat</span>
+              <span class="card-img-verified">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Verified
+              </span>
+            </div>
+            <div class="card-body">
+              <div class="card-category">Community &amp; Events</div>
+              <h2 class="card-title">Wellness Retreat</h2>
+              <div class="card-provider">
+                <div class="card-provider-avatar" style="background:var(--gold)">TT</div>
+                Temple of Times
+              </div>
+              <div class="card-footer">
+                <div class="card-price"><span class="card-price-from">from</span>$500</div>
+                <button class="btn-book">View Details</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 6: Reiki Energy Healing -->
+          <article class="product-card" data-category="wellness" data-provider="temple" data-price="90" data-name="Reiki Energy Healing">
+            <div class="card-img-wrap">
+              <img src="assets/sessions/session-massage.png" alt="Reiki Energy Healing" loading="lazy">
+              <span class="card-img-badge">Wellness</span>
+              <span class="card-img-verified">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Verified
+              </span>
+            </div>
+            <div class="card-body">
+              <div class="card-category">Wellness &amp; Lifestyle</div>
+              <h2 class="card-title">Reiki Energy Healing</h2>
+              <div class="card-provider">
+                <div class="card-provider-avatar" style="background:var(--gold)">TT</div>
+                Temple of Times
+              </div>
+              <div class="card-footer">
+                <div class="card-price">$90<span class="card-price-unit"> /session</span></div>
+                <button class="btn-book">Book Session</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- No results placeholder -->
+          <div class="no-results" id="no-results" style="display:none">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+            <h3>No services found</h3>
+            <p>Try adjusting your filters or <button class="af-clear" onclick="clearFilters()" style="font-size:.9rem">clear all filters</button></p>
+          </div>
+
+        </div>
+      </section>
+
+    </div>
+  </div>
+</main>
+
+<!-- ── FOOTER (matches homepage) ─────────────────── -->
+<footer class="site-footer" id="contact" aria-label="Site footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="index.html" class="footer-logo" aria-label="Temple of Heal home">
+          <img src="assets/logo.png" alt="Temple of Heal" class="footer-logo-img">
+        </a>
+        <p>A sacred space for awakening, healing, and shining from within. Growth · Change · Becoming.</p>
+        <div class="footer-newsletter" aria-label="Newsletter signup">
+          <p class="footer-newsletter-label">Get wellness tips &amp; updates</p>
+          <div class="footer-newsletter-row">
+            <input type="email" placeholder="Your email" aria-label="Subscribe to newsletter" autocomplete="email">
+            <button type="button" class="btn btn-primary btn-sm">Subscribe</button>
+          </div>
+        </div>
+        <div class="footer-social" aria-label="Social media links">
+          <a href="https://instagram.com/templeofheal" aria-label="Instagram" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+          </a>
+          <a href="https://linkedin.com/company/templeofheal" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="https://facebook.com/templeofheal" aria-label="Facebook" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+          </a>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Quick Links</h4>
+        <ul>
+          <li><a href="index.html#find-session">Find a Session</a></li>
+          <li><a href="index.html#our-experts">Our Experts</a></li>
+          <li><a href="index.html#why-us">About Us</a></li>
+          <li><a href="index.html#faq">FAQ</a></li>
+          <li><a href="services.html">All Services</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Our Address</h4>
+        <address>Temple of Heal<br>Wellness Plaza, Suite 210<br>Toronto, ON M5V 3A8<br>Canada</address>
+        <div style="margin-top:1rem">
+          <div class="footer-contact-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.94h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 10.6a16 16 0 0 0 6 6l1.02-.92a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 17.92z"/></svg>
+            +1 (416) 555-0192
+          </div>
+          <div class="footer-contact-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            hello@templeofheal.com
+          </div>
+        </div>
+      </div>
+      <div class="footer-col">
+        <h4>Follow Us</h4>
+        <ul>
+          <li><a href="https://instagram.com/templeofheal" target="_blank" rel="noopener noreferrer">Instagram</a></li>
+          <li><a href="https://linkedin.com/company/templeofheal" target="_blank" rel="noopener noreferrer">LinkedIn</a></li>
+          <li><a href="https://facebook.com/templeofheal" target="_blank" rel="noopener noreferrer">Facebook</a></li>
+        </ul>
+        <div style="margin-top:1.5rem">
+          <h4>For Providers</h4>
+          <ul>
+            <li><a href="index.html#become-provider">Join as a Pro</a></li>
+            <li><a href="admin/">Provider CMS</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2026 Temple of Heal. All rights reserved.</p>
+      <nav class="footer-legal" aria-label="Legal links">
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Service</a>
+        <a href="sitemap.xml">Sitemap</a>
+        <a href="llms.txt">llms.txt</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<button class="back-top" id="back-top" aria-label="Back to top">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="m5 12 7-7 7 7"/></svg>
+</button>
+
+<!-- Mobile filter drawer -->
+<div class="filter-overlay" id="filter-overlay" onclick="if(event.target===this)closeDrawer()">
+  <div class="filter-drawer">
+    <div class="drawer-header">
+      <span class="drawer-title">Filters</span>
+      <button class="drawer-close" onclick="closeDrawer()">✕</button>
+    </div>
+    <div class="sidebar-label" style="margin-bottom:.85rem">Categories</div>
+    <ul class="cat-list" style="margin-bottom:1.5rem">
+      <li class="svc-cat-item active" style="padding:.6rem .5rem" onclick="setCategory('all',this)"><div class="svc-cat-left"><div class="svc-cat-dot"></div><span class="svc-cat-name">All Services</span></div></li>
+      <li class="svc-cat-item" style="padding:.6rem .5rem" onclick="setCategory('counseling',this)"><div class="svc-cat-left"><div class="svc-cat-dot"></div><span class="svc-cat-name">Counselling &amp; Coaching</span></div></li>
+      <li class="svc-cat-item" style="padding:.6rem .5rem" onclick="setCategory('mind',this)"><div class="svc-cat-left"><div class="svc-cat-dot"></div><span class="svc-cat-name">Mind &amp; Body</span></div></li>
+      <li class="svc-cat-item" style="padding:.6rem .5rem" onclick="setCategory('wellness',this)"><div class="svc-cat-left"><div class="svc-cat-dot"></div><span class="svc-cat-name">Wellness &amp; Lifestyle</span></div></li>
+      <li class="svc-cat-item" style="padding:.6rem .5rem" onclick="setCategory('community',this)"><div class="svc-cat-left"><div class="svc-cat-dot"></div><span class="svc-cat-name">Community &amp; Events</span></div></li>
+    </ul>
+    <div class="sidebar-label" style="margin-bottom:.85rem">Sort By</div>
+    <select class="svc-sort-select" style="width:100%;margin-bottom:1.5rem" onchange="sortCards()">
+      <option value="default">Featured</option>
+      <option value="price-asc">Price: Low to High</option>
+      <option value="price-desc">Price: High to Low</option>
+      <option value="name-asc">Name A–Z</option>
+    </select>
+    <button class="btn btn-primary" style="width:100%" onclick="closeDrawer()">Apply Filters</button>
+  </div>
+</div>
+
+<script src="js/main.js"></script>
+<script>
+  let activeCategory = 'all';
+  let activeProvider = 'all';
+  let maxPrice = 500;
+
+  function getCards() {
+    return Array.from(document.querySelectorAll('#product-grid .product-card'));
+  }
+
+  function setCategory(cat, el) {
+    activeCategory = cat;
+    document.querySelectorAll('.svc-cat-item').forEach(i => i.classList.remove('active'));
+    document.querySelectorAll(`.svc-cat-item[data-cat="${cat}"]`).forEach(i => i.classList.add('active'));
+    applyFilters(); updatePills();
+  }
+
+  function setProvider(prov, el) {
+    activeProvider = prov;
+    document.querySelectorAll('.provider-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    applyFilters(); updatePills();
+  }
+
+  function updatePrice(val) {
+    maxPrice = parseInt(val);
+    document.getElementById('price-label').textContent = val == 500 ? 'All prices' : '$' + val;
+    applyFilters();
+  }
+
+  function applyFilters() {
+    const search = (document.getElementById('svc-search').value || '').toLowerCase();
+    const cards = getCards();
+    let visible = 0;
+    cards.forEach(card => {
+      const catOk  = activeCategory === 'all' || card.dataset.category === activeCategory;
+      const provOk = activeProvider === 'all'  || card.dataset.provider  === activeProvider;
+      const price  = parseInt(card.dataset.price);
+      const priceOk = price <= maxPrice;
+      const searchOk = !search || card.dataset.name.toLowerCase().includes(search);
+      const show = catOk && provOk && priceOk && searchOk;
+      card.style.display = show ? '' : 'none';
+      if (show) visible++;
+    });
+    document.getElementById('result-count').textContent = visible;
+    const noRes = document.getElementById('no-results');
+    if (noRes) noRes.style.display = visible === 0 ? '' : 'none';
+  }
+
+  function sortCards() {
+    const val = document.getElementById('sort-select').value;
+    const grid = document.getElementById('product-grid');
+    const cards = getCards();
+    cards.sort((a, b) => {
+      if (val === 'price-asc')  return parseInt(a.dataset.price) - parseInt(b.dataset.price);
+      if (val === 'price-desc') return parseInt(b.dataset.price) - parseInt(a.dataset.price);
+      if (val === 'name-asc')   return a.dataset.name.localeCompare(b.dataset.name);
+      return 0;
+    });
+    cards.forEach(c => grid.appendChild(c));
+  }
+
+  function updatePills() {
+    const wrap  = document.getElementById('active-filters');
+    const pills = document.getElementById('filter-pills');
+    const parts = [];
+    if (activeCategory !== 'all') parts.push(`<span class="af-pill">${activeCategory.charAt(0).toUpperCase()+activeCategory.slice(1)} <span class="af-pill-x" onclick="setCategory('all',document.querySelector('.svc-cat-item'))">×</span></span>`);
+    if (activeProvider !== 'all') parts.push(`<span class="af-pill">${activeProvider.charAt(0).toUpperCase()+activeProvider.slice(1)} <span class="af-pill-x" onclick="setProvider('all',document.querySelector('.provider-chip'))">×</span></span>`);
+    pills.innerHTML = parts.join('');
+    wrap.style.display = parts.length ? 'flex' : 'none';
+  }
+
+  function clearFilters() {
+    activeCategory = 'all'; activeProvider = 'all'; maxPrice = 500;
+    const si = document.getElementById('svc-search'); if(si) si.value = '';
+    const pr = document.getElementById('price-range'); if(pr) pr.value = 500;
+    document.getElementById('price-label').textContent = 'All prices';
+    document.querySelectorAll('.svc-cat-item').forEach((i,idx) => i.classList.toggle('active', idx===0));
+    document.querySelectorAll('.provider-chip').forEach((c,idx) => c.classList.toggle('active', idx===0));
+    applyFilters(); updatePills();
+  }
+
+  function setView(type, btn) {
+    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const grid = document.getElementById('product-grid');
+    if (type === 'list') {
+      grid.style.gridTemplateColumns = '1fr';
+    } else {
+      grid.style.gridTemplateColumns = '';
+    }
+  }
+
+  function openDrawer()  { document.getElementById('filter-overlay').classList.add('open'); }
+  function closeDrawer() { document.getElementById('filter-overlay').classList.remove('open'); }
+
+  // Back to top
+  const backTop = document.getElementById('back-top');
+  if (backTop) {
+    window.addEventListener('scroll', () => {
+      backTop.classList.toggle('visible', window.scrollY > 400);
+    });
+    backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+  }
+</script>
+</body>
+</html>
