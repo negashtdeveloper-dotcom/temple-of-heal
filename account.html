@@ -393,6 +393,13 @@
 
         <div class="auth-divider">or sign in with email</div>
 
+        <!-- Demo credentials hint -->
+        <div style="background:rgba(46,107,74,.06);border:1.5px solid rgba(46,107,74,.18);border-radius:var(--radius);padding:.85rem 1rem;margin-bottom:1.25rem;font-size:.78rem;color:var(--text-mid);line-height:1.7">
+          <strong style="color:var(--nav-bg);display:block;margin-bottom:.25rem">🔑 Demo Credentials</strong>
+          <span style="display:block"><b>Provider (Shohreh):</b> shohreh@templeofheal.com · <code style="background:var(--cream);padding:.1rem .3rem;border-radius:3px">provider123</code></span>
+          <span style="display:block"><b>Client (Sarah):</b> sarah@templeofheal.com · <code style="background:var(--cream);padding:.1rem .3rem;border-radius:3px">client123</code></span>
+        </div>
+
         <form id="signin-form" onsubmit="handleSignIn(event)" novalidate>
           <div class="form-group">
             <label class="form-label" for="si-email">Email Address</label>
@@ -618,15 +625,34 @@
     label.textContent = val.length > 0 ? names[score] + (score < 3 ? ' — add uppercase, numbers or symbols' : '') : '';
   }
 
+  /* ── Mock users ── */
+  const MOCK_USERS = {
+    'shohreh@templeofheal.com': { password: 'provider123', role: 'provider', redirect: 'provider-portal.html' },
+    'sarah@templeofheal.com':   { password: 'client123',   role: 'client',   redirect: 'my-account.html'      },
+  };
+
   /* ── Form handlers ── */
   function handleSignIn(e) {
     e.preventDefault();
-    const email = document.getElementById('si-email');
-    const pwd   = document.getElementById('si-password');
+    const emailEl = document.getElementById('si-email');
+    const pwdEl   = document.getElementById('si-password');
     let ok = true;
-    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) { showErr('si-email-err'); email.classList.add('error'); ok = false; } else { hideErr('si-email-err'); email.classList.remove('error'); }
-    if (!pwd.value) { showErr('si-pwd-err'); pwd.classList.add('error'); ok = false; } else { hideErr('si-pwd-err'); pwd.classList.remove('error'); }
-    if (ok) alert('Sign in would be handled by your backend. Email: ' + email.value);
+    if (!emailEl.value || !/\S+@\S+\.\S+/.test(emailEl.value)) { showErr('si-email-err'); emailEl.classList.add('error'); ok = false; } else { hideErr('si-email-err'); emailEl.classList.remove('error'); }
+    if (!pwdEl.value) { showErr('si-pwd-err'); pwdEl.classList.add('error'); ok = false; } else { hideErr('si-pwd-err'); pwdEl.classList.remove('error'); }
+    if (!ok) return;
+
+    const user = MOCK_USERS[emailEl.value.toLowerCase()];
+    if (user && user.password === pwdEl.value) {
+      /* Animate button then redirect */
+      const btn = document.querySelector('#signin-form .btn-auth');
+      btn.textContent = 'Signing in…';
+      btn.disabled = true;
+      setTimeout(() => { window.location.href = user.redirect; }, 800);
+    } else {
+      showErr('si-email-err');
+      emailEl.classList.add('error');
+      document.getElementById('si-email-err').textContent = 'Incorrect email or password.';
+    }
   }
   function handleRegister(e) {
     e.preventDefault();
