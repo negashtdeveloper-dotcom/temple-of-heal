@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In — Temple of Heal</title>
+  <meta name="description" content="Sign in or create your Temple of Heal account to book wellness sessions and manage your healing journey.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body { background: var(--cream); min-height: 100vh; }
+
+    /* ── AUTH LAYOUT ──────────────────────────────────── */
+    .auth-wrap {
+      min-height: calc(100vh - 72px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 72px;
+    }
+
+    /* Left: brand panel */
+    .auth-brand {
+      position: relative;
+      overflow: hidden;
+      display: flex; flex-direction: column;
+      justify-content: flex-end;
+      padding: 3rem;
+    }
+    .auth-brand-bg {
+      position: absolute; inset: 0; z-index: 0;
+    }
+    .auth-brand-bg img {
+      width: 100%; height: 100%; object-fit: cover;
+      animation: authZoom 20s ease-in-out infinite;
+    }
+    @keyframes authZoom {
+      0%  { transform: scale(1); }
+      50% { transform: scale(1.06); }
+      100%{ transform: scale(1); }
+    }
+    .auth-brand-overlay {
+      position: absolute; inset: 0; z-index: 1;
+      background: linear-gradient(to top, rgba(10,25,18,.88) 0%, rgba(10,25,18,.3) 60%, rgba(10,25,18,.1) 100%);
+    }
+    .auth-brand-content { position: relative; z-index: 2; }
+    .auth-brand-logo {
+      display: inline-flex; margin-bottom: 2rem;
+    }
+    .auth-brand-logo img { height: 42px; filter: brightness(0) invert(1); }
+    .auth-brand-quote {
+      font-family: var(--f-head);
+      font-size: clamp(1.8rem, 3vw, 2.6rem);
+      font-weight: 400; font-style: italic;
+      color: var(--white); line-height: 1.25;
+      margin-bottom: 1rem;
+    }
+    .auth-brand-quote em { color: #9DD4B5; font-style: normal; }
+    .auth-brand-desc { font-size: .875rem; color: rgba(255,255,255,.65); line-height: 1.7; max-width: 360px; }
+    .auth-brand-stats {
+      display: flex; gap: 1.5rem; margin-top: 2rem; flex-wrap: wrap;
+    }
+    .auth-stat { display: flex; flex-direction: column; }
+    .auth-stat-num { font-family: var(--f-head); font-size: 1.5rem; color: var(--white); line-height: 1; }
+    .auth-stat-label { font-size: .7rem; text-transform: uppercase; letter-spacing: .08em; color: rgba(255,255,255,.5); margin-top: .15rem; }
+
+    /* Right: form panel */
+    .auth-form-panel {
+      display: flex; align-items: center; justify-content: center;
+      padding: 3rem 2rem;
+      background: var(--white);
+      overflow-y: auto;
+    }
+    .auth-card {
+      width: 100%; max-width: 420px;
+    }
+    .auth-card-title {
+      font-family: var(--f-head);
+      font-size: 2rem; font-weight: 500;
+      color: var(--nav-bg); margin-bottom: .35rem;
+    }
+    .auth-card-sub { font-size: .875rem; color: var(--text-light); margin-bottom: 2rem; line-height: 1.6; }
+
+    /* Tab switcher */
+    .auth-tabs {
+      display: flex; background: var(--cream);
+      border-radius: var(--radius-pill); padding: .25rem;
+      margin-bottom: 1.75rem; gap: .25rem;
+    }
+    .auth-tab {
+      flex: 1; text-align: center;
+      padding: .55rem 1rem; border-radius: var(--radius-pill);
+      font-size: .85rem; font-weight: 500; cursor: pointer;
+      color: var(--text-mid); background: none; border: none;
+      font-family: var(--f-body); transition: all var(--trans-fast);
+    }
+    .auth-tab.active { background: var(--white); color: var(--primary); box-shadow: 0 1px 6px rgba(0,0,0,.08); }
+
+    /* Social login */
+    .auth-social { display: flex; gap: .75rem; margin-bottom: 1.25rem; }
+    .social-btn {
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: .5rem;
+      padding: .65rem; border: 1.5px solid var(--border); border-radius: var(--radius);
+      font-size: .82rem; font-weight: 500; color: var(--text); background: var(--white);
+      cursor: pointer; font-family: var(--f-body);
+      transition: border-color var(--trans-fast), box-shadow var(--trans-fast);
+    }
+    .social-btn:hover { border-color: var(--primary); box-shadow: 0 2px 12px rgba(46,107,74,.1); }
+    .social-btn svg { width: 1.1rem; height: 1.1rem; flex-shrink: 0; }
+
+    .auth-divider {
+      display: flex; align-items: center; gap: .75rem;
+      font-size: .75rem; color: var(--text-light);
+      margin-bottom: 1.25rem;
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    /* Form fields */
+    .form-group { margin-bottom: 1.1rem; }
+    .form-label {
+      display: block; font-size: .8rem; font-weight: 500;
+      color: var(--text-mid); margin-bottom: .4rem;
+    }
+    .form-input {
+      width: 100%; padding: .7rem .9rem;
+      border: 1.5px solid var(--border); border-radius: var(--radius);
+      font-size: .9rem; font-family: var(--f-body); color: var(--text);
+      background: var(--white); outline: none;
+      transition: border-color var(--trans-fast), box-shadow var(--trans-fast);
+    }
+    .form-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(46,107,74,.1); }
+    .form-input::placeholder { color: var(--text-light); }
+    .form-input.error { border-color: #e53e3e; }
+    .form-error { font-size: .75rem; color: #e53e3e; margin-top: .3rem; display: none; }
+    .form-error.show { display: block; }
+
+    /* Password wrapper */
+    .input-wrap { position: relative; }
+    .input-wrap .form-input { padding-right: 2.8rem; }
+    .input-eye {
+      position: absolute; right: .8rem; top: 50%; transform: translateY(-50%);
+      background: none; border: none; cursor: pointer; color: var(--text-light);
+      padding: 0; display: flex;
+    }
+    .input-eye svg { width: 1rem; height: 1rem; }
+    .input-eye:hover { color: var(--primary); }
+
+    /* Row layout */
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+
+    /* Account type toggle */
+    .type-toggle { display: grid; grid-template-columns: 1fr 1fr; gap: .5rem; margin-bottom: 1.25rem; }
+    .type-btn {
+      display: flex; align-items: center; gap: .6rem;
+      padding: .75rem 1rem; border: 1.5px solid var(--border);
+      border-radius: var(--radius); cursor: pointer; background: none;
+      font-size: .85rem; font-family: var(--f-body); font-weight: 500;
+      color: var(--text-mid); transition: all var(--trans-fast);
+    }
+    .type-btn svg { width: 1.1rem; height: 1.1rem; flex-shrink: 0; }
+    .type-btn.active { border-color: var(--primary); background: rgba(46,107,74,.06); color: var(--primary); }
+    .type-btn:hover:not(.active) { border-color: rgba(46,107,74,.3); }
+
+    /* Checkbox */
+    .form-check {
+      display: flex; align-items: flex-start; gap: .6rem;
+      font-size: .8rem; color: var(--text-mid); cursor: pointer;
+      margin-bottom: 1.25rem;
+    }
+    .form-check input[type="checkbox"] { width: 1rem; height: 1rem; margin-top: .1rem; accent-color: var(--primary); flex-shrink: 0; }
+    .form-check a { color: var(--primary); }
+
+    /* Row: remember + forgot */
+    .form-meta {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 1.5rem; font-size: .8rem;
+    }
+    .form-meta label { display: flex; align-items: center; gap: .4rem; color: var(--text-mid); cursor: pointer; }
+    .form-meta input[type="checkbox"] { accent-color: var(--primary); }
+    .form-meta a { color: var(--primary); font-weight: 500; }
+    .form-meta a:hover { text-decoration: underline; }
+
+    /* Submit button */
+    .btn-auth {
+      width: 100%; padding: .85rem;
+      background: var(--primary); color: var(--white);
+      border: none; border-radius: var(--radius-pill);
+      font-size: .95rem; font-weight: 500;
+      font-family: var(--f-body); cursor: pointer;
+      transition: background var(--trans-fast), transform var(--trans-fast);
+      margin-bottom: 1.25rem;
+    }
+    .btn-auth:hover { background: var(--primary-h); transform: translateY(-1px); }
+
+    /* Switch tab link */
+    .auth-switch { font-size: .82rem; color: var(--text-light); text-align: center; }
+    .auth-switch a { color: var(--primary); font-weight: 500; }
+    .auth-switch a:hover { text-decoration: underline; }
+
+    /* Sections */
+    .auth-section { display: none; }
+    .auth-section.active { display: block; }
+
+    /* Provider extra fields */
+    .provider-fields { display: none; }
+    .provider-fields.show { display: block; }
+
+    /* Select */
+    .form-select {
+      width: 100%; padding: .7rem .9rem;
+      border: 1.5px solid var(--border); border-radius: var(--radius);
+      font-size: .9rem; font-family: var(--f-body); color: var(--text);
+      background: var(--white); outline: none; appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath fill='none' stroke='%239a9a9a' stroke-width='1.5' d='M1 1l4 4 4-4'/%3E%3C/svg%3E");
+      background-repeat: no-repeat; background-position: right .9rem center;
+      transition: border-color var(--trans-fast), box-shadow var(--trans-fast);
+    }
+    .form-select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(46,107,74,.1); }
+
+    /* Password strength */
+    .pwd-strength { display: flex; gap: .25rem; margin-top: .5rem; }
+    .pwd-bar { flex: 1; height: 3px; border-radius: 2px; background: var(--border); transition: background .3s; }
+    .pwd-bar.weak   { background: #e53e3e; }
+    .pwd-bar.fair   { background: #dd6b20; }
+    .pwd-bar.good   { background: #38a169; }
+    .pwd-bar.strong { background: var(--primary); }
+    .pwd-label { font-size: .7rem; color: var(--text-light); margin-top: .25rem; }
+
+    /* Forgot password section */
+    .auth-back-btn {
+      display: inline-flex; align-items: center; gap: .35rem;
+      font-size: .82rem; color: var(--text-mid); background: none; border: none;
+      cursor: pointer; font-family: var(--f-body); padding: 0; margin-bottom: 1.5rem;
+    }
+    .auth-back-btn:hover { color: var(--primary); }
+    .auth-back-btn svg { width: .85rem; height: .85rem; }
+
+    /* Success message */
+    .auth-success {
+      display: none; text-align: center; padding: 2rem 1rem;
+    }
+    .auth-success.show { display: block; }
+    .auth-success-icon {
+      width: 3.5rem; height: 3.5rem; border-radius: 50%;
+      background: rgba(46,107,74,.1); display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1rem;
+    }
+    .auth-success-icon svg { width: 1.75rem; height: 1.75rem; color: var(--primary); }
+    .auth-success h3 { font-family: var(--f-head); font-size: 1.5rem; color: var(--nav-bg); margin-bottom: .5rem; }
+    .auth-success p { font-size: .875rem; color: var(--text-light); }
+
+    /* Responsive */
+    @media (max-width: 860px) {
+      .auth-wrap { grid-template-columns: 1fr; }
+      .auth-brand { display: none; }
+      .auth-form-panel { min-height: calc(100vh - 72px); }
+    }
+    @media (max-width: 480px) {
+      .form-row { grid-template-columns: 1fr; }
+      .auth-social { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<header class="site-header" id="site-header">
+  <nav class="nav container" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo" aria-label="Temple of Heal – Home">
+      <img src="assets/logo.png" alt="Temple of Heal" class="nav-logo-img">
+    </a>
+    <div class="nav-links" role="list">
+      <a href="index.html#find-session" role="listitem">Find a Session</a>
+      <div class="nav-mega-wrap" role="listitem">
+        <button class="nav-mega-trigger" id="mega-trigger" aria-haspopup="true" aria-expanded="false">
+          Services
+          <svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>
+        </button>
+      </div>
+      <a href="index.html#our-experts" role="listitem">Providers</a>
+      <a href="index.html#why-us" role="listitem">About</a>
+      <a href="index.html#faq" role="listitem">FAQ</a>
+      <a href="index.html#contact" role="listitem">Contact</a>
+      <a href="index.html#become-provider" class="nav-cta" role="listitem">Become a Provider</a>
+    </div>
+    <div class="nav-icons" aria-label="Site actions">
+      <button class="nav-icon-btn" aria-label="Search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </button>
+      <div class="nav-account-wrap" id="nav-account-wrap">
+        <button class="nav-account-btn active" id="nav-account-btn" aria-label="Account menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          <span>Account</span>
+        </button>
+      </div>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- Mega menu -->
+  <div class="mega-menu" id="mega-menu" role="navigation" aria-label="Services navigation" aria-hidden="true">
+    <div class="container"><div class="mega-inner">
+      <div class="mega-col mega-categories">
+        <p class="mega-label">Browse by Category</p>
+        <a href="services.html" class="mega-cat"><div class="mega-cat-icon" style="--ci:#4F8EF7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="mega-cat-text"><strong>Counselling &amp; Coaching</strong><span>1-on-1 therapy, NLP &amp; life coaching</span></div><svg class="mega-cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <a href="services.html" class="mega-cat"><div class="mega-cat-icon" style="--ci:#3CB880"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div class="mega-cat-text"><strong>Mind &amp; Body Practices</strong><span>Yoga, meditation &amp; mindfulness</span></div><svg class="mega-cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <a href="services.html" class="mega-cat"><div class="mega-cat-icon" style="--ci:#E07B3E"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/></svg></div><div class="mega-cat-text"><strong>Wellness &amp; Lifestyle</strong><span>Massage, energy healing &amp; nutrition</span></div><svg class="mega-cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <a href="services.html" class="mega-cat"><div class="mega-cat-icon" style="--ci:#9B6FD0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="mega-cat-text"><strong>Community &amp; Events</strong><span>Workshops, circles &amp; retreats</span></div><svg class="mega-cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      </div>
+      <div class="mega-divider"></div>
+      <div class="mega-col mega-featured">
+        <p class="mega-label">Popular Right Now</p>
+        <a href="services.html" class="mega-service"><img src="assets/sessions/session-coaching.png" alt="" class="mega-service-img"><div class="mega-service-body"><strong>Life Coaching</strong><span>Shohreh Bashar</span><span class="mega-service-price mega-price-free">Free intro</span></div></a>
+        <a href="services.html" class="mega-service"><img src="assets/sessions/session-meditation.png" alt="" class="mega-service-img"><div class="mega-service-body"><strong>Sound Healing</strong><span>Shohreh Bashar</span><span class="mega-service-price">$80 / session</span></div></a>
+        <a href="services.html" class="mega-view-all">View All Services <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      </div>
+    </div></div>
+  </div>
+</header>
+
+<!-- Mobile nav -->
+<div class="mobile-nav" id="mobile-nav" aria-hidden="true">
+  <div class="mobile-nav-backdrop" id="mobile-backdrop"></div>
+  <div class="mobile-nav-drawer" role="dialog">
+    <div style="margin-bottom:1.5rem"><a href="index.html"><img src="assets/logo.png" alt="Temple of Heal" style="height:36px;width:auto;filter:brightness(0) invert(1);opacity:.9"></a></div>
+    <nav class="mobile-nav-links">
+      <a href="index.html#find-session">Find a Session</a>
+      <a href="services.html">Services</a>
+      <a href="index.html#our-experts">Providers</a>
+      <a href="index.html#why-us">About</a>
+      <a href="index.html#faq">FAQ</a>
+      <a href="index.html#contact">Contact</a>
+    </nav>
+    <div class="mobile-nav-ctas">
+      <a href="account.html" class="btn btn-primary">Sign In</a>
+      <a href="account.html?tab=register" class="btn btn-outline-white">Create Account</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── AUTH LAYOUT ── -->
+<div class="auth-wrap">
+
+  <!-- Left: brand -->
+  <div class="auth-brand">
+    <div class="auth-brand-bg">
+      <img src="assets/bg-toh.png" alt="">
+    </div>
+    <div class="auth-brand-overlay"></div>
+    <div class="auth-brand-content">
+      <a href="index.html" class="auth-brand-logo">
+        <img src="assets/logo.png" alt="Temple of Heal">
+      </a>
+      <p class="auth-brand-quote">Your healing journey begins with a <em>single step</em></p>
+      <p class="auth-brand-desc">Join thousands of Torontonians who've found their path to wellness through verified practitioners, AI-powered matching, and a compassionate community.</p>
+      <div class="auth-brand-stats">
+        <div class="auth-stat"><span class="auth-stat-num">500+</span><span class="auth-stat-label">Sessions Booked</span></div>
+        <div class="auth-stat"><span class="auth-stat-num">50+</span><span class="auth-stat-label">Verified Pros</span></div>
+        <div class="auth-stat"><span class="auth-stat-num">4.9★</span><span class="auth-stat-label">Avg Rating</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Right: form -->
+  <div class="auth-form-panel">
+    <div class="auth-card">
+
+      <!-- ── SIGN IN ── -->
+      <div class="auth-section active" id="section-signin">
+        <h1 class="auth-card-title">Welcome back</h1>
+        <p class="auth-card-sub">Sign in to your Temple of Heal account.</p>
+
+        <div class="auth-tabs" role="tablist">
+          <button class="auth-tab active" role="tab" onclick="switchTab('signin')">Sign In</button>
+          <button class="auth-tab" role="tab" onclick="switchTab('register')">Create Account</button>
+        </div>
+
+        <div class="auth-social">
+          <button class="social-btn" type="button" onclick="socialAuth('google')">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+            Continue with Google
+          </button>
+          <button class="social-btn" type="button" onclick="socialAuth('apple')">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            Continue with Apple
+          </button>
+        </div>
+
+        <div class="auth-divider">or sign in with email</div>
+
+        <form id="signin-form" onsubmit="handleSignIn(event)" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="si-email">Email Address</label>
+            <input class="form-input" type="email" id="si-email" placeholder="you@example.com" autocomplete="email" required>
+            <p class="form-error" id="si-email-err">Please enter a valid email.</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="si-password">Password</label>
+            <div class="input-wrap">
+              <input class="form-input" type="password" id="si-password" placeholder="Your password" autocomplete="current-password" required>
+              <button type="button" class="input-eye" onclick="togglePwd('si-password',this)" aria-label="Show password">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <p class="form-error" id="si-pwd-err">Please enter your password.</p>
+          </div>
+          <div class="form-meta">
+            <label><input type="checkbox" id="si-remember"> Remember me</label>
+            <a href="#" onclick="showSection('forgot'); return false;">Forgot password?</a>
+          </div>
+          <button type="submit" class="btn-auth">Sign In</button>
+        </form>
+
+        <p class="auth-switch">Don't have an account? <a href="#" onclick="switchTab('register'); return false;">Create one free</a></p>
+      </div>
+
+      <!-- ── REGISTER ── -->
+      <div class="auth-section" id="section-register">
+        <h1 class="auth-card-title">Create account</h1>
+        <p class="auth-card-sub">Join Temple of Heal and start your wellness journey.</p>
+
+        <div class="auth-tabs" role="tablist">
+          <button class="auth-tab" role="tab" onclick="switchTab('signin')">Sign In</button>
+          <button class="auth-tab active" role="tab" onclick="switchTab('register')">Create Account</button>
+        </div>
+
+        <!-- Account type -->
+        <div class="type-toggle" role="group" aria-label="Account type">
+          <button type="button" class="type-btn active" id="type-client" onclick="setType('client')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+            I'm a Client
+          </button>
+          <button type="button" class="type-btn" id="type-provider" onclick="setType('provider')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2A19.8 19.8 0 0 1 4.69 13.6 2 2 0 0 1 3.6 2.94h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 10.6a16 16 0 0 0 6 6l.92-1.02a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 17.92z"/></svg>
+            I'm a Provider
+          </button>
+        </div>
+
+        <div class="auth-social">
+          <button class="social-btn" type="button" onclick="socialAuth('google')">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
+            Continue with Google
+          </button>
+          <button class="social-btn" type="button" onclick="socialAuth('apple')">
+            <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            Continue with Apple
+          </button>
+        </div>
+
+        <div class="auth-divider">or register with email</div>
+
+        <form id="register-form" onsubmit="handleRegister(event)" novalidate>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="reg-fname">First Name</label>
+              <input class="form-input" type="text" id="reg-fname" placeholder="First" autocomplete="given-name" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-lname">Last Name</label>
+              <input class="form-input" type="text" id="reg-lname" placeholder="Last" autocomplete="family-name" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-email">Email Address</label>
+            <input class="form-input" type="email" id="reg-email" placeholder="you@example.com" autocomplete="email" required>
+            <p class="form-error" id="reg-email-err">Please enter a valid email.</p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-password">Password</label>
+            <div class="input-wrap">
+              <input class="form-input" type="password" id="reg-password" placeholder="Create a password" autocomplete="new-password" oninput="checkPwd(this.value)" required>
+              <button type="button" class="input-eye" onclick="togglePwd('reg-password',this)" aria-label="Show password">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="pwd-strength" id="pwd-bars" aria-hidden="true">
+              <div class="pwd-bar" id="bar1"></div>
+              <div class="pwd-bar" id="bar2"></div>
+              <div class="pwd-bar" id="bar3"></div>
+              <div class="pwd-bar" id="bar4"></div>
+            </div>
+            <p class="pwd-label" id="pwd-label"></p>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="reg-confirm">Confirm Password</label>
+            <div class="input-wrap">
+              <input class="form-input" type="password" id="reg-confirm" placeholder="Repeat password" autocomplete="new-password" required>
+              <button type="button" class="input-eye" onclick="togglePwd('reg-confirm',this)" aria-label="Show password">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <p class="form-error" id="reg-confirm-err">Passwords don't match.</p>
+          </div>
+
+          <!-- Provider-only fields -->
+          <div class="provider-fields" id="provider-fields">
+            <div class="form-group">
+              <label class="form-label" for="reg-phone">Phone Number</label>
+              <input class="form-input" type="tel" id="reg-phone" placeholder="+1 (416) 555-0100" autocomplete="tel">
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-category">Service Category</label>
+              <select class="form-select" id="reg-category">
+                <option value="">Select your primary service…</option>
+                <option>Counselling &amp; Psychotherapy</option>
+                <option>Life &amp; NLP Coaching</option>
+                <option>Yoga &amp; Somatic Practices</option>
+                <option>Meditation &amp; Mindfulness</option>
+                <option>Massage Therapy</option>
+                <option>Energy Healing &amp; Reiki</option>
+                <option>Holistic Nutrition</option>
+                <option>Sound Healing</option>
+                <option>Retreats &amp; Workshops</option>
+                <option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reg-bio">Short Bio <span style="font-weight:400;color:var(--text-light)">(optional)</span></label>
+              <textarea class="form-input" id="reg-bio" rows="3" placeholder="Tell clients about your background and approach…" style="resize:vertical"></textarea>
+            </div>
+          </div>
+
+          <label class="form-check">
+            <input type="checkbox" id="reg-terms" required>
+            <span>I agree to the <a href="/terms" target="_blank">Terms of Service</a> and <a href="/privacy" target="_blank">Privacy Policy</a></span>
+          </label>
+
+          <button type="submit" class="btn-auth" id="reg-submit-btn">Create Account</button>
+        </form>
+
+        <p class="auth-switch">Already have an account? <a href="#" onclick="switchTab('signin'); return false;">Sign in</a></p>
+      </div>
+
+      <!-- ── FORGOT PASSWORD ── -->
+      <div class="auth-section" id="section-forgot">
+        <button class="auth-back-btn" onclick="showSection('signin')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+          Back to Sign In
+        </button>
+        <h1 class="auth-card-title">Reset password</h1>
+        <p class="auth-card-sub">Enter your email and we'll send you a reset link.</p>
+
+        <div id="forgot-form-wrap">
+          <form onsubmit="handleForgot(event)" novalidate>
+            <div class="form-group">
+              <label class="form-label" for="forgot-email">Email Address</label>
+              <input class="form-input" type="email" id="forgot-email" placeholder="you@example.com" autocomplete="email" required>
+              <p class="form-error" id="forgot-email-err">Please enter a valid email.</p>
+            </div>
+            <button type="submit" class="btn-auth">Send Reset Link</button>
+          </form>
+        </div>
+
+        <div class="auth-success" id="forgot-success">
+          <div class="auth-success-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13.6a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2.94h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L7.91 10.6a16 16 0 0 0 6 6l.92-1.02a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 17.92z"/></svg>
+          </div>
+          <h3>Check your inbox</h3>
+          <p>We've sent a password reset link to your email. It expires in 30 minutes.</p>
+        </div>
+      </div>
+
+    </div><!-- /auth-card -->
+  </div><!-- /auth-form-panel -->
+
+</div><!-- /auth-wrap -->
+
+<script src="js/main.js"></script>
+<script>
+  /* ── Tab & section switching ── */
+  function switchTab(tab) {
+    showSection(tab === 'signin' ? 'signin' : 'register');
+  }
+  function showSection(id) {
+    document.querySelectorAll('.auth-section').forEach(s => s.classList.remove('active'));
+    document.getElementById('section-' + id).classList.add('active');
+  }
+
+  /* ── Account type toggle ── */
+  function setType(type) {
+    document.getElementById('type-client').classList.toggle('active', type === 'client');
+    document.getElementById('type-provider').classList.toggle('active', type === 'provider');
+    const pf = document.getElementById('provider-fields');
+    pf.classList.toggle('show', type === 'provider');
+    document.getElementById('reg-submit-btn').textContent = type === 'provider' ? 'Apply as Provider' : 'Create Account';
+  }
+
+  /* ── Password visibility toggle ── */
+  function togglePwd(id, btn) {
+    const inp = document.getElementById(id);
+    const show = inp.type === 'password';
+    inp.type = show ? 'text' : 'password';
+    btn.innerHTML = show
+      ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>'
+      : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+  }
+
+  /* ── Password strength ── */
+  function checkPwd(val) {
+    const bars = ['bar1','bar2','bar3','bar4'];
+    const label = document.getElementById('pwd-label');
+    let score = 0;
+    if (val.length >= 8)  score++;
+    if (/[A-Z]/.test(val)) score++;
+    if (/[0-9]/.test(val)) score++;
+    if (/[^A-Za-z0-9]/.test(val)) score++;
+    const levels = ['', 'weak', 'fair', 'good', 'strong'];
+    const names  = ['', 'Weak', 'Fair', 'Good', 'Strong'];
+    bars.forEach((b,i) => {
+      const el = document.getElementById(b);
+      el.className = 'pwd-bar ' + (i < score ? levels[score] : '');
+    });
+    label.textContent = val.length > 0 ? names[score] + (score < 3 ? ' — add uppercase, numbers or symbols' : '') : '';
+  }
+
+  /* ── Form handlers ── */
+  function handleSignIn(e) {
+    e.preventDefault();
+    const email = document.getElementById('si-email');
+    const pwd   = document.getElementById('si-password');
+    let ok = true;
+    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) { showErr('si-email-err'); email.classList.add('error'); ok = false; } else { hideErr('si-email-err'); email.classList.remove('error'); }
+    if (!pwd.value) { showErr('si-pwd-err'); pwd.classList.add('error'); ok = false; } else { hideErr('si-pwd-err'); pwd.classList.remove('error'); }
+    if (ok) alert('Sign in would be handled by your backend. Email: ' + email.value);
+  }
+  function handleRegister(e) {
+    e.preventDefault();
+    const email   = document.getElementById('reg-email');
+    const confirm = document.getElementById('reg-confirm');
+    const pwd     = document.getElementById('reg-password');
+    const terms   = document.getElementById('reg-terms');
+    let ok = true;
+    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) { showErr('reg-email-err'); ok = false; } else hideErr('reg-email-err');
+    if (pwd.value !== confirm.value) { showErr('reg-confirm-err'); ok = false; } else hideErr('reg-confirm-err');
+    if (!terms.checked) { alert('Please accept the Terms of Service.'); ok = false; }
+    if (ok) alert('Registration would be handled by your backend. Email: ' + email.value);
+  }
+  function handleForgot(e) {
+    e.preventDefault();
+    const email = document.getElementById('forgot-email');
+    if (!email.value || !/\S+@\S+\.\S+/.test(email.value)) { showErr('forgot-email-err'); return; }
+    hideErr('forgot-email-err');
+    document.getElementById('forgot-form-wrap').style.display = 'none';
+    document.getElementById('forgot-success').classList.add('show');
+  }
+  function showErr(id) { document.getElementById(id).classList.add('show'); }
+  function hideErr(id) { document.getElementById(id).classList.remove('show'); }
+
+  /* ── Social auth placeholder ── */
+  function socialAuth(provider) {
+    alert('Social sign-in with ' + provider.charAt(0).toUpperCase() + provider.slice(1) + ' would be handled by your backend OAuth flow.');
+  }
+
+  /* ── Read URL params to pre-select tab/type ── */
+  const params = new URLSearchParams(location.search);
+  if (params.get('tab') === 'register') {
+    switchTab('register');
+    if (params.get('type') === 'provider') setType('provider');
+  }
+</script>
+</body>
+</html>

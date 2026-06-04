@@ -15,6 +15,27 @@
 
   backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
+  /* ── Account dropdown ───────────────────────────────────── */
+  const acctBtn  = document.getElementById('nav-account-btn');
+  const acctDrop = document.getElementById('nav-account-dropdown');
+  if (acctBtn && acctDrop) {
+    acctBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = acctDrop.classList.toggle('open');
+      acctBtn.classList.toggle('active', open);
+      acctBtn.setAttribute('aria-expanded', open);
+      acctDrop.setAttribute('aria-hidden', !open);
+    });
+    document.addEventListener('click', e => {
+      if (!acctBtn.contains(e.target) && !acctDrop.contains(e.target)) {
+        acctDrop.classList.remove('open');
+        acctBtn.classList.remove('active');
+        acctBtn.setAttribute('aria-expanded', 'false');
+      }
+    });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') acctDrop.classList.remove('open'); });
+  }
+
   /* ── Mega menu ──────────────────────────────────────────── */
   const megaTrigger = document.getElementById('mega-trigger');
   const megaMenu    = document.getElementById('mega-menu');

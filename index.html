@@ -118,15 +118,32 @@
 
     <div class="nav-icons" aria-label="Site actions">
       <button class="nav-icon-btn" aria-label="Search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/>
-        </svg>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
       </button>
-      <button class="nav-icon-btn" aria-label="My account">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
-        </svg>
-      </button>
+      <!-- Account dropdown -->
+      <div class="nav-account-wrap" id="nav-account-wrap">
+        <button class="nav-account-btn" id="nav-account-btn" aria-haspopup="true" aria-expanded="false" aria-label="Account menu">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          <span>Sign In</span>
+        </button>
+        <div class="nav-account-dropdown" id="nav-account-dropdown" aria-hidden="true">
+          <div class="nad-header">
+            <p class="nad-greeting">Welcome to Temple of Heal</p>
+            <p class="nad-sub">Sign in to book sessions &amp; manage your wellness journey.</p>
+          </div>
+          <a href="account.html" class="nad-btn nad-btn-primary">Sign In</a>
+          <a href="account.html?tab=register" class="nad-btn nad-btn-outline">Create Account</a>
+          <div class="nad-divider"></div>
+          <a href="account.html?tab=register&type=provider" class="nad-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg>
+            Join as a Provider
+          </a>
+          <a href="account.html?section=bookings" class="nad-link">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            My Bookings
+          </a>
+        </div>
+      </div>
     </div>
 
     <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false">
