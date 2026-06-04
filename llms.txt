@@ -1,0 +1,66 @@
+# Temple of Heal — llms.txt
+# Machine-readable site description for AI and LLM systems
+# Format: https://llmstxt.org
+
+# About
+Temple of Heal is a wellness marketplace platform connecting individuals with
+verified wellness professionals including coaches, therapists, yoga teachers,
+meditation guides, and healing practitioners.
+
+# Primary URL
+https://templeofheal.com
+
+# What we offer
+- Individual counselling and psychotherapy (virtual and in-person)
+- Life coaching, NLP coaching, performance coaching
+- Yoga classes and yoga teacher training
+- Meditation and mindfulness sessions
+- Massage therapy (in-person)
+- Wellness retreats (multi-day immersive programs)
+- Group workshops and community circles
+- AI-powered professional matching
+- Secure booking and Stripe payments
+
+# Who we serve
+1. Seekers / End Users: Individuals looking for healing, growth, therapy, or wellness support
+2. Service Providers: Coaches, therapists, yoga teachers, healers, and practitioners wanting to list their services
+
+# Trust signals
+- 50+ verified professionals
+- 4.9/5 average rating
+- 500+ sessions booked
+- All providers are credential-verified and background-checked
+- Tier system: Silver, Gold, Platinum based on performance
+
+# Session types
+- Virtual (online video)
+- In-person
+- Both (practitioner offers either)
+
+# Key pages
+/ — Homepage with full session discovery, expert spotlight, testimonials
+/#find-session — Browse all session categories and search practitioners
+/#our-experts — View all verified practitioners
+/#testimonials — Client reviews with verified booking badges
+/#faq — Frequently asked questions
+/sitemap.xml — Full XML sitemap
+
+# Contact
+hello@templeofheal.com
++1 (416) 555-0192
+
+# Social
+Instagram: https://instagram.com/templeofheal
+LinkedIn: https://linkedin.com/company/templeofheal
+Facebook: https://facebook.com/templeofheal
+YouTube: https://youtube.com/@templeofheal
+
+# CMS
+Content is managed via /admin/ — a self-contained CMS admin panel.
+Service listings include required/optional booking fields and required/optional
+provider document uploads defined per service type.
+
+# Keywords
+wellness, coaching, therapy, yoga, meditation, healing, NLP, counselling,
+mindfulness, retreat, massage therapy, holistic health, mental health,
+personal growth, energy healing, inner peace, professional guidance

@@ -1,0 +1,888 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CMS Admin – Temple of Heal</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%231B3A2A'/><text y='72' x='50' text-anchor='middle' font-size='60'>🌿</text></svg>">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --g900: #0F2419; --g800: #1B3A2A; --g600: #2E6B4A; --g400: #5AA878;
+      --g100: #EBF5F0; --cream: #F7F2EA; --white: #fff;
+      --text: #1A1A1A; --mid: #4A5568; --lt: #718096;
+      --border: #E2D9CC; --gold: #C49B3C; --red: #DC2626;
+      --r: 0.5rem; --r-lg: 0.875rem; --shadow: 0 2px 12px rgba(0,0,0,.08);
+      --trans: .2s ease; --sidebar-w: 240px;
+    }
+    html, body { height: 100%; font-family: 'DM Sans', system-ui, sans-serif; color: var(--text); background: var(--cream); }
+    a { color: inherit; text-decoration: none; }
+    button { cursor: pointer; font-family: inherit; }
+    input, textarea, select { font-family: inherit; }
+    img { max-width: 100%; }
+
+    /* Layout */
+    .app { display: flex; height: 100vh; overflow: hidden; }
+    .sidebar {
+      width: var(--sidebar-w); flex-shrink: 0; background: var(--g800);
+      display: flex; flex-direction: column; overflow-y: auto;
+    }
+    .sidebar-header {
+      padding: 1.25rem 1rem; border-bottom: 1px solid rgba(255,255,255,.08);
+      display: flex; align-items: center; gap: .6rem;
+      color: #fff; font-size: 1rem; font-weight: 600;
+    }
+    .sidebar-header svg { color: #9DD4B5; width: 1.1rem; height: 1.1rem; }
+    .sidebar-header small { display: block; font-size: .7rem; font-weight: 400; color: rgba(255,255,255,.5); }
+    .sidebar-nav { flex: 1; padding: .75rem 0; }
+    .nav-section { padding: .5rem 1rem .25rem; font-size: .65rem; letter-spacing: .1em; text-transform: uppercase; color: rgba(255,255,255,.35); font-weight: 500; }
+    .nav-item {
+      display: flex; align-items: center; gap: .65rem; padding: .65rem 1rem;
+      color: rgba(255,255,255,.7); font-size: .875rem; cursor: pointer;
+      border-left: 3px solid transparent; transition: var(--trans);
+    }
+    .nav-item:hover { color: #fff; background: rgba(255,255,255,.05); }
+    .nav-item.active { color: #fff; background: rgba(255,255,255,.08); border-left-color: #9DD4B5; }
+    .nav-item svg { width: 1rem; height: 1rem; flex-shrink: 0; }
+    .sidebar-footer {
+      padding: 1rem; border-top: 1px solid rgba(255,255,255,.08);
+      display: flex; flex-direction: column; gap: .5rem;
+    }
+    .sidebar-footer a {
+      display: flex; align-items: center; gap: .5rem; color: rgba(255,255,255,.5);
+      font-size: .8rem; transition: color var(--trans);
+    }
+    .sidebar-footer a:hover { color: rgba(255,255,255,.85); }
+    .sidebar-footer a svg { width: .9rem; height: .9rem; }
+
+    /* Main content */
+    .main { flex: 1; overflow-y: auto; display: flex; flex-direction: column; }
+    .topbar {
+      background: var(--white); border-bottom: 1px solid var(--border);
+      padding: .875rem 1.5rem; display: flex; align-items: center; justify-content: space-between;
+      position: sticky; top: 0; z-index: 100;
+    }
+    .topbar h1 { font-size: 1.1rem; font-weight: 600; }
+    .topbar-actions { display: flex; align-items: center; gap: .75rem; }
+    .content { flex: 1; padding: 1.5rem; }
+
+    /* Buttons */
+    .btn { display: inline-flex; align-items: center; gap: .4rem; padding: .55rem 1.1rem; border-radius: 0.375rem; font-size: .875rem; font-weight: 500; border: none; transition: var(--trans); cursor: pointer; }
+    .btn-primary { background: var(--g600); color: #fff; }
+    .btn-primary:hover { background: #245839; }
+    .btn-secondary { background: var(--white); color: var(--text); border: 1.5px solid var(--border); }
+    .btn-secondary:hover { border-color: var(--g600); color: var(--g600); }
+    .btn-danger { background: #FEF2F2; color: var(--red); border: 1.5px solid #FECACA; }
+    .btn-danger:hover { background: #FEE2E2; }
+    .btn-sm { padding: .35rem .75rem; font-size: .8rem; }
+    .btn svg { width: .9rem; height: .9rem; }
+
+    /* Cards */
+    .card { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r-lg); padding: 1.25rem; margin-bottom: 1rem; }
+    .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1rem; padding-bottom: .75rem; border-bottom: 1px solid var(--border); }
+    .card-header h2 { font-size: 1rem; font-weight: 600; }
+
+    /* Tables */
+    .table-wrap { overflow-x: auto; border-radius: var(--r); border: 1.5px solid var(--border); }
+    table { width: 100%; border-collapse: collapse; }
+    th { background: var(--cream); text-align: left; padding: .65rem 1rem; font-size: .78rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; color: var(--lt); border-bottom: 1.5px solid var(--border); }
+    td { padding: .8rem 1rem; border-bottom: 1px solid var(--border); font-size: .875rem; vertical-align: middle; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: var(--cream); }
+    .td-actions { display: flex; gap: .4rem; }
+
+    /* Badges */
+    .badge { display: inline-flex; align-items: center; gap: .25rem; padding: .2rem .6rem; border-radius: 999px; font-size: .72rem; font-weight: 500; }
+    .badge-green { background: var(--g100); color: var(--g600); }
+    .badge-gold { background: #FFF8E7; color: var(--gold); }
+    .badge-gray { background: #F3F4F6; color: #6B7280; }
+    .badge-new { background: #FFF7ED; color: #C2410C; }
+    .status-dot { width: .5rem; height: .5rem; border-radius: 50%; display: inline-block; }
+    .dot-green { background: #22C55E; }
+    .dot-gray { background: #9CA3AF; }
+
+    /* Forms */
+    .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; }
+    .form-grid.cols-1 { grid-template-columns: 1fr; }
+    .field { display: flex; flex-direction: column; gap: .4rem; }
+    .field.span-2 { grid-column: 1 / -1; }
+    label { font-size: .82rem; font-weight: 500; color: var(--mid); }
+    label .req { color: var(--red); margin-left: 2px; }
+    input[type=text], input[type=email], input[type=url], input[type=tel], input[type=number],
+    textarea, select {
+      width: 100%; padding: .6rem .85rem; border: 1.5px solid var(--border); border-radius: var(--r);
+      font-size: .875rem; color: var(--text); background: var(--white);
+      transition: border-color var(--trans), box-shadow var(--trans); outline: none;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--g600); box-shadow: 0 0 0 3px rgba(46,107,74,.1); }
+    textarea { resize: vertical; min-height: 100px; }
+    .hint { font-size: .75rem; color: var(--lt); }
+
+    /* Tabs */
+    .tab-bar { display: flex; gap: .25rem; background: var(--cream); border: 1.5px solid var(--border); border-radius: var(--r); padding: .25rem; margin-bottom: 1.25rem; width: fit-content; flex-wrap: wrap; }
+    .tab { padding: .4rem 1rem; border-radius: calc(var(--r) - 2px); font-size: .85rem; font-weight: 500; color: var(--mid); cursor: pointer; transition: var(--trans); border: none; background: none; }
+    .tab.active { background: var(--white); color: var(--g600); box-shadow: var(--shadow); }
+
+    /* Fields manager */
+    .fields-list { display: flex; flex-direction: column; gap: .5rem; }
+    .field-item { display: flex; align-items: center; gap: .75rem; background: var(--cream); border: 1.5px solid var(--border); border-radius: var(--r); padding: .6rem .85rem; }
+    .field-item input[type=text] { flex: 1; border: none; background: transparent; box-shadow: none; padding: 0; }
+    .field-item input[type=text]:focus { box-shadow: none; border: none; }
+    .field-badge { font-size: .7rem; padding: .15rem .5rem; border-radius: 999px; white-space: nowrap; }
+    .field-badge.req { background: #FFF7ED; color: #C2410C; }
+    .field-badge.opt { background: var(--g100); color: var(--g600); }
+    .add-field-row { display: flex; gap: .5rem; margin-top: .5rem; }
+    .add-field-row input { flex: 1; }
+
+    /* Modal */
+    .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.45); z-index: 999; display: flex; align-items: center; justify-content: center; padding: 1rem; }
+    .modal-backdrop[hidden] { display: none; }
+    .modal { background: var(--white); border-radius: var(--r-lg); width: 100%; max-width: 680px; max-height: 90vh; display: flex; flex-direction: column; box-shadow: 0 20px 60px rgba(0,0,0,.2); }
+    .modal-header { padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-shrink: 0; }
+    .modal-header h3 { font-size: 1rem; font-weight: 600; }
+    .modal-body { padding: 1.5rem; overflow-y: auto; flex: 1; }
+    .modal-footer { padding: 1rem 1.5rem; border-top: 1px solid var(--border); display: flex; justify-content: flex-end; gap: .75rem; flex-shrink: 0; }
+
+    /* Dashboard stats */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.5rem; }
+    .stat-card { background: var(--white); border: 1.5px solid var(--border); border-radius: var(--r-lg); padding: 1.25rem; }
+    .stat-card .num { font-size: 2rem; font-weight: 700; color: var(--g600); line-height: 1; display: block; }
+    .stat-card .lbl { font-size: .82rem; color: var(--lt); margin-top: .3rem; }
+    .stat-card .chg { font-size: .78rem; color: #16A34A; margin-top: .5rem; }
+
+    /* Toggle switch */
+    .toggle-wrap { display: flex; align-items: center; gap: .5rem; }
+    .toggle { position: relative; width: 2.5rem; height: 1.4rem; flex-shrink: 0; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider { position: absolute; inset: 0; background: #D1D5DB; border-radius: 999px; cursor: pointer; transition: var(--trans); }
+    .toggle-slider::before { content: ''; position: absolute; width: 1rem; height: 1rem; left: .2rem; top: 50%; transform: translateY(-50%); background: #fff; border-radius: 50%; transition: var(--trans); }
+    .toggle input:checked + .toggle-slider { background: var(--g600); }
+    .toggle input:checked + .toggle-slider::before { left: 1.3rem; }
+    .toggle-label { font-size: .875rem; color: var(--mid); }
+
+    /* Alert */
+    .alert { display: flex; align-items: flex-start; gap: .75rem; padding: .875rem 1rem; border-radius: var(--r); margin-bottom: 1rem; font-size: .875rem; }
+    .alert-success { background: #F0FDF4; color: #166534; border: 1px solid #BBF7D0; }
+    .alert-error   { background: #FEF2F2; color: var(--red); border: 1px solid #FECACA; }
+    .alert[hidden]  { display: none; }
+    .alert svg { width: 1rem; height: 1rem; flex-shrink: 0; margin-top: .1rem; }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 680px) {
+      .sidebar { display: none; }
+      .form-grid { grid-template-columns: 1fr; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ── Sidebar ────────────────────────────────────────── -->
+  <aside class="sidebar" role="navigation" aria-label="Admin navigation">
+    <div class="sidebar-header">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2C6 2 3 7 3 12c0 3 1.5 5.5 4 7"/><path d="M12 2c6 0 9 5 9 10 0 3-1.5 5.5-4 7"/><path d="M12 22V10"/><path d="M8 14c1.5-1 3-1.5 4-1.5s2.5.5 4 1.5"/></svg>
+      <div>Temple of Heal<small>Content Manager</small></div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section">Overview</div>
+      <div class="nav-item active" data-panel="dashboard">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </div>
+
+      <div class="nav-section">Content</div>
+      <div class="nav-item" data-panel="services">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Services
+      </div>
+      <div class="nav-item" data-panel="experts">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Experts / Providers
+      </div>
+      <div class="nav-item" data-panel="testimonials">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Testimonials
+      </div>
+      <div class="nav-item" data-panel="faqs">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        FAQs
+      </div>
+
+      <div class="nav-section">Settings</div>
+      <div class="nav-item" data-panel="settings">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14"/><path d="M4.93 4.93a10 10 0 0 0 0 14.14"/></svg>
+        Site Settings
+      </div>
+    </nav>
+
+    <div class="sidebar-footer">
+      <a href="../index.html" target="_blank">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        View Website
+      </a>
+      <a href="#" id="export-btn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        Export JSON
+      </a>
+    </div>
+  </aside>
+
+  <!-- ── Main content ───────────────────────────────────── -->
+  <div class="main">
+    <div class="topbar">
+      <h1 id="panel-title">Dashboard</h1>
+      <div class="topbar-actions">
+        <div id="alert-success" class="alert alert-success" hidden>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+          <span id="alert-text">Saved!</span>
+        </div>
+        <button class="btn btn-primary" id="save-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+          Save All
+        </button>
+      </div>
+    </div>
+
+    <div class="content" id="main-content">
+      <!-- Panels rendered by JS -->
+    </div>
+  </div>
+</div>
+
+<!-- Modal for service/expert editing -->
+<div class="modal-backdrop" id="modal" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="modal-header">
+      <h3 id="modal-title">Edit Item</h3>
+      <button class="btn btn-secondary btn-sm" id="modal-close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+        Close
+      </button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-secondary" id="modal-cancel">Cancel</button>
+      <button class="btn btn-primary" id="modal-save">Save Changes</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/cms-data.js"></script>
+<script>
+(function () {
+  'use strict';
+
+  /* ── State ───────────────────────────────────────────── */
+  let cms;
+  try {
+    const saved = localStorage.getItem('toh_cms');
+    cms = saved ? JSON.parse(saved) : deepCopy(TOH_CMS);
+  } catch (_) {
+    cms = deepCopy(TOH_CMS);
+  }
+
+  function deepCopy(o) { return JSON.parse(JSON.stringify(o)); }
+  function saveCMS() {
+    localStorage.setItem('toh_cms', JSON.stringify(cms));
+    showAlert('Changes saved successfully!');
+  }
+  function showAlert(msg) {
+    const el = document.getElementById('alert-success');
+    document.getElementById('alert-text').textContent = msg;
+    el.hidden = false;
+    clearTimeout(el._t);
+    el._t = setTimeout(() => { el.hidden = true; }, 2500);
+  }
+
+  let currentPanel = 'dashboard';
+  let modalCallback = null;
+
+  /* ── Nav ─────────────────────────────────────────────── */
+  document.querySelectorAll('.nav-item[data-panel]').forEach(item => {
+    item.addEventListener('click', () => {
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+      item.classList.add('active');
+      currentPanel = item.dataset.panel;
+      document.getElementById('panel-title').textContent = item.textContent.trim();
+      renderPanel(currentPanel);
+    });
+  });
+
+  /* ── Save button ─────────────────────────────────────── */
+  document.getElementById('save-btn').addEventListener('click', saveCMS);
+
+  /* ── Export ──────────────────────────────────────────── */
+  document.getElementById('export-btn').addEventListener('click', e => {
+    e.preventDefault();
+    const blob = new Blob([JSON.stringify(cms, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = 'toh-cms-export.json';
+    a.click();
+  });
+
+  /* ── Modal ───────────────────────────────────────────── */
+  function openModal(title, bodyHtml, onSave) {
+    document.getElementById('modal-title').textContent = title;
+    document.getElementById('modal-body').innerHTML = bodyHtml;
+    modalCallback = onSave;
+    document.getElementById('modal').hidden = false;
+  }
+  function closeModal() {
+    document.getElementById('modal').hidden = true;
+    modalCallback = null;
+  }
+  document.getElementById('modal-close').addEventListener('click', closeModal);
+  document.getElementById('modal-cancel').addEventListener('click', closeModal);
+  document.getElementById('modal-save').addEventListener('click', () => {
+    if (modalCallback) modalCallback();
+    closeModal();
+    saveCMS();
+  });
+  document.getElementById('modal').addEventListener('click', e => {
+    if (e.target === document.getElementById('modal')) closeModal();
+  });
+
+  /* ── Render panels ───────────────────────────────────── */
+  function renderPanel(name) {
+    const el = document.getElementById('main-content');
+    switch (name) {
+      case 'dashboard':    el.innerHTML = dashboardHTML(); break;
+      case 'services':     el.innerHTML = servicesHTML(); bindServiceEvents(); break;
+      case 'experts':      el.innerHTML = expertsHTML(); bindExpertEvents(); break;
+      case 'testimonials': el.innerHTML = testimonialsHTML(); bindTestimonialEvents(); break;
+      case 'faqs':         el.innerHTML = faqsHTML(); bindFaqEvents(); break;
+      case 'settings':     el.innerHTML = settingsHTML(); bindSettingsEvents(); break;
+    }
+  }
+
+  /* ── DASHBOARD ───────────────────────────────────────── */
+  function dashboardHTML() {
+    const activeServices = cms.services.filter(s => s.isActive).length;
+    const activeExperts  = cms.experts.filter(e => e.isActive).length;
+    return `
+    <div class="stats-grid">
+      <div class="stat-card"><span class="num">${activeServices}</span><div class="lbl">Active Services</div><div class="chg">↑ ${cms.services.filter(s=>s.isNew).length} new</div></div>
+      <div class="stat-card"><span class="num">${activeExperts}</span><div class="lbl">Active Experts</div></div>
+      <div class="stat-card"><span class="num">${cms.testimonials.filter(t=>t.isActive).length}</span><div class="lbl">Testimonials</div></div>
+      <div class="stat-card"><span class="num">${cms.faqs.filter(f=>f.isActive).length}</span><div class="lbl">Active FAQs</div></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h2>Quick Actions</h2></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem">
+        ${['services','experts','testimonials','faqs','settings'].map(p=>`
+          <button class="btn btn-secondary" onclick="document.querySelector('[data-panel=${p}]').click()"
+            style="justify-content:flex-start;gap:.5rem;padding:.75rem">
+            ${p.charAt(0).toUpperCase()+p.slice(1)}
+          </button>`).join('')}
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><h2>Recent Services</h2></div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Category</th><th>Type</th><th>Status</th></tr></thead>
+          <tbody>${cms.services.slice(0,5).map(s=>`
+            <tr>
+              <td>${s.name}</td>
+              <td><span class="badge badge-green">${s.category}</span></td>
+              <td>${s.sessionType}</td>
+              <td><span class="status-dot ${s.isActive?'dot-green':'dot-gray'}"></span> ${s.isActive?'Active':'Inactive'}</td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+  }
+
+  /* ── SERVICES ────────────────────────────────────────── */
+  function servicesHTML() {
+    return `
+    <div class="card">
+      <div class="card-header">
+        <h2>Services (${cms.services.length})</h2>
+        <button class="btn btn-primary btn-sm" id="add-service-btn">+ Add Service</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Name</th><th>Category</th><th>Price Range</th><th>Type</th><th>New</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody id="services-tbody">
+            ${cms.services.map((s,i) => `
+            <tr data-idx="${i}">
+              <td><strong>${s.name}</strong></td>
+              <td><span class="badge badge-green">${s.category}</span></td>
+              <td>${s.priceRange}</td>
+              <td>${s.sessionType}</td>
+              <td>${s.isNew ? '<span class="badge badge-new">NEW</span>' : '—'}</td>
+              <td>
+                <label class="toggle-wrap">
+                  <label class="toggle"><input type="checkbox" class="service-toggle" data-idx="${i}" ${s.isActive?'checked':''}><span class="toggle-slider"></span></label>
+                  <span class="toggle-label">${s.isActive?'Active':'Off'}</span>
+                </label>
+              </td>
+              <td>
+                <div class="td-actions">
+                  <button class="btn btn-secondary btn-sm edit-service" data-idx="${i}">Edit</button>
+                  <button class="btn btn-danger btn-sm del-service" data-idx="${i}">Del</button>
+                </div>
+              </td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+  }
+
+  function serviceModalHTML(s) {
+    const rf = (s.requiredFields || []).join(', ');
+    const of_ = (s.optionalFields || []).join(', ');
+    const rd = (s.requiredDocs || []).join(', ');
+    const od = (s.optionalDocs || []).join(', ');
+    const dur = (s.duration || []).join(', ');
+    return `
+    <div class="tab-bar" id="svc-tabs">
+      <button class="tab active" data-tab="basic">Basic Info</button>
+      <button class="tab" data-tab="fields">Booking Fields</button>
+      <button class="tab" data-tab="docs">Documents</button>
+    </div>
+
+    <div id="svc-tab-basic">
+      <div class="form-grid">
+        <div class="field"><label>Service Name <span class="req">*</span></label><input type="text" id="s-name" value="${s.name||''}"></div>
+        <div class="field"><label>Category <span class="req">*</span></label>
+          <select id="s-cat">
+            ${['Counselling','Coaching','Practices','Wellness','Community'].map(c=>`<option ${s.category===c?'selected':''}>${c}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field span-2"><label>Description</label><textarea id="s-desc">${s.description||''}</textarea></div>
+        <div class="field"><label>Price Range</label><input type="text" id="s-price" value="${s.priceRange||''}" placeholder="e.g. $60 – $200"></div>
+        <div class="field"><label>Session Type</label>
+          <select id="s-type">
+            ${['virtual','in-person','both'].map(t=>`<option value="${t}" ${s.sessionType===t?'selected':''}>${t}</option>`).join('')}
+          </select>
+        </div>
+        <div class="field"><label>Duration Options <span class="hint">(comma-separated)</span></label><input type="text" id="s-dur" value="${dur}"></div>
+        <div class="field" style="display:flex;align-items:center;gap:1rem;padding-top:1.5rem">
+          <label class="toggle"><input type="checkbox" id="s-new" ${s.isNew?'checked':''}><span class="toggle-slider"></span></label>
+          <span>Mark as NEW</span>
+          <label class="toggle" style="margin-left:1rem"><input type="checkbox" id="s-active" ${s.isActive?'checked':''}><span class="toggle-slider"></span></label>
+          <span>Active</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="svc-tab-fields" style="display:none">
+      <div class="form-grid cols-1">
+        <div class="field">
+          <label>Required Booking Fields <span class="req">*</span></label>
+          <input type="text" id="s-rfields" value="${rf}" placeholder="full_name, email, phone, reason_for_visit">
+          <span class="hint">Comma-separated. These are mandatory for clients to fill when booking.</span>
+        </div>
+        <div class="field">
+          <label>Optional Booking Fields</label>
+          <input type="text" id="s-ofields" value="${of_}" placeholder="health_conditions, preferences, notes">
+          <span class="hint">Comma-separated. These are optional extras clients may fill.</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="svc-tab-docs" style="display:none">
+      <div class="form-grid cols-1">
+        <div class="field">
+          <label>Required Documents (Provider must upload) <span class="req">*</span></label>
+          <input type="text" id="s-rdocs" value="${rd}" placeholder="professional_license, liability_insurance, id_verification">
+          <span class="hint">Comma-separated. Providers must upload these before going live.</span>
+        </div>
+        <div class="field">
+          <label>Optional Documents (Provider may upload)</label>
+          <input type="text" id="s-ododocs" value="${od}" placeholder="certifications, bio_photo, intro_video">
+          <span class="hint">Comma-separated. These enhance the provider's profile.</span>
+        </div>
+      </div>
+    </div>
+    <script>
+      document.getElementById('svc-tabs').addEventListener('click', function(e){
+        const t = e.target.closest('.tab');
+        if(!t) return;
+        document.querySelectorAll('#svc-tabs .tab').forEach(b=>b.classList.remove('active'));
+        t.classList.add('active');
+        ['basic','fields','docs'].forEach(id=>{ document.getElementById('svc-tab-'+id).style.display='none'; });
+        document.getElementById('svc-tab-'+t.dataset.tab).style.display='';
+      });
+    <\/script>`;
+  }
+
+  function bindServiceEvents() {
+    document.getElementById('add-service-btn').addEventListener('click', () => {
+      openModal('Add Service', serviceModalHTML({name:'',category:'Coaching',description:'',priceRange:'',sessionType:'virtual',duration:[],isNew:false,isActive:true,requiredFields:[],optionalFields:[],requiredDocs:[],optionalDocs:[]}), () => {
+        const s = collectServiceForm();
+        if (!s.name) return;
+        s.id = s.name.toLowerCase().replace(/\s+/g,'-');
+        cms.services.push(s);
+      });
+    });
+
+    document.querySelectorAll('.edit-service').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const i = +btn.dataset.idx;
+        const s = cms.services[i];
+        openModal('Edit Service: ' + s.name, serviceModalHTML(s), () => {
+          const updated = collectServiceForm();
+          cms.services[i] = { ...s, ...updated };
+        });
+      });
+    });
+
+    document.querySelectorAll('.del-service').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!confirm('Delete this service?')) return;
+        cms.services.splice(+btn.dataset.idx, 1);
+        saveCMS();
+        renderPanel('services');
+      });
+    });
+
+    document.querySelectorAll('.service-toggle').forEach(chk => {
+      chk.addEventListener('change', () => {
+        cms.services[+chk.dataset.idx].isActive = chk.checked;
+        saveCMS();
+      });
+    });
+  }
+
+  function collectServiceForm() {
+    return {
+      name:           document.getElementById('s-name').value.trim(),
+      category:       document.getElementById('s-cat').value,
+      description:    document.getElementById('s-desc').value.trim(),
+      priceRange:     document.getElementById('s-price').value.trim(),
+      sessionType:    document.getElementById('s-type').value,
+      duration:       document.getElementById('s-dur').value.split(',').map(x=>x.trim()).filter(Boolean),
+      isNew:          document.getElementById('s-new').checked,
+      isActive:       document.getElementById('s-active').checked,
+      requiredFields: document.getElementById('s-rfields').value.split(',').map(x=>x.trim()).filter(Boolean),
+      optionalFields: document.getElementById('s-ofields').value.split(',').map(x=>x.trim()).filter(Boolean),
+      requiredDocs:   document.getElementById('s-rdocs').value.split(',').map(x=>x.trim()).filter(Boolean),
+      optionalDocs:   document.getElementById('s-ododocs').value.split(',').map(x=>x.trim()).filter(Boolean),
+    };
+  }
+
+  /* ── EXPERTS ─────────────────────────────────────────── */
+  function expertsHTML() {
+    return `
+    <div class="card">
+      <div class="card-header">
+        <h2>Experts / Providers (${cms.experts.length})</h2>
+        <button class="btn btn-primary btn-sm" id="add-expert-btn">+ Add Expert</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Photo</th><th>Name</th><th>Specialty</th><th>Rating</th><th>Tier</th><th>Featured</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>${cms.experts.map((ex,i)=>`
+            <tr data-idx="${i}">
+              <td><img src="${ex.photo||'https://picsum.photos/seed/'+i+'/40/40'}" style="width:2.5rem;height:2.5rem;border-radius:50%;object-fit:cover" alt="${ex.name}"></td>
+              <td><strong>${ex.name}</strong><br><small style="color:var(--lt)">${ex.nextSlot?'Next: '+ex.nextSlot:''}</small></td>
+              <td>${ex.specialty}</td>
+              <td>⭐ ${ex.rating} <span style="color:var(--lt)">(${ex.reviews})</span></td>
+              <td><span class="badge ${ex.tier==='Gold'?'badge-gold':ex.tier==='Platinum'?'badge-gold':'badge-green'}">${ex.tier}</span></td>
+              <td>${ex.featured?'⭐ Yes':'—'}</td>
+              <td><label class="toggle"><input type="checkbox" class="expert-toggle" data-idx="${i}" ${ex.isActive?'checked':''}><span class="toggle-slider"></span></label></td>
+              <td><div class="td-actions">
+                <button class="btn btn-secondary btn-sm edit-expert" data-idx="${i}">Edit</button>
+                <button class="btn btn-danger btn-sm del-expert" data-idx="${i}">Del</button>
+              </div></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+  }
+
+  function expertModalHTML(ex) {
+    return `
+    <div class="form-grid">
+      <div class="field"><label>Name <span class="req">*</span></label><input type="text" id="e-name" value="${ex.name||''}"></div>
+      <div class="field"><label>Specialty</label><input type="text" id="e-spec" value="${ex.specialty||''}"></div>
+      <div class="field span-2"><label>Photo URL</label><input type="url" id="e-photo" value="${ex.photo||''}"></div>
+      <div class="field span-2"><label>Bio</label><textarea id="e-bio">${ex.bio||''}</textarea></div>
+      <div class="field"><label>Rating (0-5)</label><input type="number" id="e-rating" value="${ex.rating||5}" min="0" max="5" step="0.1"></div>
+      <div class="field"><label>Review Count</label><input type="number" id="e-reviews" value="${ex.reviews||0}"></div>
+      <div class="field"><label>Tier</label>
+        <select id="e-tier">${['Silver','Gold','Platinum'].map(t=>`<option ${ex.tier===t?'selected':''}>${t}</option>`).join('')}</select>
+      </div>
+      <div class="field"><label>Next Slot</label><input type="text" id="e-slot" value="${ex.nextSlot||''}" placeholder="Mon, 3pm"></div>
+      <div class="field"><label>LinkedIn URL</label><input type="url" id="e-li" value="${(ex.social&&ex.social.linkedin)||''}"></div>
+      <div class="field"><label>Instagram URL</label><input type="url" id="e-ig" value="${(ex.social&&ex.social.instagram)||''}"></div>
+      <div class="field" style="display:flex;align-items:center;gap:1rem;padding-top:1.25rem">
+        <label class="toggle"><input type="checkbox" id="e-featured" ${ex.featured?'checked':''}><span class="toggle-slider"></span></label>
+        <span>Featured (Pro Spotlight)</span>
+        <label class="toggle" style="margin-left:1rem"><input type="checkbox" id="e-active" ${ex.isActive?'checked':''}><span class="toggle-slider"></span></label>
+        <span>Active</span>
+      </div>
+    </div>`;
+  }
+
+  function collectExpertForm() {
+    return {
+      name:     document.getElementById('e-name').value.trim(),
+      specialty:document.getElementById('e-spec').value.trim(),
+      photo:    document.getElementById('e-photo').value.trim(),
+      bio:      document.getElementById('e-bio').value.trim(),
+      rating:   parseFloat(document.getElementById('e-rating').value) || 5,
+      reviews:  parseInt(document.getElementById('e-reviews').value) || 0,
+      tier:     document.getElementById('e-tier').value,
+      nextSlot: document.getElementById('e-slot').value.trim(),
+      social:   { linkedin: document.getElementById('e-li').value.trim(), instagram: document.getElementById('e-ig').value.trim() },
+      featured: document.getElementById('e-featured').checked,
+      isActive: document.getElementById('e-active').checked,
+    };
+  }
+
+  function bindExpertEvents() {
+    document.getElementById('add-expert-btn').addEventListener('click', () => {
+      openModal('Add Expert', expertModalHTML({isActive:true}), () => {
+        const ex = collectExpertForm();
+        if (!ex.name) return;
+        cms.experts.push(ex);
+      });
+    });
+    document.querySelectorAll('.edit-expert').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const i = +btn.dataset.idx;
+        openModal('Edit Expert: ' + cms.experts[i].name, expertModalHTML(cms.experts[i]), () => {
+          cms.experts[i] = { ...cms.experts[i], ...collectExpertForm() };
+        });
+      });
+    });
+    document.querySelectorAll('.del-expert').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!confirm('Delete this expert?')) return;
+        cms.experts.splice(+btn.dataset.idx, 1);
+        saveCMS(); renderPanel('experts');
+      });
+    });
+    document.querySelectorAll('.expert-toggle').forEach(chk => {
+      chk.addEventListener('change', () => { cms.experts[+chk.dataset.idx].isActive = chk.checked; saveCMS(); });
+    });
+  }
+
+  /* ── TESTIMONIALS ────────────────────────────────────── */
+  function testimonialsHTML() {
+    return `
+    <div class="card">
+      <div class="card-header">
+        <h2>Testimonials (${cms.testimonials.length})</h2>
+        <button class="btn btn-primary btn-sm" id="add-testi-btn">+ Add Testimonial</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Reviewer</th><th>Quote (preview)</th><th>Rating</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>${cms.testimonials.map((t,i)=>`
+            <tr>
+              <td><strong>${t.name}</strong></td>
+              <td style="max-width:300px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${t.quote}</td>
+              <td>${'⭐'.repeat(t.rating||5)} (${t.rating})</td>
+              <td><label class="toggle"><input type="checkbox" class="testi-toggle" data-idx="${i}" ${t.isActive?'checked':''}><span class="toggle-slider"></span></label></td>
+              <td><div class="td-actions">
+                <button class="btn btn-secondary btn-sm edit-testi" data-idx="${i}">Edit</button>
+                <button class="btn btn-danger btn-sm del-testi" data-idx="${i}">Del</button>
+              </div></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+  }
+
+  function testiModalHTML(t) {
+    return `
+    <div class="form-grid">
+      <div class="field"><label>Reviewer Name <span class="req">*</span></label><input type="text" id="t-name" value="${t.name||''}"></div>
+      <div class="field"><label>Rating (1-5)</label><input type="number" id="t-rating" value="${t.rating||5}" min="1" max="5"></div>
+      <div class="field span-2"><label>Quote <span class="req">*</span></label><textarea id="t-quote">${t.quote||''}</textarea></div>
+      <div class="field span-2"><label>Avatar URL</label><input type="url" id="t-avatar" value="${t.avatar||''}"></div>
+    </div>`;
+  }
+
+  function bindTestimonialEvents() {
+    document.getElementById('add-testi-btn').addEventListener('click', () => {
+      openModal('Add Testimonial', testiModalHTML({rating:5,isActive:true}), () => {
+        const t = { name: document.getElementById('t-name').value.trim(), quote: document.getElementById('t-quote').value.trim(), rating: parseInt(document.getElementById('t-rating').value)||5, avatar: document.getElementById('t-avatar').value.trim(), isActive: true };
+        if (!t.name || !t.quote) return;
+        cms.testimonials.push(t);
+      });
+    });
+    document.querySelectorAll('.edit-testi').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const i = +btn.dataset.idx;
+        openModal('Edit Testimonial', testiModalHTML(cms.testimonials[i]), () => {
+          cms.testimonials[i] = { ...cms.testimonials[i], name: document.getElementById('t-name').value.trim(), quote: document.getElementById('t-quote').value.trim(), rating: parseInt(document.getElementById('t-rating').value)||5, avatar: document.getElementById('t-avatar').value.trim() };
+        });
+      });
+    });
+    document.querySelectorAll('.del-testi').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!confirm('Delete?')) return;
+        cms.testimonials.splice(+btn.dataset.idx, 1);
+        saveCMS(); renderPanel('testimonials');
+      });
+    });
+    document.querySelectorAll('.testi-toggle').forEach(chk => {
+      chk.addEventListener('change', () => { cms.testimonials[+chk.dataset.idx].isActive = chk.checked; saveCMS(); });
+    });
+  }
+
+  /* ── FAQs ────────────────────────────────────────────── */
+  function faqsHTML() {
+    return `
+    <div class="card">
+      <div class="card-header">
+        <h2>FAQs (${cms.faqs.length})</h2>
+        <button class="btn btn-primary btn-sm" id="add-faq-btn">+ Add FAQ</button>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>#</th><th>Question</th><th>Status</th><th>Actions</th></tr></thead>
+          <tbody>${cms.faqs.map((f,i)=>`
+            <tr>
+              <td>${i+1}</td>
+              <td>${f.question}</td>
+              <td><label class="toggle"><input type="checkbox" class="faq-toggle" data-idx="${i}" ${f.isActive?'checked':''}><span class="toggle-slider"></span></label></td>
+              <td><div class="td-actions">
+                <button class="btn btn-secondary btn-sm edit-faq" data-idx="${i}">Edit</button>
+                <button class="btn btn-danger btn-sm del-faq" data-idx="${i}">Del</button>
+              </div></td>
+            </tr>`).join('')}
+          </tbody>
+        </table>
+      </div>
+    </div>`;
+  }
+
+  function faqModalHTML(f) {
+    return `
+    <div class="form-grid cols-1">
+      <div class="field"><label>Question <span class="req">*</span></label><input type="text" id="f-q" value="${(f.question||'').replace(/"/g,'&quot;')}"></div>
+      <div class="field"><label>Answer <span class="req">*</span></label><textarea id="f-a" rows="5">${f.answer||''}</textarea></div>
+    </div>`;
+  }
+
+  function bindFaqEvents() {
+    document.getElementById('add-faq-btn').addEventListener('click', () => {
+      openModal('Add FAQ', faqModalHTML({isActive:true}), () => {
+        const f = { question: document.getElementById('f-q').value.trim(), answer: document.getElementById('f-a').value.trim(), isActive: true };
+        if (!f.question || !f.answer) return;
+        cms.faqs.push(f);
+      });
+    });
+    document.querySelectorAll('.edit-faq').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const i = +btn.dataset.idx;
+        openModal('Edit FAQ', faqModalHTML(cms.faqs[i]), () => {
+          cms.faqs[i] = { ...cms.faqs[i], question: document.getElementById('f-q').value.trim(), answer: document.getElementById('f-a').value.trim() };
+        });
+      });
+    });
+    document.querySelectorAll('.del-faq').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (!confirm('Delete?')) return;
+        cms.faqs.splice(+btn.dataset.idx, 1);
+        saveCMS(); renderPanel('faqs');
+      });
+    });
+    document.querySelectorAll('.faq-toggle').forEach(chk => {
+      chk.addEventListener('change', () => { cms.faqs[+chk.dataset.idx].isActive = chk.checked; saveCMS(); });
+    });
+  }
+
+  /* ── SETTINGS ────────────────────────────────────────── */
+  function settingsHTML() {
+    const s = cms.site;
+    return `
+    <div class="card">
+      <div class="card-header"><h2>Website Settings</h2></div>
+      <div class="tab-bar" id="settings-tabs">
+        <button class="tab active" data-tab="general">General</button>
+        <button class="tab" data-tab="contact">Contact</button>
+        <button class="tab" data-tab="social">Social Media</button>
+      </div>
+
+      <div id="settings-tab-general">
+        <div class="form-grid">
+          <div class="field"><label>Site Name</label><input type="text" id="st-name" value="${s.name||'Temple of Heal'}"></div>
+          <div class="field"><label>Logo URL <span class="hint">(leave blank to use default)</span></label><input type="url" id="st-logo" value="${s.logo||''}"></div>
+          <div class="field span-2"><label>Tagline / Hero Sub</label><textarea id="st-tagline">${s.tagline||''}</textarea></div>
+          <div class="field span-2"><label>About Text</label><textarea id="st-about" rows="5">${s.about||''}</textarea></div>
+        </div>
+      </div>
+
+      <div id="settings-tab-contact" style="display:none">
+        <div class="form-grid">
+          <div class="field"><label>Email</label><input type="email" id="st-email" value="${s.email||''}"></div>
+          <div class="field"><label>Phone</label><input type="tel" id="st-phone" value="${s.phone||''}"></div>
+          <div class="field span-2"><label>Address</label><textarea id="st-address">${s.address||''}</textarea></div>
+        </div>
+      </div>
+
+      <div id="settings-tab-social" style="display:none">
+        <div class="form-grid">
+          <div class="field"><label>Instagram URL</label><input type="url" id="st-ig" value="${(s.social&&s.social.instagram)||''}"></div>
+          <div class="field"><label>LinkedIn URL</label><input type="url" id="st-li" value="${(s.social&&s.social.linkedin)||''}"></div>
+          <div class="field"><label>Facebook URL</label><input type="url" id="st-fb" value="${(s.social&&s.social.facebook)||''}"></div>
+          <div class="field"><label>YouTube URL</label><input type="url" id="st-yt" value="${(s.social&&s.social.youtube)||''}"></div>
+        </div>
+      </div>
+
+      <div style="margin-top:1.25rem;border-top:1px solid var(--border);padding-top:1rem">
+        <button class="btn btn-primary" id="save-settings-btn">Save Settings</button>
+      </div>
+    </div>
+    <script>
+      document.getElementById('settings-tabs').addEventListener('click', function(e){
+        const t = e.target.closest('.tab');
+        if(!t) return;
+        document.querySelectorAll('#settings-tabs .tab').forEach(b=>b.classList.remove('active'));
+        t.classList.add('active');
+        ['general','contact','social'].forEach(id=>{ document.getElementById('settings-tab-'+id).style.display='none'; });
+        document.getElementById('settings-tab-'+t.dataset.tab).style.display='';
+      });
+    <\/script>`;
+  }
+
+  function bindSettingsEvents() {
+    document.getElementById('save-settings-btn').addEventListener('click', () => {
+      cms.site = {
+        ...cms.site,
+        name:    document.getElementById('st-name').value.trim(),
+        logo:    document.getElementById('st-logo').value.trim(),
+        tagline: document.getElementById('st-tagline').value.trim(),
+        about:   document.getElementById('st-about').value.trim(),
+        email:   document.getElementById('st-email').value.trim(),
+        phone:   document.getElementById('st-phone').value.trim(),
+        address: document.getElementById('st-address').value.trim(),
+        social: {
+          instagram: document.getElementById('st-ig').value.trim(),
+          linkedin:  document.getElementById('st-li').value.trim(),
+          facebook:  document.getElementById('st-fb').value.trim(),
+          youtube:   document.getElementById('st-yt').value.trim(),
+        }
+      };
+      saveCMS();
+    });
+  }
+
+  /* ── Boot ────────────────────────────────────────────── */
+  renderPanel('dashboard');
+})();
+</script>
+</body>
+</html>

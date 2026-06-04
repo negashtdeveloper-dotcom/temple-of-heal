@@ -1,0 +1,10 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /admin/index.html
+
+# Sitemap
+Sitemap: https://templeofheal.com/sitemap.xml
+
+# LLM / AI crawler discovery
+# See llms.txt for a machine-readable description of this site
