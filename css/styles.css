@@ -9,7 +9,8 @@
   --primary:      #2E6B4A;
   --primary-h:    #245839;
   --primary-lt:   #EBF5F0;
-  --pink:         #F0A8A1;   /* logo head circle accent */
+  --pink:         #F0A8A1;   /* branded pink */
+  --pink-h:       #E8837B;   /* branded pink hover */
   --pink-lt:      #FDF1F0;
   --teal:         #1F5C50;
   --teal-lt:      #EBF5F2;
@@ -102,11 +103,11 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--f-head); line-height: 1.2; }
   cursor: pointer;
 }
 .btn-primary {
-  background: var(--primary);
-  color: var(--white);
-  border: 2px solid var(--primary);
+  background: var(--pink);
+  color: var(--text);
+  border: 2px solid var(--pink);
 }
-.btn-primary:hover { background: var(--primary-h); border-color: var(--primary-h); transform: translateY(-1px); box-shadow: var(--shadow); }
+.btn-primary:hover { background: var(--pink-h); border-color: var(--pink-h); color: var(--white); transform: translateY(-1px); box-shadow: var(--shadow); }
 .btn-outline {
   background: transparent;
   color: var(--primary);
@@ -216,13 +217,13 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--f-head); line-height: 1.2; }
 .nav-links a:hover { color: var(--white); }
 .nav-links a.active { color: var(--white); }
 .nav-links a.nav-cta {
-  background: var(--primary);
-  color: var(--white);
+  background: var(--pink);
+  color: var(--text);
   padding: .45rem 1.1rem;
   border-radius: var(--radius-pill);
   font-weight: 500;
 }
-.nav-links a.nav-cta:hover { background: var(--primary-h); }
+.nav-links a.nav-cta:hover { background: var(--pink-h); color: var(--white); }
 
 /* ── ACCOUNT DROPDOWN ────────────────────────────────── */
 .nav-account-wrap { position: relative; }
@@ -888,15 +889,16 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--f-head); line-height: 1.2; }
 .social-proof-row {
   display: flex;
   align-items: center;
-  gap: 2rem;
-  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: nowrap;
   margin-bottom: 2rem;
-  padding: 1.25rem;
+  padding: 1.25rem 1.5rem;
   background: var(--white);
   border-radius: var(--radius-lg);
   border: 1px solid var(--border);
 }
-.proof-stat { text-align: center; }
+.proof-stat { text-align: center; flex: 1; }
 .proof-stat .num { font-family: var(--f-head); font-size: 1.6rem; font-weight: 700; color: var(--primary); display: block; line-height: 1; }
 .proof-stat .lbl { font-size: .78rem; color: var(--text-lt); }
 .proof-divider { width: 1px; height: 2.5rem; background: var(--border); }

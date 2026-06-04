@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Account — Temple of Heal</title>
+  <meta name="robots" content="noindex">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    body { background: #f0ece4; margin: 0; }
+
+    /* ── ACCOUNT LAYOUT ──────────────────────────── */
+    .acct-wrap {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      min-height: calc(100vh - 72px);
+      padding-top: 72px;
+    }
+
+    /* ── SIDEBAR ─────────────────────────────────── */
+    .acct-sidebar {
+      background: var(--nav-bg);
+      position: sticky; top: 72px;
+      height: calc(100vh - 72px);
+      overflow-y: auto;
+      display: flex; flex-direction: column;
+    }
+    .acct-user {
+      padding: 1.75rem 1.25rem 1.25rem;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+    .acct-avatar-wrap { position: relative; display: inline-block; margin-bottom: .9rem; }
+    .acct-avatar {
+      width: 3.5rem; height: 3.5rem; border-radius: 50%;
+      overflow: hidden; border: 2px solid rgba(157,212,181,.4);
+    }
+    .acct-avatar img { width: 100%; height: 100%; object-fit: cover; }
+    .acct-badge {
+      position: absolute; bottom: 0; right: -2px;
+      background: var(--gold); color: var(--white);
+      font-size: .55rem; font-weight: 700; text-transform: uppercase;
+      padding: .1rem .35rem; border-radius: 4px; letter-spacing: .04em;
+      border: 1.5px solid var(--nav-bg);
+    }
+    .acct-badge.client { background: #5b8a7a; }
+    .acct-name { font-size: .95rem; font-weight: 600; color: var(--white); line-height: 1.2; }
+    .acct-email { font-size: .72rem; color: rgba(255,255,255,.45); margin-top: .15rem; }
+    .acct-type-switch {
+      display: flex; gap: .35rem; margin-top: .85rem;
+    }
+    .type-switch-btn {
+      flex: 1; padding: .35rem; border-radius: var(--radius-sm);
+      font-size: .7rem; font-weight: 500; cursor: pointer;
+      border: 1px solid rgba(255,255,255,.15); background: none;
+      color: rgba(255,255,255,.5); font-family: var(--f-body);
+      transition: all .2s;
+    }
+    .type-switch-btn.active { background: rgba(157,212,181,.15); border-color: #9DD4B5; color: #9DD4B5; }
+
+    /* Sidebar nav */
+    .acct-nav { flex: 1; padding: .75rem 0; }
+    .acct-nav-section {
+      padding: .6rem 1.25rem .25rem;
+      font-size: .62rem; text-transform: uppercase; letter-spacing: .1em;
+      color: rgba(255,255,255,.3); font-weight: 600;
+    }
+    .acct-nav-item {
+      display: flex; align-items: center; gap: .65rem;
+      padding: .6rem 1.25rem; cursor: pointer;
+      color: rgba(255,255,255,.65); font-size: .84rem;
+      border-left: 3px solid transparent;
+      transition: all .15s; position: relative;
+    }
+    .acct-nav-item:hover { background: rgba(255,255,255,.05); color: var(--white); }
+    .acct-nav-item.active { background: rgba(255,255,255,.08); color: var(--white); border-left-color: #9DD4B5; }
+    .acct-nav-item svg { width: 1rem; height: 1rem; flex-shrink: 0; }
+    .acct-nav-badge {
+      margin-left: auto; background: #e53e3e; color: var(--white);
+      font-size: .62rem; font-weight: 700; padding: .1rem .4rem;
+      border-radius: 10px; line-height: 1.4;
+    }
+    .acct-nav-item.danger { color: rgba(255,100,100,.7); }
+    .acct-nav-item.danger:hover { color: #ff8080; background: rgba(229,62,62,.1); }
+
+    .acct-sidebar-footer {
+      padding: 1rem 1.25rem;
+      border-top: 1px solid rgba(255,255,255,.08);
+      font-size: .72rem; color: rgba(255,255,255,.3);
+    }
+    .acct-sidebar-footer a { color: rgba(255,255,255,.35); display: flex; align-items: center; gap: .35rem; }
+    .acct-sidebar-footer a:hover { color: rgba(255,255,255,.6); }
+
+    /* ── MAIN CONTENT ────────────────────────────── */
+    .acct-main {
+      padding: 2rem 2.5rem 4rem;
+      overflow-y: auto;
+    }
+    .acct-section { display: none; }
+    .acct-section.active { display: block; }
+
+    /* Page header */
+    .acct-page-header {
+      display: flex; align-items: flex-start; justify-content: space-between;
+      margin-bottom: 1.75rem; flex-wrap: wrap; gap: 1rem;
+    }
+    .acct-page-title { font-family: var(--f-head); font-size: 1.75rem; color: var(--nav-bg); font-weight: 500; }
+    .acct-page-sub { font-size: .82rem; color: var(--text-light); margin-top: .2rem; }
+
+    /* Stat cards */
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 1.75rem; }
+    .stat-card {
+      background: var(--white); border-radius: var(--radius-lg);
+      padding: 1.25rem; border: 1px solid var(--border);
+      transition: box-shadow .2s;
+    }
+    .stat-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,.07); }
+    .stat-card-icon {
+      width: 2.4rem; height: 2.4rem; border-radius: var(--radius-sm);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: .85rem;
+    }
+    .stat-card-icon svg { width: 1.1rem; height: 1.1rem; }
+    .stat-card-num { font-family: var(--f-head); font-size: 1.7rem; font-weight: 500; color: var(--nav-bg); line-height: 1; }
+    .stat-card-label { font-size: .72rem; color: var(--text-light); margin-top: .25rem; }
+    .stat-card-trend { font-size: .72rem; color: #38a169; margin-top: .35rem; }
+
+    /* Content card */
+    .content-card {
+      background: var(--white); border-radius: var(--radius-lg);
+      border: 1px solid var(--border); overflow: hidden;
+      margin-bottom: 1.5rem;
+    }
+    .content-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.1rem 1.5rem; border-bottom: 1px solid var(--border);
+    }
+    .content-card-title { font-size: .9rem; font-weight: 600; color: var(--nav-bg); }
+    .content-card-action { font-size: .78rem; color: var(--primary); cursor: pointer; font-weight: 500; }
+    .content-card-body { padding: 1.5rem; }
+    .content-card-empty {
+      padding: 3rem 1.5rem; text-align: center; color: var(--text-light);
+    }
+    .content-card-empty svg { width: 2.5rem; height: 2.5rem; opacity: .35; margin-bottom: .75rem; }
+    .content-card-empty p { font-size: .875rem; margin-bottom: 1rem; }
+
+    /* Booking rows */
+    .booking-row {
+      display: flex; align-items: center; gap: 1rem;
+      padding: .85rem 0; border-bottom: 1px solid var(--border);
+    }
+    .booking-row:last-child { border-bottom: none; }
+    .booking-img { width: 3rem; height: 3rem; border-radius: var(--radius-sm); object-fit: cover; flex-shrink: 0; }
+    .booking-info { flex: 1; min-width: 0; }
+    .booking-title { font-size: .875rem; font-weight: 500; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .booking-meta { font-size: .75rem; color: var(--text-light); margin-top: .1rem; }
+    .booking-status {
+      font-size: .7rem; font-weight: 600; padding: .2rem .65rem;
+      border-radius: 20px; white-space: nowrap; flex-shrink: 0;
+    }
+    .status-confirmed { background: rgba(56,161,105,.1); color: #38a169; }
+    .status-pending   { background: rgba(221,107,32,.1); color: #dd6b20; }
+    .status-completed { background: rgba(46,107,74,.1);  color: var(--primary); }
+    .status-cancelled { background: rgba(229,62,62,.1);  color: #e53e3e; }
+    .booking-action { font-size: .75rem; color: var(--primary); cursor: pointer; white-space: nowrap; }
+
+    /* Provider cards */
+    .provider-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+    .saved-provider-card {
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: var(--radius); padding: 1.1rem; text-align: center;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .saved-provider-card:hover { border-color: var(--primary); box-shadow: 0 4px 16px rgba(0,0,0,.07); }
+    .sp-avatar { width: 3.5rem; height: 3.5rem; border-radius: 50%; object-fit: cover; margin: 0 auto .6rem; display: block; border: 2px solid var(--border); }
+    .sp-name { font-size: .85rem; font-weight: 500; color: var(--text); }
+    .sp-specialty { font-size: .72rem; color: var(--text-light); margin: .15rem 0 .6rem; }
+    .sp-actions { display: flex; gap: .5rem; justify-content: center; }
+    .sp-btn { flex: 1; padding: .35rem .5rem; border-radius: var(--radius-sm); font-size: .72rem; font-weight: 500; cursor: pointer; font-family: var(--f-body); border: 1.5px solid var(--border); background: none; color: var(--text-mid); transition: all .15s; }
+    .sp-btn.primary { background: var(--primary); color: var(--white); border-color: var(--primary); }
+    .sp-btn:hover:not(.primary) { border-color: var(--primary); color: var(--primary); }
+
+    /* Messages */
+    .message-row {
+      display: flex; align-items: flex-start; gap: .85rem;
+      padding: .9rem 0; border-bottom: 1px solid var(--border); cursor: pointer;
+    }
+    .message-row:last-child { border-bottom: none; }
+    .message-row:hover { opacity: .85; }
+    .msg-avatar { width: 2.4rem; height: 2.4rem; border-radius: 50%; object-fit: cover; flex-shrink: 0; border: 2px solid var(--border); }
+    .msg-body { flex: 1; min-width: 0; }
+    .msg-from { font-size: .85rem; font-weight: 500; color: var(--text); }
+    .msg-preview { font-size: .75rem; color: var(--text-light); margin-top: .1rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .msg-time { font-size: .7rem; color: var(--text-light); white-space: nowrap; }
+    .msg-unread { width: .5rem; height: .5rem; border-radius: 50%; background: var(--primary); margin-top: .35rem; flex-shrink: 0; }
+
+    /* Payment cards */
+    .payment-card-row {
+      display: flex; align-items: center; gap: 1rem;
+      padding: .9rem; border: 1.5px solid var(--border);
+      border-radius: var(--radius); margin-bottom: .75rem;
+      background: var(--white);
+    }
+    .pay-icon { width: 2.75rem; height: 1.75rem; border-radius: 4px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .pay-info { flex: 1; }
+    .pay-label { font-size: .85rem; font-weight: 500; color: var(--text); }
+    .pay-sub { font-size: .72rem; color: var(--text-light); margin-top: .1rem; }
+    .pay-default { font-size: .68rem; background: rgba(46,107,74,.1); color: var(--primary); padding: .1rem .5rem; border-radius: 20px; font-weight: 500; }
+    .pay-remove { font-size: .75rem; color: #e53e3e; cursor: pointer; }
+
+    /* Account details form */
+    .settings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem; }
+    .settings-grid .full { grid-column: 1/-1; }
+    .settings-label { font-size: .8rem; font-weight: 500; color: var(--text-mid); margin-bottom: .4rem; display: block; }
+    .settings-input {
+      width: 100%; padding: .65rem .9rem;
+      border: 1.5px solid var(--border); border-radius: var(--radius);
+      font-size: .875rem; font-family: var(--f-body); color: var(--text);
+      background: var(--white); outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .settings-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(46,107,74,.1); }
+    .settings-section-divider { border: none; border-top: 1px solid var(--border); margin: 1.75rem 0; }
+
+    /* Support tickets */
+    .ticket-row {
+      display: flex; align-items: center; gap: 1rem;
+      padding: .85rem 0; border-bottom: 1px solid var(--border);
+    }
+    .ticket-row:last-child { border-bottom: none; }
+    .ticket-title { flex: 1; font-size: .875rem; font-weight: 500; color: var(--text); }
+    .ticket-cat { font-size: .72rem; color: var(--text-light); margin-top: .15rem; }
+    .ticket-priority { font-size: .68rem; padding: .15rem .6rem; border-radius: 20px; font-weight: 600; }
+    .priority-high   { background: rgba(229,62,62,.1);  color: #e53e3e; }
+    .priority-medium { background: rgba(221,107,32,.1); color: #dd6b20; }
+    .priority-low    { background: rgba(46,107,74,.1);  color: var(--primary); }
+
+    /* Provider: Sessions calendar row */
+    .session-row {
+      display: flex; align-items: center; gap: 1rem;
+      padding: .85rem 0; border-bottom: 1px solid var(--border);
+    }
+    .session-row:last-child { border-bottom: none; }
+    .session-date {
+      width: 3rem; text-align: center; flex-shrink: 0;
+      background: var(--cream); border-radius: var(--radius-sm);
+      padding: .4rem .5rem;
+    }
+    .session-date .day { font-family: var(--f-head); font-size: 1.3rem; color: var(--nav-bg); line-height: 1; }
+    .session-date .month { font-size: .6rem; text-transform: uppercase; letter-spacing: .08em; color: var(--text-light); }
+    .session-info { flex: 1; }
+    .session-title { font-size: .875rem; font-weight: 500; color: var(--text); }
+    .session-meta { font-size: .75rem; color: var(--text-light); margin-top: .1rem; }
+    .session-actions { display: flex; gap: .5rem; }
+    .session-btn { padding: .35rem .75rem; border-radius: var(--radius-sm); font-size: .75rem; font-weight: 500; cursor: pointer; font-family: var(--f-body); border: 1.5px solid var(--border); background: none; color: var(--text-mid); transition: all .15s; }
+    .session-btn.primary { background: var(--primary); color: var(--white); border-color: var(--primary); }
+
+    /* Earnings */
+    .earnings-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .payout-row {
+      display: flex; align-items: center; gap: 1rem;
+      padding: .75rem 0; border-bottom: 1px solid var(--border);
+      font-size: .875rem;
+    }
+    .payout-row:last-child { border-bottom: none; }
+    .payout-date { color: var(--text-light); font-size: .78rem; width: 80px; flex-shrink: 0; }
+    .payout-desc { flex: 1; color: var(--text); }
+    .payout-amount { font-weight: 600; color: var(--primary); }
+
+    /* Profile editor */
+    .profile-photo-editor {
+      display: flex; align-items: center; gap: 1.25rem;
+      padding: 1.25rem; background: var(--cream); border-radius: var(--radius);
+      margin-bottom: 1.5rem;
+    }
+    .profile-photo { width: 4rem; height: 4rem; border-radius: 50%; object-fit: cover; border: 3px solid var(--white); box-shadow: 0 2px 10px rgba(0,0,0,.1); }
+    .profile-photo-actions { display: flex; flex-direction: column; gap: .4rem; }
+    .profile-photo-btn { font-size: .78rem; color: var(--primary); cursor: pointer; font-weight: 500; background: none; border: none; font-family: var(--f-body); padding: 0; }
+
+    /* Progress bar */
+    .progress-bar-wrap { margin-bottom: 1.5rem; }
+    .progress-bar-label { display: flex; justify-content: space-between; font-size: .78rem; color: var(--text-mid); margin-bottom: .4rem; }
+    .progress-bar { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: var(--primary); border-radius: 3px; transition: width .4s; }
+
+    /* Two-column layout */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+    .full-col { grid-column: 1/-1; }
+
+    /* Btn */
+    .btn-save {
+      background: var(--primary); color: var(--white);
+      border: none; padding: .65rem 1.5rem; border-radius: var(--radius-pill);
+      font-size: .875rem; font-weight: 500; font-family: var(--f-body);
+      cursor: pointer; transition: background .2s;
+    }
+    .btn-save:hover { background: var(--primary-h); }
+    .btn-outline-sm {
+      background: none; border: 1.5px solid var(--border); color: var(--text-mid);
+      padding: .6rem 1.2rem; border-radius: var(--radius-pill);
+      font-size: .85rem; font-weight: 500; font-family: var(--f-body);
+      cursor: pointer; transition: all .2s;
+    }
+    .btn-outline-sm:hover { border-color: var(--primary); color: var(--primary); }
+    .btn-danger-sm {
+      background: none; border: 1.5px solid rgba(229,62,62,.3); color: #e53e3e;
+      padding: .6rem 1.2rem; border-radius: var(--radius-pill);
+      font-size: .85rem; font-weight: 500; font-family: var(--f-body);
+      cursor: pointer; transition: all .2s;
+    }
+    .btn-danger-sm:hover { background: rgba(229,62,62,.06); border-color: #e53e3e; }
+
+    /* Toast notification */
+    .toast {
+      position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--nav-bg); color: var(--white); padding: .75rem 1.5rem;
+      border-radius: var(--radius-pill); font-size: .85rem; font-weight: 500;
+      box-shadow: 0 8px 32px rgba(0,0,0,.2); opacity: 0;
+      transition: opacity .3s, transform .3s; z-index: 2000;
+      pointer-events: none;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .acct-wrap { grid-template-columns: 1fr; }
+      .acct-sidebar { display: none; }
+      .acct-main { padding: 1.5rem; }
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+      .two-col, .settings-grid, .earnings-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 500px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<header class="site-header" id="site-header">
+  <nav class="nav container" aria-label="Main navigation">
+    <a href="index.html" class="nav-logo"><img src="assets/logo.png" alt="Temple of Heal" class="nav-logo-img"></a>
+    <div class="nav-links" role="list">
+      <a href="index.html#find-session" role="listitem">Find a Session</a>
+      <div class="nav-mega-wrap" role="listitem">
+        <button class="nav-mega-trigger" id="mega-trigger" aria-haspopup="true" aria-expanded="false">Services <svg class="mega-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+      </div>
+      <a href="index.html#our-experts" role="listitem">Providers</a>
+      <a href="index.html#why-us" role="listitem">About</a>
+      <a href="index.html#faq" role="listitem">FAQ</a>
+      <a href="become-a-provider.html" class="nav-cta" role="listitem">Become a Provider</a>
+    </div>
+    <div class="nav-icons">
+      <button class="nav-icon-btn" aria-label="Search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></button>
+      <div class="nav-account-wrap" id="nav-account-wrap">
+        <button class="nav-account-btn active" id="nav-account-btn" aria-label="Account">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
+          <span>My Account</span>
+        </button>
+      </div>
+    </div>
+    <button class="nav-hamburger" id="nav-hamburger" aria-label="Open menu" aria-expanded="false"><span></span><span></span><span></span></button>
+  </nav>
+  <div class="mega-menu" id="mega-menu" aria-hidden="true">
+    <div class="container"><div class="mega-inner">
+      <div class="mega-col mega-categories">
+        <p class="mega-label">Browse by Category</p>
+        <a href="services.html" class="mega-cat"><div class="mega-cat-icon" style="--ci:#4F8EF7"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="mega-cat-text"><strong>Counselling &amp; Coaching</strong><span>1-on-1 therapy, NLP &amp; life coaching</span></div><svg class="mega-cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <a href="services.html" class="mega-cat"><div class="mega-cat-icon" style="--ci:#3CB880"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><div class="mega-cat-text"><strong>Mind &amp; Body Practices</strong><span>Yoga, meditation &amp; mindfulness</span></div><svg class="mega-cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <a href="services.html" class="mega-cat"><div class="mega-cat-icon" style="--ci:#E07B3E"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/></svg></div><div class="mega-cat-text"><strong>Wellness &amp; Lifestyle</strong><span>Massage, energy healing &amp; nutrition</span></div><svg class="mega-cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+        <a href="services.html" class="mega-cat"><div class="mega-cat-icon" style="--ci:#9B6FD0"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><div class="mega-cat-text"><strong>Community &amp; Events</strong><span>Workshops, circles &amp; retreats</span></div><svg class="mega-cat-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      </div>
+      <div class="mega-divider"></div>
+      <div class="mega-col mega-featured">
+        <p class="mega-label">Popular Right Now</p>
+        <a href="services.html" class="mega-service"><img src="assets/sessions/session-coaching.png" alt="" class="mega-service-img"><div class="mega-service-body"><strong>Life Coaching</strong><span>Shohreh Bashar</span><span class="mega-service-price mega-price-free">Free intro</span></div></a>
+        <a href="services.html" class="mega-view-all">View All Services <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></a>
+      </div>
+    </div></div>
+  </div>
+</header>
+
+<!-- Mobile nav -->
+<div class="mobile-nav" id="mobile-nav" aria-hidden="true">
+  <div class="mobile-nav-backdrop" id="mobile-backdrop"></div>
+  <div class="mobile-nav-drawer" role="dialog">
+    <div style="margin-bottom:1.5rem"><a href="index.html"><img src="assets/logo.png" alt="" style="height:36px;width:auto;filter:brightness(0) invert(1);opacity:.9"></a></div>
+    <nav class="mobile-nav-links">
+      <a href="index.html#find-session">Find a Session</a>
+      <a href="services.html">Services</a>
+      <a href="index.html#our-experts">Providers</a>
+      <a href="index.html#why-us">About</a>
+    </nav>
+    <div class="mobile-nav-ctas">
+      <a href="services.html" class="btn btn-primary">Browse Sessions</a>
+      <a href="account.html" class="btn btn-outline-white">Sign Out</a>
+    </div>
+  </div>
+</div>
+
+<!-- ── ACCOUNT LAYOUT ── -->
+<div class="acct-wrap">
+
+  <!-- ── SIDEBAR ── -->
+  <aside class="acct-sidebar" aria-label="Account navigation">
+    <div class="acct-user">
+      <div class="acct-avatar-wrap">
+        <div class="acct-avatar">
+          <img src="https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-8.png"
+               onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&q=80&auto=format&fit=crop&crop=face'"
+               alt="User avatar" id="sidebar-avatar">
+        </div>
+        <span class="acct-badge client" id="sidebar-badge">Client</span>
+      </div>
+      <div class="acct-name" id="sidebar-name">Sarah Lin</div>
+      <div class="acct-email" id="sidebar-email">sarah.lin@example.com</div>
+      <!-- View as client/provider toggle (demo) -->
+      <div class="acct-type-switch">
+        <button class="type-switch-btn active" id="switch-client" onclick="setMode('client')">Client View</button>
+        <button class="type-switch-btn" id="switch-provider" onclick="setMode('provider')">Provider View</button>
+      </div>
+    </div>
+
+    <!-- Client navigation -->
+    <nav class="acct-nav" id="client-nav">
+      <div class="acct-nav-section">Overview</div>
+      <div class="acct-nav-item active" data-section="dashboard" onclick="showSection('dashboard',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </div>
+      <div class="acct-nav-section">My Activity</div>
+      <div class="acct-nav-item" data-section="bookings" onclick="showSection('bookings',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        My Bookings
+        <span class="acct-nav-badge">2</span>
+      </div>
+      <div class="acct-nav-item" data-section="messages" onclick="showSection('messages',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Messages
+        <span class="acct-nav-badge">1</span>
+      </div>
+      <div class="acct-nav-item" data-section="saved" onclick="showSection('saved',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>
+        Saved Providers
+      </div>
+      <div class="acct-nav-section">Account</div>
+      <div class="acct-nav-item" data-section="payment" onclick="showSection('payment',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        Payment Methods
+      </div>
+      <div class="acct-nav-item" data-section="settings" onclick="showSection('settings',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Account Settings
+      </div>
+      <div class="acct-nav-item" data-section="support" onclick="showSection('support',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Support
+      </div>
+      <div class="acct-nav-item danger" onclick="signOut()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign Out
+      </div>
+    </nav>
+
+    <!-- Provider navigation -->
+    <nav class="acct-nav" id="provider-nav" style="display:none">
+      <div class="acct-nav-section">Overview</div>
+      <div class="acct-nav-item active" data-section="pdashboard" onclick="showSection('pdashboard',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        Dashboard
+      </div>
+      <div class="acct-nav-section">Sessions</div>
+      <div class="acct-nav-item" data-section="psessions" onclick="showSection('psessions',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        My Sessions
+        <span class="acct-nav-badge">3</span>
+      </div>
+      <div class="acct-nav-item" data-section="pmessages" onclick="showSection('pmessages',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+        Client Messages
+        <span class="acct-nav-badge">2</span>
+      </div>
+      <div class="acct-nav-section">Business</div>
+      <div class="acct-nav-item" data-section="earnings" onclick="showSection('earnings',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+        Earnings &amp; Payouts
+      </div>
+      <div class="acct-nav-item" data-section="profile" onclick="showSection('profile',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+        My Public Profile
+      </div>
+      <div class="acct-nav-section">Account</div>
+      <div class="acct-nav-item" data-section="settings" onclick="showSection('settings',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        Account Settings
+      </div>
+      <div class="acct-nav-item" data-section="support" onclick="showSection('support',this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+        Support
+      </div>
+      <div class="acct-nav-item danger" onclick="signOut()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sign Out
+      </div>
+    </nav>
+
+    <div class="acct-sidebar-footer">
+      <a href="index.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="12" height="12"><path d="m15 18-6-6 6-6"/></svg> Back to site</a>
+    </div>
+  </aside>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main class="acct-main">
+
+    <!-- ═══ CLIENT DASHBOARD ═══ -->
+    <div class="acct-section active" id="section-dashboard">
+      <div class="acct-page-header">
+        <div><h1 class="acct-page-title">Good morning, Sarah ✨</h1><p class="acct-page-sub">Here's what's happening with your wellness journey.</p></div>
+        <a href="services.html" class="btn-save" style="text-decoration:none">Book a Session</a>
+      </div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-card-icon" style="background:rgba(46,107,74,.1)"><svg viewBox="0 0 24 24" fill="none" stroke="#2E6B4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="stat-card-num">7</div><div class="stat-card-label">Total Sessions</div><div class="stat-card-trend">↑ 2 this month</div></div>
+        <div class="stat-card"><div class="stat-card-icon" style="background:rgba(79,142,247,.1)"><svg viewBox="0 0 24 24" fill="none" stroke="#4F8EF7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0 1 12 2a8 8 0 0 1 8 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="stat-card-num">3</div><div class="stat-card-label">Saved Providers</div></div>
+        <div class="stat-card"><div class="stat-card-icon" style="background:rgba(221,107,32,.1)"><svg viewBox="0 0 24 24" fill="none" stroke="#dd6b20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="stat-card-num">2</div><div class="stat-card-label">Upcoming Sessions</div></div>
+        <div class="stat-card"><div class="stat-card-icon" style="background:rgba(155,111,208,.1)"><svg viewBox="0 0 24 24" fill="none" stroke="#9B6FD0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="stat-card-num">1</div><div class="stat-card-label">Unread Messages</div></div>
+      </div>
+      <div class="two-col">
+        <div class="content-card">
+          <div class="content-card-header"><span class="content-card-title">Upcoming Sessions</span><span class="content-card-action" onclick="showSection('bookings',document.querySelector('[data-section=bookings]'))">View all →</span></div>
+          <div class="content-card-body">
+            <div class="booking-row"><img src="assets/sessions/session-coaching.png" class="booking-img" alt=""><div class="booking-info"><div class="booking-title">Life Coaching Session</div><div class="booking-meta">Shohreh Bashar · Jun 7, 2026 at 2:00 PM</div></div><span class="booking-status status-confirmed">Confirmed</span></div>
+            <div class="booking-row"><img src="assets/sessions/session-meditation.png" class="booking-img" alt=""><div class="booking-info"><div class="booking-title">Meditation &amp; Mindfulness</div><div class="booking-meta">Shohreh Bashar · Jun 12, 2026 at 10:00 AM</div></div><span class="booking-status status-confirmed">Confirmed</span></div>
+          </div>
+        </div>
+        <div class="content-card">
+          <div class="content-card-header"><span class="content-card-title">Recent Messages</span><span class="content-card-action" onclick="showSection('messages',document.querySelector('[data-section=messages]'))">View all →</span></div>
+          <div class="content-card-body">
+            <div class="message-row"><img src="https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-8.png" onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&q=80&auto=format&fit=crop&crop=face'" class="msg-avatar" alt=""><div class="msg-body"><div class="msg-from">Shohreh Bashar</div><div class="msg-preview">Looking forward to our session on Thursday! Please...</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:.35rem"><div class="msg-time">2h ago</div><div class="msg-unread"></div></div></div>
+            <div class="message-row"><img src="https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-3.png" onerror="this.src='https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=60&q=80&auto=format&fit=crop&crop=face'" class="msg-avatar" alt=""><div class="msg-body"><div class="msg-from">Temple of Heal</div><div class="msg-preview">Your booking confirmation for Sound Healing has been...</div></div><div class="msg-time">Yesterday</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ CLIENT BOOKINGS ═══ -->
+    <div class="acct-section" id="section-bookings">
+      <div class="acct-page-header"><div><h1 class="acct-page-title">My Bookings</h1><p class="acct-page-sub">All your upcoming and past sessions.</p></div><a href="services.html" class="btn-save" style="text-decoration:none">+ Book New Session</a></div>
+      <div class="content-card" style="margin-bottom:1rem">
+        <div class="content-card-header"><span class="content-card-title">Upcoming</span></div>
+        <div class="content-card-body">
+          <div class="booking-row"><img src="assets/sessions/session-coaching.png" class="booking-img" alt=""><div class="booking-info"><div class="booking-title">Life Coaching Session</div><div class="booking-meta">Shohreh Bashar · Jun 7, 2026 · 2:00 PM – 3:00 PM · Virtual</div></div><span class="booking-status status-confirmed">Confirmed</span><span class="booking-action">Reschedule</span></div>
+          <div class="booking-row"><img src="assets/sessions/session-meditation.png" class="booking-img" alt=""><div class="booking-info"><div class="booking-title">Meditation &amp; Mindfulness</div><div class="booking-meta">Shohreh Bashar · Jun 12, 2026 · 10:00 AM – 11:00 AM · Virtual</div></div><span class="booking-status status-confirmed">Confirmed</span><span class="booking-action">Reschedule</span></div>
+        </div>
+      </div>
+      <div class="content-card">
+        <div class="content-card-header"><span class="content-card-title">Past Sessions</span></div>
+        <div class="content-card-body">
+          <div class="booking-row"><img src="assets/sessions/session-yoga.png" class="booking-img" alt=""><div class="booking-info"><div class="booking-title">Yoga — Vinyasa Flow</div><div class="booking-meta">Shohreh Bashar · May 28, 2026 · In-Person</div></div><span class="booking-status status-completed">Completed</span><span class="booking-action">Book again</span></div>
+          <div class="booking-row"><img src="assets/sessions/session-massage.png" class="booking-img" alt=""><div class="booking-info"><div class="booking-title">Massage Therapy — 60 min</div><div class="booking-meta">Temple of Times · May 15, 2026 · In-Person</div></div><span class="booking-status status-completed">Completed</span><span class="booking-action">Book again</span></div>
+          <div class="booking-row"><img src="assets/sessions/session-retreat.png" class="booking-img" alt=""><div class="booking-info"><div class="booking-title">Healing Workshop</div><div class="booking-meta">Shohreh Bashar · Apr 20, 2026 · In-Person</div></div><span class="booking-status status-completed">Completed</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ CLIENT MESSAGES ═══ -->
+    <div class="acct-section" id="section-messages">
+      <div class="acct-page-header"><div><h1 class="acct-page-title">Messages</h1><p class="acct-page-sub">Your conversations with providers.</p></div></div>
+      <div class="content-card">
+        <div class="content-card-body" style="padding:0">
+          <div class="message-row" style="padding:.9rem 1.5rem"><img src="https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-8.png" onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&q=80&auto=format&fit=crop&crop=face'" class="msg-avatar" alt="" style="width:3rem;height:3rem"><div class="msg-body"><div class="msg-from" style="font-size:.9rem">Shohreh Bashar</div><div class="msg-preview">Looking forward to our session on Thursday! Please bring comfortable clothing and a water bottle.</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:.35rem"><div class="msg-time">2 hours ago</div><div class="msg-unread"></div></div></div>
+          <div class="message-row" style="padding:.9rem 1.5rem"><img src="https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-3.png" onerror="this.src='https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=60&q=80&auto=format&fit=crop&crop=face'" class="msg-avatar" alt="" style="width:3rem;height:3rem"><div class="msg-body"><div class="msg-from" style="font-size:.9rem">Temple of Heal</div><div class="msg-preview">Your booking confirmation for Sound Healing has been received. See you soon!</div></div><div class="msg-time">Yesterday</div></div>
+          <div class="message-row" style="padding:.9rem 1.5rem;border-bottom:none"><img src="https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-7.png" onerror="this.src='https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&q=80&auto=format&fit=crop&crop=face'" class="msg-avatar" alt="" style="width:3rem;height:3rem"><div class="msg-body"><div class="msg-from" style="font-size:.9rem">Shohreh Bashar</div><div class="msg-preview">Thanks for the great review! It means a lot. See you next time.</div></div><div class="msg-time">May 30</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SAVED PROVIDERS ═══ -->
+    <div class="acct-section" id="section-saved">
+      <div class="acct-page-header"><div><h1 class="acct-page-title">Saved Providers</h1><p class="acct-page-sub">Providers you've bookmarked for easy access.</p></div><a href="services.html" class="btn-outline-sm" style="text-decoration:none">Explore More</a></div>
+      <div class="provider-grid">
+        <div class="saved-provider-card">
+          <img src="https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-8.png" onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80&auto=format&fit=crop&crop=face'" class="sp-avatar" alt="">
+          <div class="sp-name">Shohreh Bashar</div>
+          <div class="sp-specialty">Life Coach · NLP Practitioner</div>
+          <div class="sp-actions"><button class="sp-btn" onclick="toast('Message sent!')">Message</button><button class="sp-btn primary" onclick="toast('Redirecting to booking...')">Book</button></div>
+        </div>
+        <div class="saved-provider-card">
+          <img src="https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-3.png" onerror="this.src='https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=100&q=80&auto=format&fit=crop&crop=face'" class="sp-avatar" alt="">
+          <div class="sp-name">Temple of Times</div>
+          <div class="sp-specialty">Sound Healing · Retreats</div>
+          <div class="sp-actions"><button class="sp-btn" onclick="toast('Message sent!')">Message</button><button class="sp-btn primary" onclick="toast('Redirecting to booking...')">Book</button></div>
+        </div>
+        <div class="saved-provider-card">
+          <img src="https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-7.png" onerror="this.src='https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&q=80&auto=format&fit=crop&crop=face'" class="sp-avatar" alt="">
+          <div class="sp-name">Alireza Sharifi</div>
+          <div class="sp-specialty">Yoga · Meditation</div>
+          <div class="sp-actions"><button class="sp-btn" onclick="toast('Message sent!')">Message</button><button class="sp-btn primary" onclick="toast('Redirecting to booking...')">Book</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PAYMENT METHODS ═══ -->
+    <div class="acct-section" id="section-payment">
+      <div class="acct-page-header"><div><h1 class="acct-page-title">Payment Methods</h1><p class="acct-page-sub">Saved cards for fast checkout. Payments processed securely via Stripe.</p></div></div>
+      <div class="content-card">
+        <div class="content-card-header"><span class="content-card-title">Saved Cards</span><button class="content-card-action" onclick="toast('Stripe checkout would open here.')">+ Add New Card</button></div>
+        <div class="content-card-body">
+          <div class="payment-card-row">
+            <div class="pay-icon" style="background:#1a1f71"><svg viewBox="0 0 38 24" xmlns="http://www.w3.org/2000/svg" fill="white" width="32"><text x="2" y="17" font-size="10" font-family="sans-serif" font-weight="bold">VISA</text></svg></div>
+            <div class="pay-info"><div class="pay-label">Visa ending in 4242</div><div class="pay-sub">Expires 08/2027</div></div>
+            <span class="pay-default">Default</span>
+            <span class="pay-remove" onclick="toast('Card removed.')">Remove</span>
+          </div>
+          <div class="payment-card-row">
+            <div class="pay-icon" style="background:#eb001b;border-radius:4px;overflow:hidden;position:relative"><div style="position:absolute;left:12px;width:16px;height:16px;border-radius:50%;background:rgba(255,165,0,.8)"></div></div>
+            <div class="pay-info"><div class="pay-label">Mastercard ending in 5678</div><div class="pay-sub">Expires 11/2026</div></div>
+            <span class="pay-remove" onclick="toast('Card removed.')">Remove</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ ACCOUNT SETTINGS ═══ -->
+    <div class="acct-section" id="section-settings">
+      <div class="acct-page-header"><div><h1 class="acct-page-title">Account Settings</h1><p class="acct-page-sub">Manage your personal information and password.</p></div></div>
+      <div class="content-card" style="margin-bottom:1.5rem">
+        <div class="content-card-header"><span class="content-card-title">Personal Information</span></div>
+        <div class="content-card-body">
+          <div class="settings-grid">
+            <div><label class="settings-label">First Name</label><input class="settings-input" type="text" value="Sarah"></div>
+            <div><label class="settings-label">Last Name</label><input class="settings-input" type="text" value="Lin"></div>
+            <div><label class="settings-label">Email Address</label><input class="settings-input" type="email" value="sarah.lin@example.com"></div>
+            <div><label class="settings-label">Phone</label><input class="settings-input" type="tel" value="+1 (416) 555-0192"></div>
+            <div class="full"><label class="settings-label">Display Name</label><input class="settings-input" type="text" value="Sarah L."><p style="font-size:.72rem;color:var(--text-light);margin-top:.3rem">Shown to providers in booking confirmations.</p></div>
+          </div>
+          <div style="margin-top:1.25rem;display:flex;gap:.75rem">
+            <button class="btn-save" onclick="toast('Changes saved successfully.')">Save Changes</button>
+          </div>
+        </div>
+      </div>
+      <div class="content-card" style="margin-bottom:1.5rem">
+        <div class="content-card-header"><span class="content-card-title">Change Password</span></div>
+        <div class="content-card-body">
+          <div class="settings-grid">
+            <div><label class="settings-label">Current Password</label><input class="settings-input" type="password" placeholder="••••••••"></div>
+            <div></div>
+            <div><label class="settings-label">New Password</label><input class="settings-input" type="password" placeholder="••••••••"></div>
+            <div><label class="settings-label">Confirm New Password</label><input class="settings-input" type="password" placeholder="••••••••"></div>
+          </div>
+          <div style="margin-top:1.25rem"><button class="btn-save" onclick="toast('Password updated.')">Update Password</button></div>
+        </div>
+      </div>
+      <div class="content-card">
+        <div class="content-card-header"><span class="content-card-title" style="color:#e53e3e">Danger Zone</span></div>
+        <div class="content-card-body" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem">
+          <div><p style="font-size:.875rem;font-weight:500;color:var(--text)">Delete Account</p><p style="font-size:.78rem;color:var(--text-light)">Permanently delete your account and all data. This cannot be undone.</p></div>
+          <button class="btn-danger-sm" onclick="if(confirm('Are you sure? This cannot be undone.')) toast('Account deletion requested. We will email you a confirmation.')">Delete Account</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ SUPPORT ═══ -->
+    <div class="acct-section" id="section-support">
+      <div class="acct-page-header"><div><h1 class="acct-page-title">Support</h1><p class="acct-page-sub">Need help? We're here for you.</p></div><button class="btn-save" onclick="toast('Support ticket form opening...')">+ New Ticket</button></div>
+      <div class="two-col" style="margin-bottom:1.5rem">
+        <div class="content-card" style="margin-bottom:0"><div class="content-card-body" style="text-align:center;padding:1.5rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:2rem;height:2rem;color:var(--primary);margin-bottom:.5rem"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><div style="font-weight:600;color:var(--nav-bg);margin-bottom:.25rem">Live Chat</div><div style="font-size:.78rem;color:var(--text-light);margin-bottom:.75rem">Chat with our support team instantly</div><button class="btn-save" onclick="toast('Opening live chat...')">Start Chat</button></div></div>
+        <div class="content-card" style="margin-bottom:0"><div class="content-card-body" style="text-align:center;padding:1.5rem"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:2rem;height:2rem;color:var(--primary);margin-bottom:.5rem"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><div style="font-weight:600;color:var(--nav-bg);margin-bottom:.25rem">Email Support</div><div style="font-size:.78rem;color:var(--text-light);margin-bottom:.75rem">hello@templeofheal.com</div><a href="mailto:hello@templeofheal.com" class="btn-save" style="text-decoration:none;display:inline-block">Send Email</a></div></div>
+      </div>
+      <div class="content-card">
+        <div class="content-card-header"><span class="content-card-title">Your Support Tickets</span></div>
+        <div class="content-card-body">
+          <div class="ticket-row"><div style="flex:1"><div class="ticket-title">Unable to reschedule booking #1042</div><div class="ticket-cat">Bookings · Opened Jun 1, 2026</div></div><span class="booking-status status-confirmed" style="font-size:.7rem">Open</span><span class="ticket-priority priority-medium">Medium</span></div>
+          <div class="ticket-row" style="border-bottom:none"><div style="flex:1"><div class="ticket-title">Question about refund policy</div><div class="ticket-cat">Billing · Opened May 20, 2026</div></div><span class="booking-status status-completed" style="font-size:.7rem">Resolved</span><span class="ticket-priority priority-low">Low</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PROVIDER DASHBOARD ═══ -->
+    <div class="acct-section" id="section-pdashboard">
+      <div class="acct-page-header"><div><h1 class="acct-page-title">Provider Dashboard</h1><p class="acct-page-sub">Welcome back, Shohreh. Here's your business overview.</p></div><button class="btn-save" onclick="toast('Opening session scheduler...')">+ Add Availability</button></div>
+      <div class="stats-grid">
+        <div class="stat-card"><div class="stat-card-icon" style="background:rgba(46,107,74,.1)"><svg viewBox="0 0 24 24" fill="none" stroke="#2E6B4A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div class="stat-card-num">$1,240</div><div class="stat-card-label">Earnings This Month</div><div class="stat-card-trend">↑ 18% vs last month</div></div>
+        <div class="stat-card"><div class="stat-card-icon" style="background:rgba(79,142,247,.1)"><svg viewBox="0 0 24 24" fill="none" stroke="#4F8EF7" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div><div class="stat-card-num">3</div><div class="stat-card-label">Upcoming Sessions</div></div>
+        <div class="stat-card"><div class="stat-card-icon" style="background:rgba(221,107,32,.1)"><svg viewBox="0 0 24 24" fill="none" stroke="#dd6b20" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div><div class="stat-card-num">2</div><div class="stat-card-label">New Inquiries</div></div>
+        <div class="stat-card"><div class="stat-card-icon" style="background:rgba(196,155,60,.12)"><svg viewBox="0 0 24 24" fill="none" stroke="#C49B3C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div><div class="stat-card-num">4.9</div><div class="stat-card-label">Avg Rating (28 reviews)</div></div>
+      </div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-label"><span>Profile Completion</span><span style="color:var(--primary);font-weight:600">82%</span></div>
+        <div class="progress-bar"><div class="progress-bar-fill" style="width:82%"></div></div>
+        <p style="font-size:.72rem;color:var(--text-light);margin-top:.4rem">Add your profile photo and at least 3 service photos to reach 100%.</p>
+      </div>
+      <div class="two-col">
+        <div class="content-card">
+          <div class="content-card-header"><span class="content-card-title">Next Sessions</span><span class="content-card-action" onclick="showSection('psessions',document.querySelector('[data-section=psessions]'))">View all →</span></div>
+          <div class="content-card-body">
+            <div class="session-row"><div class="session-date"><div class="day">7</div><div class="month">Jun</div></div><div class="session-info"><div class="session-title">Life Coaching — Sarah L.</div><div class="session-meta">2:00 PM · 60 min · Virtual</div></div><div class="session-actions"><button class="session-btn primary" onclick="toast('Opening session details...')">Start</button></div></div>
+            <div class="session-row"><div class="session-date"><div class="day">9</div><div class="month">Jun</div></div><div class="session-info"><div class="session-title">Meditation — Michael C.</div><div class="session-meta">10:00 AM · 45 min · Virtual</div></div><div class="session-actions"><button class="session-btn" onclick="toast('Opening session details...')">Details</button></div></div>
+          </div>
+        </div>
+        <div class="content-card">
+          <div class="content-card-header"><span class="content-card-title">Recent Client Messages</span></div>
+          <div class="content-card-body">
+            <div class="message-row"><img src="https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-7.png" onerror="this.src='https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&q=80&auto=format&fit=crop&crop=face'" class="msg-avatar" alt=""><div class="msg-body"><div class="msg-from">Sarah Lin</div><div class="msg-preview">Can we reschedule Thursday's session to Friday?</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:.35rem"><div class="msg-time">1h ago</div><div class="msg-unread"></div></div></div>
+            <div class="message-row"><img src="https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-3.png" onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&q=80&auto=format&fit=crop&crop=face'" class="msg-avatar" alt=""><div class="msg-body"><div class="msg-from">Michael Carter</div><div class="msg-preview">Thank you for the amazing session yesterday!</div></div><div class="msg-time">3h ago</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PROVIDER SESSIONS ═══ -->
+    <div class="acct-section" id="section-psessions">
+      <div class="acct-page-header"><div><h1 class="acct-page-title">My Sessions</h1><p class="acct-page-sub">Manage your upcoming and past client sessions.</p></div><button class="btn-save" onclick="toast('Opening availability scheduler...')">+ Set Availability</button></div>
+      <div class="content-card" style="margin-bottom:1rem">
+        <div class="content-card-header"><span class="content-card-title">Upcoming</span></div>
+        <div class="content-card-body">
+          <div class="session-row"><div class="session-date"><div class="day">7</div><div class="month">Jun</div></div><div class="session-info"><div class="session-title">Life Coaching — Sarah Lin</div><div class="session-meta">2:00 PM · 60 min · Virtual · $120</div></div><span class="booking-status status-confirmed">Confirmed</span><div class="session-actions"><button class="session-btn" onclick="toast('Sending message...')">Message</button><button class="session-btn primary" onclick="toast('Starting session...')">Start</button></div></div>
+          <div class="session-row"><div class="session-date"><div class="day">9</div><div class="month">Jun</div></div><div class="session-info"><div class="session-title">Meditation — Michael Carter</div><div class="session-meta">10:00 AM · 45 min · Virtual · $80</div></div><span class="booking-status status-confirmed">Confirmed</span><div class="session-actions"><button class="session-btn" onclick="toast('Sending message...')">Message</button><button class="session-btn primary" onclick="toast('Opening details...')">Details</button></div></div>
+          <div class="session-row"><div class="session-date"><div class="day">12</div><div class="month">Jun</div></div><div class="session-info"><div class="session-title">Sound Healing — Emily J.</div><div class="session-meta">3:00 PM · 90 min · In-Person · $180</div></div><span class="booking-status status-pending">Pending</span><div class="session-actions"><button class="session-btn" onclick="toast('Session confirmed!')">Confirm</button><button class="session-btn" onclick="toast('Session declined.')">Decline</button></div></div>
+        </div>
+      </div>
+      <div class="content-card">
+        <div class="content-card-header"><span class="content-card-title">Completed Sessions</span></div>
+        <div class="content-card-body">
+          <div class="session-row"><div class="session-date"><div class="day">28</div><div class="month">May</div></div><div class="session-info"><div class="session-title">Yoga Flow — Sarah Lin</div><div class="session-meta">In-Person · $90 · ⭐⭐⭐⭐⭐</div></div><span class="booking-status status-completed">Completed</span></div>
+          <div class="session-row"><div class="session-date"><div class="day">22</div><div class="month">May</div></div><div class="session-info"><div class="session-title">Life Coaching — Michael Carter</div><div class="session-meta">Virtual · $120 · ⭐⭐⭐⭐⭐</div></div><span class="booking-status status-completed">Completed</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PROVIDER MESSAGES ═══ -->
+    <div class="acct-section" id="section-pmessages">
+      <div class="acct-page-header"><div><h1 class="acct-page-title">Client Messages</h1><p class="acct-page-sub">Messages from your clients and prospects.</p></div></div>
+      <div class="content-card"><div class="content-card-body" style="padding:0">
+        <div class="message-row" style="padding:.9rem 1.5rem"><img src="https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-7.png" onerror="this.src='https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=60&q=80&auto=format&fit=crop&crop=face'" class="msg-avatar" alt="" style="width:3rem;height:3rem"><div class="msg-body"><div class="msg-from" style="font-size:.9rem">Sarah Lin</div><div class="msg-preview">Can we reschedule Thursday's session to Friday afternoon?</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:.35rem"><div class="msg-time">1h ago</div><div class="msg-unread"></div></div></div>
+        <div class="message-row" style="padding:.9rem 1.5rem;border-bottom:none"><img src="https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-3.png" onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&q=80&auto=format&fit=crop&crop=face'" class="msg-avatar" alt="" style="width:3rem;height:3rem"><div class="msg-body"><div class="msg-from" style="font-size:.9rem">Michael Carter</div><div class="msg-preview">Thank you so much for the amazing session yesterday! I feel transformed.</div></div><div class="msg-time">3h ago</div></div>
+      </div></div>
+    </div>
+
+    <!-- ═══ EARNINGS ═══ -->
+    <div class="acct-section" id="section-earnings">
+      <div class="acct-page-header"><div><h1 class="acct-page-title">Earnings &amp; Payouts</h1><p class="acct-page-sub">Track your income and Stripe payouts.</p></div></div>
+      <div class="stats-grid" style="grid-template-columns:repeat(3,1fr)">
+        <div class="stat-card"><div class="stat-card-num">$1,240</div><div class="stat-card-label">This Month</div><div class="stat-card-trend">↑ 18% vs May</div></div>
+        <div class="stat-card"><div class="stat-card-num">$8,760</div><div class="stat-card-label">Year to Date</div></div>
+        <div class="stat-card"><div class="stat-card-num">$620</div><div class="stat-card-label">Pending Payout</div><div style="font-size:.72rem;color:var(--text-light);margin-top:.25rem">Arrives Jun 7</div></div>
+      </div>
+      <div class="two-col">
+        <div class="content-card">
+          <div class="content-card-header"><span class="content-card-title">Recent Payouts</span></div>
+          <div class="content-card-body">
+            <div class="payout-row"><span class="payout-date">Jun 1</span><span class="payout-desc">Stripe payout — 4 sessions</span><span class="payout-amount">+$480</span></div>
+            <div class="payout-row"><span class="payout-date">May 15</span><span class="payout-desc">Stripe payout — 6 sessions</span><span class="payout-amount">+$720</span></div>
+            <div class="payout-row"><span class="payout-date">May 1</span><span class="payout-desc">Stripe payout — 5 sessions</span><span class="payout-amount">+$580</span></div>
+          </div>
+        </div>
+        <div class="content-card">
+          <div class="content-card-header"><span class="content-card-title">Payout Settings</span></div>
+          <div class="content-card-body">
+            <div style="font-size:.85rem;color:var(--text-mid);margin-bottom:.75rem">Connected bank: •••• 4321 (TD Bank)</div>
+            <div style="font-size:.82rem;color:var(--text-light);margin-bottom:1.25rem;line-height:1.6">Payouts are processed every 2 weeks via Stripe. A 10% platform fee is deducted before transfer.</div>
+            <button class="btn-outline-sm" onclick="toast('Opening Stripe payout settings...')">Manage Stripe Account</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ PROVIDER PROFILE ═══ -->
+    <div class="acct-section" id="section-profile">
+      <div class="acct-page-header"><div><h1 class="acct-page-title">My Public Profile</h1><p class="acct-page-sub">This is what clients see when they find you on Temple of Heal.</p></div><button class="btn-outline-sm" onclick="toast('Opening preview...')">Preview Profile</button></div>
+      <div class="content-card">
+        <div class="content-card-header"><span class="content-card-title">Profile Photo &amp; Headline</span></div>
+        <div class="content-card-body">
+          <div class="profile-photo-editor">
+            <img src="https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-8.png" onerror="this.src='https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=120&q=80&auto=format&fit=crop&crop=face'" class="profile-photo" alt="">
+            <div class="profile-photo-actions"><button class="profile-photo-btn" onclick="toast('Photo upload opening...')">Upload new photo</button><button class="profile-photo-btn" style="color:var(--text-light);font-weight:400;font-size:.72rem">Remove photo</button></div>
+          </div>
+          <div class="settings-grid">
+            <div><label class="settings-label">Display Name</label><input class="settings-input" type="text" value="Shohreh Bashar"></div>
+            <div><label class="settings-label">Headline</label><input class="settings-input" type="text" value="Certified Life Coach &amp; NLP Practitioner"></div>
+            <div class="full"><label class="settings-label">Professional Bio</label><textarea class="settings-input" rows="4" style="resize:vertical">With over 20 years of experience bridging the world of numbers and consciousness, I offer transformative coaching and healing sessions rooted in NLP, Reiki, and personal development.</textarea></div>
+            <div><label class="settings-label">Starting Rate (CAD)</label><input class="settings-input" type="text" value="$80"></div>
+            <div><label class="settings-label">Languages</label><input class="settings-input" type="text" value="English, Farsi"></div>
+          </div>
+          <div style="margin-top:1.25rem;display:flex;gap:.75rem"><button class="btn-save" onclick="toast('Profile updated!')">Save Changes</button></div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- Toast notification -->
+<div class="toast" id="toast"></div>
+
+<script src="js/main.js"></script>
+<script>
+  let currentMode = 'client';
+
+  function showSection(id, el) {
+    document.querySelectorAll('.acct-section').forEach(s => s.classList.remove('active'));
+    document.getElementById('section-' + id).classList.add('active');
+    document.querySelectorAll('.acct-nav-item').forEach(i => i.classList.remove('active'));
+    if (el) el.classList.add('active');
+  }
+
+  function setMode(mode) {
+    currentMode = mode;
+    document.getElementById('client-nav').style.display   = mode === 'client'   ? 'block' : 'none';
+    document.getElementById('provider-nav').style.display = mode === 'provider' ? 'block' : 'none';
+    document.getElementById('switch-client').classList.toggle('active',   mode === 'client');
+    document.getElementById('switch-provider').classList.toggle('active', mode === 'provider');
+    const badge = document.getElementById('sidebar-badge');
+    badge.textContent = mode === 'provider' ? 'Provider' : 'Client';
+    badge.className = 'acct-badge ' + (mode === 'provider' ? '' : 'client');
+    if (mode === 'provider') {
+      document.getElementById('sidebar-name').textContent = 'Shohreh Bashar';
+      document.getElementById('sidebar-email').textContent = 'shohreh@templeofheal.com';
+      showSection('pdashboard', document.querySelector('[data-section=pdashboard]'));
+    } else {
+      document.getElementById('sidebar-name').textContent = 'Sarah Lin';
+      document.getElementById('sidebar-email').textContent = 'sarah.lin@example.com';
+      showSection('dashboard', document.querySelector('[data-section=dashboard]'));
+    }
+  }
+
+  function signOut() {
+    if (confirm('Sign out of your account?')) window.location.href = 'account.html';
+  }
+
+  function toast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2800);
+  }
+
+  /* Read URL param */
+  const p = new URLSearchParams(location.search);
+  if (p.get('section') === 'bookings') showSection('bookings', document.querySelector('[data-section=bookings]'));
+</script>
+</body>
+</html>
