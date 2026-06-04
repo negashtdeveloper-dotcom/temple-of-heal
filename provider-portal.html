@@ -202,6 +202,9 @@
     .filter-tab.active { background: var(--nav-bg); color: var(--white); border-color: var(--nav-bg); }
     .filter-tab:hover:not(.active) { border-color: var(--primary); color: var(--primary); }
 
+    /* Placeholder text globally grey */
+    ::placeholder { color: #A0ADB8; opacity: 1; }
+
     /* Availability */
     .avail-grid {
       display: grid; grid-template-columns: repeat(7, 1fr); gap: .75rem;
@@ -225,10 +228,44 @@
     .avail-slots { margin-top: .5rem; display: flex; flex-direction: column; gap: .35rem; }
     .avail-slot {
       background: var(--cream); border-radius: var(--radius-sm);
-      padding: .3rem .4rem; font-size: .68rem; color: var(--text-mid);
+      padding: .3rem .5rem; font-size: .68rem; color: var(--text-mid);
       text-align: center; border: 1px solid var(--border);
+      position: relative; cursor: pointer; transition: all .15s;
+      display: flex; align-items: center; justify-content: center;
     }
+    .avail-slot:hover { border-color: #e53e3e; }
     .avail-slot.active { background: rgba(46,107,74,.07); border-color: rgba(46,107,74,.3); color: var(--primary); }
+    .avail-slot.active:hover { border-color: #e53e3e; background: rgba(229,62,62,.05); color: #e53e3e; }
+    .avail-slot.inactive-day { cursor: default; font-style: italic; color: #bbb; }
+    .avail-slot.inactive-day:hover { border-color: var(--border); background: var(--cream); color: #bbb; }
+    .slot-remove {
+      position: absolute; right: 3px; top: 50%; transform: translateY(-50%);
+      width: .9rem; height: .9rem; border-radius: 50%; background: #e53e3e;
+      color: white; font-size: .6rem; line-height: 1; border: none; cursor: pointer;
+      display: none; align-items: center; justify-content: center;
+      font-family: var(--f-body); padding: 0;
+    }
+    .avail-slot:hover .slot-remove { display: flex; }
+    .avail-slot.inactive-day:hover .slot-remove { display: none; }
+    .avail-add-slot {
+      background: none; border: 1.5px dashed var(--border); border-radius: var(--radius-sm);
+      padding: .3rem; font-size: .68rem; color: var(--text-mid); cursor: pointer;
+      font-family: var(--f-body); width: 100%; transition: all .15s; margin-top: .1rem;
+    }
+    .avail-add-slot:hover { border-color: var(--primary); color: var(--primary); background: rgba(46,107,74,.04); }
+    /* Time picker popup */
+    .time-picker {
+      position: absolute; z-index: 100; background: var(--white);
+      border: 1.5px solid var(--border); border-radius: var(--radius);
+      box-shadow: 0 8px 24px rgba(0,0,0,.12); padding: .5rem;
+      max-height: 180px; overflow-y: auto; min-width: 110px;
+    }
+    .time-picker button {
+      display: block; width: 100%; text-align: left; padding: .35rem .6rem;
+      border: none; background: none; font-size: .78rem; cursor: pointer;
+      border-radius: 4px; font-family: var(--f-body); color: var(--text);
+    }
+    .time-picker button:hover { background: var(--cream); color: var(--primary); }
 
     /* Messages */
     .msg-row {
@@ -755,7 +792,7 @@
     <div class="portal-section" id="sec-availability">
       <div class="page-header">
         <div><h1 class="page-title">Availability</h1><p class="page-sub">Set your weekly schedule. Clients can only book during your open slots.</p></div>
-        <button class="btn-save" onclick="toast('Availability saved!')">Save Schedule</button>
+        <button class="btn-save" onclick="saveSchedule()">Save Schedule</button>
       </div>
 
       <div class="card" style="margin-bottom:1.5rem">
@@ -769,60 +806,9 @@
       </div>
 
       <div class="card">
-        <div class="card-header"><span class="card-title">Weekly Schedule</span><button class="card-action" onclick="toast('Copied from last week.')">Copy last week</button></div>
+        <div class="card-header"><span class="card-title">Weekly Schedule</span><button class="card-action" onclick="copyLastWeek()">Copy last week</button></div>
         <div class="card-body">
-          <div class="avail-grid">
-            <div class="avail-day">
-              <div class="avail-day-label">Mon</div>
-              <button class="avail-toggle on" onclick="this.classList.toggle('on')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Open</button>
-              <div class="avail-slots">
-                <div class="avail-slot active">9:00 AM</div>
-                <div class="avail-slot active">11:00 AM</div>
-                <div class="avail-slot active">2:00 PM</div>
-                <div class="avail-slot">4:00 PM</div>
-              </div>
-            </div>
-            <div class="avail-day">
-              <div class="avail-day-label">Tue</div>
-              <button class="avail-toggle" onclick="this.classList.toggle('on')">+ Open</button>
-              <div class="avail-slots"><div class="avail-slot">Closed</div></div>
-            </div>
-            <div class="avail-day">
-              <div class="avail-day-label">Wed</div>
-              <button class="avail-toggle on" onclick="this.classList.toggle('on')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Open</button>
-              <div class="avail-slots">
-                <div class="avail-slot active">10:00 AM</div>
-                <div class="avail-slot active">1:00 PM</div>
-                <div class="avail-slot active">3:00 PM</div>
-              </div>
-            </div>
-            <div class="avail-day">
-              <div class="avail-day-label">Thu</div>
-              <button class="avail-toggle on" onclick="this.classList.toggle('on')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Open</button>
-              <div class="avail-slots">
-                <div class="avail-slot active">9:00 AM</div>
-                <div class="avail-slot active">2:00 PM</div>
-              </div>
-            </div>
-            <div class="avail-day">
-              <div class="avail-day-label">Fri</div>
-              <button class="avail-toggle on" onclick="this.classList.toggle('on')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Open</button>
-              <div class="avail-slots">
-                <div class="avail-slot active">11:00 AM</div>
-                <div class="avail-slot active">1:00 PM</div>
-              </div>
-            </div>
-            <div class="avail-day">
-              <div class="avail-day-label">Sat</div>
-              <button class="avail-toggle" onclick="this.classList.toggle('on')">+ Open</button>
-              <div class="avail-slots"><div class="avail-slot">Closed</div></div>
-            </div>
-            <div class="avail-day">
-              <div class="avail-day-label">Sun</div>
-              <button class="avail-toggle" onclick="this.classList.toggle('on')">+ Open</button>
-              <div class="avail-slots"><div class="avail-slot">Closed</div></div>
-            </div>
-          </div>
+          <div class="avail-grid" id="avail-grid"></div>
         </div>
       </div>
     </div>
@@ -1099,6 +1085,118 @@
 
   const p = new URLSearchParams(location.search);
   if (p.get('section')) go(p.get('section'), document.querySelector('[data-sec=' + p.get('section') + ']'));
+
+  /* ── AVAILABILITY MANAGEMENT ── */
+  const DAYS = ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+  const ALL_TIMES = [
+    '6:00 AM','7:00 AM','8:00 AM','9:00 AM','10:00 AM','11:00 AM',
+    '12:00 PM','1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM',
+    '6:00 PM','7:00 PM','8:00 PM','9:00 PM'
+  ];
+  const DEFAULT_SCHEDULE = {
+    Mon: { open:true,  slots:[{t:'9:00 AM',on:true},{t:'11:00 AM',on:true},{t:'2:00 PM',on:true},{t:'4:00 PM',on:false}] },
+    Tue: { open:false, slots:[] },
+    Wed: { open:true,  slots:[{t:'10:00 AM',on:true},{t:'1:00 PM',on:true},{t:'3:00 PM',on:true}] },
+    Thu: { open:true,  slots:[{t:'9:00 AM',on:true},{t:'2:00 PM',on:true}] },
+    Fri: { open:true,  slots:[{t:'11:00 AM',on:true},{t:'1:00 PM',on:true}] },
+    Sat: { open:false, slots:[] },
+    Sun: { open:false, slots:[] },
+  };
+
+  let sched = JSON.parse(localStorage.getItem('toh_avail') || 'null') || DEFAULT_SCHEDULE;
+  let activePicker = null;
+
+  function renderAvail() {
+    const grid = document.getElementById('avail-grid');
+    if (!grid) return;
+    grid.innerHTML = DAYS.map(day => {
+      const d = sched[day];
+      const checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:.7rem;height:.7rem"><polyline points="20 6 9 17 4 12"/></svg>';
+      const toggleBtn = `<button class="avail-toggle ${d.open?'on':''}" onclick="toggleDay('${day}')">${d.open ? checkSvg+' Open' : '+ Open'}</button>`;
+      let slotsHtml = '';
+      if (!d.open) {
+        slotsHtml = `<div class="avail-slot inactive-day">Closed</div>`;
+      } else {
+        slotsHtml = d.slots.map((s,i) =>
+          `<div class="avail-slot ${s.on?'active':''}" onclick="toggleSlot('${day}',${i})">
+            ${s.t}
+            <button class="slot-remove" onclick="removeSlot(event,'${day}',${i})">×</button>
+          </div>`
+        ).join('');
+        slotsHtml += `<div style="position:relative">
+          <button class="avail-add-slot" onclick="openPicker(event,'${day}')">+ Add slot</button>
+        </div>`;
+      }
+      return `<div class="avail-day">
+        <div class="avail-day-label">${day}</div>
+        ${toggleBtn}
+        <div class="avail-slots">${slotsHtml}</div>
+      </div>`;
+    }).join('');
+  }
+
+  function toggleDay(day) {
+    sched[day].open = !sched[day].open;
+    if (sched[day].open && sched[day].slots.length === 0)
+      sched[day].slots = [{t:'9:00 AM',on:true},{t:'2:00 PM',on:true}];
+    renderAvail();
+  }
+
+  function toggleSlot(day, i) {
+    sched[day].slots[i].on = !sched[day].slots[i].on;
+    renderAvail();
+  }
+
+  function removeSlot(e, day, i) {
+    e.stopPropagation();
+    sched[day].slots.splice(i, 1);
+    renderAvail();
+  }
+
+  function openPicker(e, day) {
+    e.stopPropagation();
+    closePicker();
+    const used = sched[day].slots.map(s => s.t);
+    const avail = ALL_TIMES.filter(t => !used.includes(t));
+    if (!avail.length) { toast('All time slots already added for ' + day); return; }
+    const wrap = e.target.closest('div');
+    const picker = document.createElement('div');
+    picker.className = 'time-picker';
+    picker.style.cssText = 'bottom:calc(100% + 4px);left:0;right:0;';
+    picker.innerHTML = avail.map(t =>
+      `<button onclick="addSlot(event,'${day}','${t}')">${t}</button>`
+    ).join('');
+    wrap.style.position = 'relative';
+    wrap.appendChild(picker);
+    activePicker = picker;
+  }
+
+  function addSlot(e, day, time) {
+    e.stopPropagation();
+    sched[day].slots.push({t:time, on:true});
+    sched[day].slots.sort((a,b) => {
+      const toMin = s => { const [h,m] = s.t.replace(' AM','').replace(' PM','').split(':'); const hr = parseInt(h)%12 + (s.t.includes('PM')?12:0); return hr*60+parseInt(m); };
+      return toMin(a)-toMin(b);
+    });
+    closePicker();
+    renderAvail();
+  }
+
+  function closePicker() {
+    if (activePicker) { activePicker.remove(); activePicker = null; }
+  }
+
+  function saveSchedule() {
+    localStorage.setItem('toh_avail', JSON.stringify(sched));
+    toast('Schedule saved! Clients will see your updated availability.');
+  }
+
+  function copyLastWeek() {
+    toast('Schedule copied from last week.');
+  }
+
+  document.addEventListener('click', closePicker);
+  renderAvail();
 </script>
 </body>
 </html>
