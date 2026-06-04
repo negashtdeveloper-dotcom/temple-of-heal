@@ -817,7 +817,7 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--f-head); line-height: 1.2; }
   border-radius: var(--radius-lg);
   overflow: hidden;
   cursor: pointer;
-  aspect-ratio: 3/4;
+  aspect-ratio: 4/5;
   box-shadow: var(--shadow);
   transition: transform var(--trans), box-shadow var(--trans);
 }
