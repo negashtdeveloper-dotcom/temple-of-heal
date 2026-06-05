@@ -1289,14 +1289,17 @@
     </div>
   </div>
 
-  <!-- Trigger button -->
-  <button class="ai-trigger" id="ai-trigger" aria-label="Chat with Hoorak" aria-expanded="false">
-    <span class="ai-pulse" aria-hidden="true"></span>
-    <img src="assets/hoorak-agent.png" alt="Hoorak" class="ai-trigger-img">
-    <svg class="ai-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
-    </svg>
-  </button>
+  <!-- Trigger row: label + button -->
+  <div class="ai-trigger-row">
+    <button class="ai-trigger" id="ai-trigger" aria-label="Chat with Hoorak" aria-expanded="false">
+      <span class="ai-pulse" aria-hidden="true"></span>
+      <img src="assets/hoorak-agent.png" alt="Hoorak" class="ai-trigger-img">
+      <svg class="ai-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+    <span class="ai-label" onclick="document.getElementById('ai-trigger').click()">Ask Hoorak ✨</span>
+  </div>
 
 </div>
 

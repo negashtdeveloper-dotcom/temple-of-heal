@@ -1540,6 +1540,36 @@ h1,h2,h3,h4,h5,h6 { font-family: var(--f-head); line-height: 1.2; }
   align-items: flex-end;
   gap: 1rem;
 }
+.ai-trigger-row {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  flex-direction: row-reverse;
+}
+.ai-label {
+  background: var(--white);
+  color: var(--nav-bg);
+  padding: .42rem 1rem;
+  border-radius: var(--radius-pill);
+  font-size: .82rem;
+  font-weight: 600;
+  box-shadow: 0 2px 16px rgba(0,0,0,.13);
+  border: 1px solid var(--border);
+  white-space: nowrap;
+  cursor: pointer;
+  animation: labelSlideIn .5s cubic-bezier(.22,1,.36,1) 1.8s both;
+  transition: opacity .2s, transform .2s;
+}
+.ai-label:hover { background: var(--cream); }
+@keyframes labelSlideIn {
+  from { opacity:0; transform:translateX(10px); }
+  to   { opacity:1; transform:translateX(0); }
+}
+.ai-trigger.open ~ .ai-label {
+  opacity: 0;
+  pointer-events: none;
+  transform: translateX(8px);
+}
 .ai-trigger {
   width: 4rem;
   height: 4rem;
