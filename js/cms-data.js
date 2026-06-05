@@ -148,6 +148,42 @@ const TOH_CMS = {
       social: { linkedin: "#", instagram: "#" },
       nextSlot: "Wed, 10am",
       isActive: true
+    },
+    {
+      name: "Maryam Hosseini",
+      specialty: "Nutritional Wellness Coach",
+      rating: 4.8,
+      reviews: 29,
+      tier: "Silver",
+      photo: "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?w=300&q=80&auto=format&fit=crop&crop=face",
+      bio: "Registered nutritionist and functional medicine practitioner helping clients achieve optimal health through personalised nutrition and lifestyle changes.",
+      social: { linkedin: "#", instagram: "#" },
+      nextSlot: "Thu, 11am",
+      isActive: true
+    },
+    {
+      name: "Reza Fahimi",
+      specialty: "Sound Healer & Meditation Guide",
+      rating: 5.0,
+      reviews: 47,
+      tier: "Gold",
+      photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&q=80&auto=format&fit=crop&crop=face",
+      bio: "Certified sound therapist and meditation teacher using Tibetan bowls, gongs, and breath to facilitate deep healing and nervous system regulation.",
+      social: { linkedin: "#", instagram: "#" },
+      nextSlot: "Fri, 2pm",
+      isActive: true
+    },
+    {
+      name: "Negar Sadeghi",
+      specialty: "Yoga & Breathwork Instructor",
+      rating: 4.9,
+      reviews: 83,
+      tier: "Platinum",
+      photo: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=300&q=80&auto=format&fit=crop&crop=face",
+      bio: "E-RYT 500 yoga teacher and certified breathwork facilitator with 12 years of experience integrating movement, breath, and somatic awareness.",
+      social: { linkedin: "#", instagram: "#" },
+      nextSlot: "Mon, 9am",
+      isActive: true
     }
   ],
 
@@ -178,6 +214,27 @@ const TOH_CMS = {
       quote: "I had tried other wellness apps but nothing came close to the personal attention and professionalism here. My sessions with Alireza transformed how I think and feel every day.",
       rating: 5,
       avatar: "https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-15.png",
+      isActive: true
+    },
+    {
+      name: "Leila Ahmadi",
+      quote: "The sound healing session with Reza was unlike anything I've experienced. I walked in anxious and left feeling like I'd slept for a week. Absolute magic.",
+      rating: 5,
+      avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=100&q=80&auto=format&fit=crop&crop=face",
+      isActive: true
+    },
+    {
+      name: "James Okonkwo",
+      quote: "Maryam's nutrition coaching completely reshaped how I eat and think about my body. Down 18 lbs in 3 months, energy through the roof. Best investment I've made in myself.",
+      rating: 5,
+      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&q=80&auto=format&fit=crop&crop=face",
+      isActive: true
+    },
+    {
+      name: "Priya Nair",
+      quote: "Negar's breathwork class cracked something open in me I didn't know was there. I've been coming back every week for four months. Genuinely life-changing.",
+      rating: 5,
+      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&q=80&auto=format&fit=crop&crop=face",
       isActive: true
     }
   ],

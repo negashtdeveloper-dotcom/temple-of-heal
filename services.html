@@ -752,23 +752,23 @@
           <ul class="cat-list" id="cat-list">
             <li class="svc-cat-item active" data-cat="all" onclick="setCategory('all',this)">
               <div class="svc-cat-left"><div class="svc-cat-dot"></div><span class="svc-cat-name">All Services</span></div>
-              <span class="svc-cat-count" id="count-all">6</span>
+              <span class="svc-cat-count" id="count-all">16</span>
             </li>
             <li class="svc-cat-item" data-cat="counseling" onclick="setCategory('counseling',this)">
               <div class="svc-cat-left"><div class="svc-cat-dot"></div><span class="svc-cat-name">Counselling &amp; Coaching</span></div>
-              <span class="svc-cat-count">2</span>
+              <span class="svc-cat-count">5</span>
             </li>
             <li class="svc-cat-item" data-cat="mind" onclick="setCategory('mind',this)">
               <div class="svc-cat-left"><div class="svc-cat-dot"></div><span class="svc-cat-name">Mind &amp; Body Practices</span></div>
-              <span class="svc-cat-count">2</span>
+              <span class="svc-cat-count">4</span>
             </li>
             <li class="svc-cat-item" data-cat="wellness" onclick="setCategory('wellness',this)">
               <div class="svc-cat-left"><div class="svc-cat-dot"></div><span class="svc-cat-name">Wellness &amp; Lifestyle</span></div>
-              <span class="svc-cat-count">1</span>
+              <span class="svc-cat-count">3</span>
             </li>
             <li class="svc-cat-item" data-cat="community" onclick="setCategory('community',this)">
               <div class="svc-cat-left"><div class="svc-cat-dot"></div><span class="svc-cat-name">Community &amp; Events</span></div>
-              <span class="svc-cat-count">1</span>
+              <span class="svc-cat-count">4</span>
             </li>
           </ul>
         </div>
@@ -787,6 +787,14 @@
             <div class="provider-chip" data-prov="temple" onclick="setProvider('temple',this)">
               <div class="provider-avatar" style="background:var(--gold)">TT</div>
               Temple of Times
+            </div>
+            <div class="provider-chip" data-prov="alireza" onclick="setProvider('alireza',this)">
+              <div class="provider-avatar" style="background:#1f7a6e">AS</div>
+              Alireza Sharifi
+            </div>
+            <div class="provider-chip" data-prov="maryam" onclick="setProvider('maryam',this)">
+              <div class="provider-avatar" style="background:#9b6fd0">MH</div>
+              Maryam Hosseini
             </div>
           </div>
         </div>
@@ -811,7 +819,7 @@
         </button>
 
         <div class="products-toolbar">
-          <span class="results-count">Showing <strong id="result-count">6</strong> services</span>
+          <span class="results-count">Showing <strong id="result-count">16</strong> services</span>
           <div class="toolbar-right">
             <select class="svc-sort-select" id="sort-select" onchange="sortCards()">
               <option value="default">Featured</option>
@@ -973,6 +981,188 @@
               </div>
               <div class="card-footer">
                 <div class="card-price">$90<span class="card-price-unit"> /session</span></div>
+                <button class="btn-book">Book Session</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 7: Yoga Vinyasa Flow -->
+          <article class="product-card" data-category="mind" data-provider="alireza" data-price="45" data-name="Yoga Vinyasa Flow">
+            <div class="card-img-wrap">
+              <img src="assets/sessions/session-yoga.png" alt="Yoga Vinyasa Flow" loading="lazy">
+              <span class="card-img-badge">Yoga</span>
+              <span class="card-img-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified</span>
+            </div>
+            <div class="card-body">
+              <div class="card-category">Mind &amp; Body Practices</div>
+              <h2 class="card-title">Yoga Vinyasa Flow</h2>
+              <div class="card-provider"><div class="card-provider-avatar" style="background:#1f7a6e">AS</div>Alireza Sharifi</div>
+              <div class="card-footer">
+                <div class="card-price"><span class="card-price-from">from</span>$45<span class="card-price-unit"> /class</span></div>
+                <button class="btn-book">Book Session</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 8: NLP Transformation -->
+          <article class="product-card" data-category="counseling" data-provider="alireza" data-price="120" data-name="NLP Transformation Session">
+            <div class="card-img-wrap">
+              <img src="assets/sessions/session-coaching.png" alt="NLP Transformation" loading="lazy">
+              <span class="card-img-badge">NLP</span>
+              <span class="card-img-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified</span>
+            </div>
+            <div class="card-body">
+              <div class="card-category">Counselling &amp; Coaching</div>
+              <h2 class="card-title">NLP Transformation Session</h2>
+              <div class="card-provider"><div class="card-provider-avatar" style="background:#1f7a6e">AS</div>Alireza Sharifi</div>
+              <div class="card-footer">
+                <div class="card-price">$120<span class="card-price-unit"> /session</span></div>
+                <button class="btn-book">Book Session</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 9: Massage Therapy -->
+          <article class="product-card" data-category="wellness" data-provider="temple" data-price="120" data-name="Massage Therapy">
+            <div class="card-img-wrap">
+              <img src="assets/sessions/session-massage.png" alt="Massage Therapy" loading="lazy">
+              <span class="card-img-badge">Massage</span>
+              <span class="card-img-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified</span>
+            </div>
+            <div class="card-body">
+              <div class="card-category">Wellness &amp; Lifestyle</div>
+              <h2 class="card-title">Massage Therapy — 60 min</h2>
+              <div class="card-provider"><div class="card-provider-avatar" style="background:var(--gold)">TT</div>Temple of Times</div>
+              <div class="card-footer">
+                <div class="card-price">$120<span class="card-price-unit"> /session</span></div>
+                <button class="btn-book">Book Session</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 10: Breathwork Journey -->
+          <article class="product-card" data-category="mind" data-provider="alireza" data-price="70" data-name="Breathwork Journey">
+            <div class="card-img-wrap">
+              <img src="assets/sessions/session-meditation.png" alt="Breathwork Journey" loading="lazy">
+              <span class="card-img-badge">Breathwork</span>
+              <span class="card-img-badge" style="left:auto;right:.75rem;background:rgba(196,155,60,.12);color:var(--gold);border-color:rgba(196,155,60,.35)">New</span>
+              <span class="card-img-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified</span>
+            </div>
+            <div class="card-body">
+              <div class="card-category">Mind &amp; Body Practices</div>
+              <h2 class="card-title">Breathwork Journey</h2>
+              <div class="card-provider"><div class="card-provider-avatar" style="background:#1f7a6e">AS</div>Alireza Sharifi</div>
+              <div class="card-footer">
+                <div class="card-price">$70<span class="card-price-unit"> /session</span></div>
+                <button class="btn-book">Book Session</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 11: Nutritional Wellness Coaching -->
+          <article class="product-card" data-category="wellness" data-provider="maryam" data-price="80" data-name="Nutritional Wellness Coaching">
+            <div class="card-img-wrap">
+              <img src="assets/sessions/session-retreat.png" alt="Nutritional Wellness Coaching" loading="lazy">
+              <span class="card-img-badge">Nutrition</span>
+              <span class="card-img-free">Free Intro</span>
+              <span class="card-img-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified</span>
+            </div>
+            <div class="card-body">
+              <div class="card-category">Wellness &amp; Lifestyle</div>
+              <h2 class="card-title">Nutritional Wellness Coaching</h2>
+              <div class="card-provider"><div class="card-provider-avatar" style="background:#9b6fd0">MH</div>Maryam Hosseini</div>
+              <div class="card-footer">
+                <div class="card-price">$80<span class="card-price-unit"> /session</span></div>
+                <button class="btn-book">Book Session</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 12: Couples Counselling -->
+          <article class="product-card" data-category="counseling" data-provider="temple" data-price="150" data-name="Couples Counselling">
+            <div class="card-img-wrap">
+              <img src="assets/sessions/session-therapy.png" alt="Couples Counselling" loading="lazy">
+              <span class="card-img-badge">Couples</span>
+              <span class="card-img-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified</span>
+            </div>
+            <div class="card-body">
+              <div class="card-category">Counselling &amp; Coaching</div>
+              <h2 class="card-title">Couples Counselling</h2>
+              <div class="card-provider"><div class="card-provider-avatar" style="background:var(--gold)">TT</div>Temple of Times</div>
+              <div class="card-footer">
+                <div class="card-price">$150<span class="card-price-unit"> /session</span></div>
+                <button class="btn-book">Book Session</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 13: Inner Child Healing -->
+          <article class="product-card" data-category="counseling" data-provider="shohreh" data-price="110" data-name="Inner Child Healing">
+            <div class="card-img-wrap">
+              <img src="assets/sessions/session-therapy.png" alt="Inner Child Healing" loading="lazy">
+              <span class="card-img-badge">Healing</span>
+              <span class="card-img-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified</span>
+            </div>
+            <div class="card-body">
+              <div class="card-category">Counselling &amp; Coaching</div>
+              <h2 class="card-title">Inner Child Healing</h2>
+              <div class="card-provider"><div class="card-provider-avatar" style="background:#5b8a7a">SB</div>Shohreh Bashar</div>
+              <div class="card-footer">
+                <div class="card-price">$110<span class="card-price-unit"> /session</span></div>
+                <button class="btn-book">Book Session</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 14: Group Meditation Circle -->
+          <article class="product-card" data-category="community" data-provider="shohreh" data-price="30" data-name="Group Meditation Circle">
+            <div class="card-img-wrap">
+              <img src="assets/sessions/session-meditation.png" alt="Group Meditation Circle" loading="lazy">
+              <span class="card-img-badge">Group</span>
+              <span class="card-img-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified</span>
+            </div>
+            <div class="card-body">
+              <div class="card-category">Community &amp; Events</div>
+              <h2 class="card-title">Group Meditation Circle</h2>
+              <div class="card-provider"><div class="card-provider-avatar" style="background:#5b8a7a">SB</div>Shohreh Bashar</div>
+              <div class="card-footer">
+                <div class="card-price">$30<span class="card-price-unit"> /person</span></div>
+                <button class="btn-book">Book Session</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 15: Trauma-Informed Therapy -->
+          <article class="product-card" data-category="counseling" data-provider="alireza" data-price="130" data-name="Trauma-Informed Therapy">
+            <div class="card-img-wrap">
+              <img src="assets/sessions/session-coaching.png" alt="Trauma-Informed Therapy" loading="lazy">
+              <span class="card-img-badge">Therapy</span>
+              <span class="card-img-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified</span>
+            </div>
+            <div class="card-body">
+              <div class="card-category">Counselling &amp; Coaching</div>
+              <h2 class="card-title">Trauma-Informed Therapy</h2>
+              <div class="card-provider"><div class="card-provider-avatar" style="background:#1f7a6e">AS</div>Alireza Sharifi</div>
+              <div class="card-footer">
+                <div class="card-price">$130<span class="card-price-unit"> /session</span></div>
+                <button class="btn-book">Book Session</button>
+              </div>
+            </div>
+          </article>
+
+          <!-- Card 16: Wellness Weekend Retreat -->
+          <article class="product-card" data-category="community" data-provider="temple" data-price="350" data-name="Wellness Weekend Retreat">
+            <div class="card-img-wrap">
+              <img src="assets/sessions/session-retreat.png" alt="Wellness Weekend Retreat" loading="lazy">
+              <span class="card-img-badge">Retreat</span>
+              <span class="card-img-verified"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Verified</span>
+            </div>
+            <div class="card-body">
+              <div class="card-category">Community &amp; Events</div>
+              <h2 class="card-title">Wellness Weekend Retreat</h2>
+              <div class="card-provider"><div class="card-provider-avatar" style="background:var(--gold)">TT</div>Temple of Times</div>
+              <div class="card-footer">
+                <div class="card-price"><span class="card-price-from">from</span>$350<span class="card-price-unit"> /person</span></div>
                 <button class="btn-book">Book Session</button>
               </div>
             </div>
