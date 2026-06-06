@@ -884,5 +884,233 @@
   renderPanel('dashboard');
 })();
 </script>
+
+<!-- ── HOORAK AI WIDGET (self-contained) ── -->
+<style>
+  .hk-widget {
+    position:fixed; bottom:1.5rem; right:1.5rem; z-index:9999;
+    display:flex; flex-direction:column; align-items:flex-end; gap:.9rem;
+    font-family:'DM Sans',system-ui,sans-serif;
+  }
+  .hk-panel {
+    width:320px; background:#fff; border-radius:1.25rem;
+    box-shadow:0 32px 80px rgba(0,0,0,.25); overflow:hidden;
+    transform-origin:bottom right;
+    animation:hkIn .28s cubic-bezier(.22,1,.36,1);
+  }
+  @keyframes hkIn { from{opacity:0;transform:scale(.9) translateY(10px)} to{opacity:1;transform:none} }
+  .hk-panel[hidden]{display:none}
+  .hk-head {
+    background:#1B3A2A; padding:1rem 1.25rem;
+    display:flex; align-items:center; gap:.75rem; color:#fff;
+  }
+  .hk-av {
+    width:2.75rem; height:2.75rem; border-radius:50%;
+    overflow:hidden; flex-shrink:0; border:2px solid rgba(255,255,255,.3);
+  }
+  .hk-av img{width:100%;height:100%;object-fit:cover;object-position:top}
+  .hk-head-text strong{display:block;font-size:.9rem}
+  .hk-head-text span{font-size:.72rem;opacity:.7}
+  .hk-dot{width:.5rem;height:.5rem;border-radius:50%;background:#4ADE80;margin-left:auto;box-shadow:0 0 6px #4ADE80}
+  .hk-body{padding:1.25rem;max-height:320px;overflow-y:auto}
+  .hk-greeting{
+    background:#f0f6f2; border-radius:.75rem; padding:.85rem 1rem;
+    font-size:.85rem; line-height:1.6; color:#1a1a1a; margin-bottom:.9rem;
+  }
+  .hk-greeting strong{display:block;margin-bottom:.25rem;color:#1B3A2A}
+  .hk-chips{display:flex;flex-direction:column;gap:.5rem}
+  .hk-chip{
+    padding:.55rem .9rem; border-radius:.75rem;
+    border:1.5px solid #E2D9CC; background:#fff;
+    font-size:.8rem; color:#4A5568; cursor:pointer;
+    font-family:inherit; text-align:left; transition:all .15s;
+  }
+  .hk-chip:hover{border-color:#2E6B4A;color:#2E6B4A;background:rgba(46,107,74,.06)}
+  .hk-msgs{display:flex;flex-direction:column;gap:.6rem}
+  .hk-msg{max-width:85%;padding:.6rem .85rem;border-radius:1rem;font-size:.82rem;line-height:1.55}
+  .hk-msg.bot{background:#f0f6f2;color:#1a1a1a;align-self:flex-start;border-bottom-left-radius:.25rem}
+  .hk-msg.user{background:#2E6B4A;color:#fff;align-self:flex-end;border-bottom-right-radius:.25rem}
+  .hk-typing{display:flex;gap:4px;align-items:center;padding:.5rem .7rem;background:#f0f6f2;border-radius:1rem;width:fit-content}
+  .hk-typing span{width:.45rem;height:.45rem;border-radius:50%;background:#2E6B4A;animation:hkDot .9s infinite ease-in-out alternate}
+  .hk-typing span:nth-child(2){animation-delay:.15s} .hk-typing span:nth-child(3){animation-delay:.3s}
+  @keyframes hkDot{from{opacity:.2;transform:scale(.8)}to{opacity:1;transform:scale(1)}}
+  .hk-foot{
+    display:flex; gap:.5rem; padding:.85rem 1.25rem;
+    border-top:1px solid #E2D9CC; background:#fff;
+  }
+  .hk-input{
+    flex:1; border:1.5px solid #E2D9CC; border-radius:999px;
+    padding:.5rem .9rem; font-size:.85rem; outline:none;
+    font-family:inherit; transition:border-color .2s;
+  }
+  .hk-input:focus{border-color:#2E6B4A}
+  .hk-input::placeholder{color:#A0ADB8}
+  .hk-send{
+    width:2.1rem;height:2.1rem;border-radius:50%;
+    background:#2E6B4A;color:#fff;border:none;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;flex-shrink:0;
+    transition:background .2s;
+  }
+  .hk-send:hover{background:#245839}
+  .hk-send svg{width:.9rem;height:.9rem}
+  .hk-row{display:flex;align-items:center;gap:.65rem}
+  .hk-trigger{
+    width:4rem;height:4rem;border-radius:50%;background:#1B3A2A;
+    border:2.5px solid #fff;overflow:hidden;cursor:pointer;
+    box-shadow:0 4px 24px rgba(0,0,0,.35); flex-shrink:0;
+    transition:transform .2s,box-shadow .2s; padding:0;
+  }
+  .hk-trigger:hover{transform:scale(1.07);box-shadow:0 6px 28px rgba(0,0,0,.4)}
+  .hk-trigger img{width:100%;height:100%;object-fit:cover;object-position:top}
+  .hk-trigger-lbl{
+    background:#fff;color:#1B3A2A;padding:.42rem 1rem;
+    border-radius:999px;font-size:.82rem;font-weight:600;
+    box-shadow:0 2px 16px rgba(0,0,0,.13);border:1px solid #E2D9CC;
+    white-space:nowrap;cursor:pointer;
+    animation:hkLblIn .5s cubic-bezier(.22,1,.36,1) 1.8s both;
+    transition:opacity .2s,transform .2s;
+  }
+  .hk-trigger-lbl:hover{background:#f0f6f2}
+  @keyframes hkLblIn{from{opacity:0;transform:translateX(10px)}to{opacity:1;transform:none}}
+  .hk-open .hk-trigger img{display:none}
+  .hk-close-ico{display:none;width:1.25rem;height:1.25rem;margin:auto}
+  .hk-open .hk-close-ico{display:block}
+  .hk-open .hk-trigger-lbl{opacity:0;pointer-events:none;transform:translateX(8px)}
+  .hk-pulse{
+    position:absolute;inset:-3px;border-radius:50%;
+    border:2px solid #2E6B4A;animation:hkPulse 2.5s infinite;opacity:.6;pointer-events:none;
+  }
+  @keyframes hkPulse{0%{opacity:.6;transform:scale(1)}70%{opacity:0;transform:scale(1.35)}100%{opacity:0;transform:scale(1.35)}}
+  .hk-trigger-wrap{position:relative;flex-shrink:0}
+</style>
+
+<div class="hk-widget" id="hk-widget">
+  <div class="hk-panel" id="hk-panel" hidden>
+    <div class="hk-head">
+      <div class="hk-av"><img src="../assets/hoorak-agent.png" alt="Hoorak"></div>
+      <div class="hk-head-text"><strong>Hoorak</strong><span>CMS Assistant</span></div>
+      <div class="hk-dot"></div>
+    </div>
+    <div class="hk-body" id="hk-body">
+      <div id="hk-intro">
+        <div class="hk-greeting">
+          <strong>👋 Hi, I'm Hoorak!</strong>
+          I'm here to help you manage the Temple of Heal CMS. What would you like to do?
+        </div>
+        <div class="hk-chips">
+          <button class="hk-chip" onclick="hkAsk('How do I add or edit a service?')">📋 Add or edit a service</button>
+          <button class="hk-chip" onclick="hkAsk('How do I manage provider profiles?')">👤 Manage provider profiles</button>
+          <button class="hk-chip" onclick="hkAsk('How do I update testimonials or FAQs?')">✏️ Update testimonials or FAQs</button>
+          <button class="hk-chip" onclick="hkAsk('How do I change site settings?')">⚙️ Site settings & logo</button>
+        </div>
+      </div>
+      <div id="hk-chat" style="display:none">
+        <div class="hk-msgs" id="hk-msgs"></div>
+      </div>
+    </div>
+    <div class="hk-foot">
+      <input class="hk-input" id="hk-input" type="text" placeholder="Ask anything about the CMS…" autocomplete="off">
+      <button class="hk-send" id="hk-send" aria-label="Send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="hk-row">
+    <div class="hk-trigger-wrap">
+      <span class="hk-pulse"></span>
+      <button class="hk-trigger" id="hk-trigger" aria-label="Chat with Hoorak" onclick="hkToggle()">
+        <img src="../assets/hoorak-agent.png" alt="Hoorak">
+        <svg class="hk-close-ico" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <span class="hk-trigger-lbl" onclick="hkToggle()">Ask Hoorak ✨</span>
+  </div>
+</div>
+
+<script>
+(function(){
+  const RESPONSES = {
+    'how do i add':     "To add a service, click **Services** in the left sidebar → **Add New Service** button. Fill in the name, category, description, price range, session type, and required fields, then click Save.",
+    'edit a service':   "Click **Services** in the sidebar, find the service in the list and click **Edit**. Update any fields and hit **Save Changes**. Changes go live instantly.",
+    'provider':         "Go to **Experts** in the sidebar. You can add a new provider with their photo, bio, specialty, rating and tier, or click an existing one to edit. Toggle **Active** to show or hide them on the site.",
+    'testimonial':      "Click **Testimonials** in the sidebar. Add or edit client quotes, their name, avatar URL, and star rating. Inactive testimonials are hidden from the homepage.",
+    'faq':              "Go to **FAQs** in the sidebar. Each FAQ has a question and answer. Toggle **Active** to control which ones appear on the site.",
+    'site setting':     "Click **Settings** in the sidebar. You can update the site name, tagline, about text, contact info, social links, and logo URL.",
+    'logo':             "In **Settings**, paste the URL of your new logo into the **Logo URL** field and click Save. Leave it blank to use the default.",
+    'how do i change':  "Navigate to the relevant section in the sidebar (Services, Experts, Testimonials, FAQs, or Settings), edit the fields you need, and click **Save**.",
+    'delete':           "Find the item in its section, click **Edit**, then scroll to the bottom and click **Delete**. This cannot be undone.",
+    'publish':          "All changes are saved to your browser's localStorage and go live on the site immediately — no extra publish step needed.",
+  };
+
+  let open = false;
+  let idx  = 0;
+  const DEFAULT = [
+    "Great question! The CMS lets you manage Services, Experts, Testimonials, FAQs and Site Settings from the sidebar. Which section can I help you with?",
+    "You can update any content by clicking the relevant section in the left sidebar. Would you like step-by-step instructions?",
+    "All your changes save instantly to localStorage and reflect on the live site. Is there a specific section you're working on?",
+  ];
+
+  window.hkToggle = function() {
+    open = !open;
+    const w = document.getElementById('hk-widget');
+    const p = document.getElementById('hk-panel');
+    w.classList.toggle('hk-open', open);
+    p.hidden = !open;
+  };
+
+  window.hkAsk = function(q) {
+    document.getElementById('hk-intro').style.display = 'none';
+    document.getElementById('hk-chat').style.display  = '';
+    addMsg(q, 'user');
+    respond(q);
+  };
+
+  document.getElementById('hk-send').addEventListener('click', send);
+  document.getElementById('hk-input').addEventListener('keydown', e => { if (e.key === 'Enter') send(); });
+
+  function send() {
+    const inp = document.getElementById('hk-input');
+    const q = inp.value.trim();
+    if (!q) return;
+    inp.value = '';
+    document.getElementById('hk-intro').style.display = 'none';
+    document.getElementById('hk-chat').style.display  = '';
+    addMsg(q, 'user');
+    respond(q);
+  }
+
+  function respond(q) {
+    const typing = addTyping();
+    setTimeout(() => {
+      typing.remove();
+      const lq = q.toLowerCase();
+      let reply = DEFAULT[idx++ % DEFAULT.length];
+      for (const [key, val] of Object.entries(RESPONSES)) {
+        if (lq.includes(key)) { reply = val; break; }
+      }
+      addMsg(reply, 'bot');
+    }, 900);
+  }
+
+  function addMsg(text, role) {
+    const msgs = document.getElementById('hk-msgs');
+    const d = document.createElement('div');
+    d.className = 'hk-msg ' + role;
+    d.textContent = text;
+    msgs.appendChild(d);
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function addTyping() {
+    const msgs = document.getElementById('hk-msgs');
+    const d = document.createElement('div');
+    d.className = 'hk-typing';
+    d.innerHTML = '<span></span><span></span><span></span>';
+    msgs.appendChild(d);
+    msgs.scrollTop = msgs.scrollHeight;
+    return d;
+  }
+})();
+</script>
 </body>
 </html>

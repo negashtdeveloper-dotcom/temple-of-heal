@@ -811,6 +811,57 @@
 <!-- Toast notification -->
 <div class="toast" id="toast"></div>
 
+<!-- ── HOORAK AI WIDGET ── -->
+<div class="ai-widget" id="ai-widget" role="region" aria-label="AI Assistant">
+  <div class="ai-panel" id="ai-panel" hidden aria-live="polite">
+    <div class="ai-header">
+      <div class="ai-avatar" aria-hidden="true"><img src="assets/hoorak-agent.png" alt="Hoorak"></div>
+      <div class="ai-header-text"><strong>Hoorak</strong><span>Your Account Assistant</span></div>
+      <div class="ai-status-dot" aria-label="Online" title="Online"></div>
+    </div>
+    <div class="ai-body" id="ai-body">
+      <div id="ai-intro">
+        <div class="ai-greeting">
+          <strong>👋 Hi, I'm Hoorak!</strong>
+          Need help with your bookings, account, or wellness journey? I'm here.
+        </div>
+        <p style="font-size:.8rem;color:var(--text-lt);margin-bottom:.6rem">What can I help you with?</p>
+        <div class="ai-personas" id="ai-personas">
+          <button class="persona-btn" data-persona="seeker" aria-label="Help with my bookings">
+            <span class="persona-icon seeker" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+            </span>
+            <div class="persona-text"><strong>My bookings</strong><span>Reschedule, cancel, or review sessions</span></div>
+          </button>
+          <button class="persona-btn" data-persona="provider" aria-label="I'm a provider needing help">
+            <span class="persona-icon provider" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </span>
+            <div class="persona-text"><strong>Provider support</strong><span>Manage sessions, earnings, profile</span></div>
+          </button>
+        </div>
+      </div>
+      <div id="ai-chat" style="display:none">
+        <div class="ai-chat-messages" id="ai-messages"></div>
+      </div>
+    </div>
+    <div class="ai-footer">
+      <input type="text" id="ai-input" placeholder="Ask me anything…" aria-label="Message Hoorak" autocomplete="off">
+      <button class="ai-send" id="ai-send" aria-label="Send message">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
+  </div>
+  <div class="ai-trigger-row">
+    <button class="ai-trigger" id="ai-trigger" aria-label="Chat with Hoorak" aria-expanded="false">
+      <span class="ai-pulse" aria-hidden="true"></span>
+      <img src="assets/hoorak-agent.png" alt="Hoorak" class="ai-trigger-img">
+      <svg class="ai-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <span class="ai-label" onclick="document.getElementById('ai-trigger').click()">Ask Hoorak ✨</span>
+  </div>
+</div>
+
 <script src="js/main.js"></script>
 <script>
   let currentMode = 'client';

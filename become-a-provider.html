@@ -902,29 +902,53 @@
 </footer>
 
 <!-- ── HOORAK AI WIDGET ── -->
-<div class="hoorak-widget" id="hoorak-widget">
-  <div class="hoorak-bubble" id="hoorak-bubble">
-    <strong>Hi, I'm Layla — Hoorak AI ✦</strong>
-    <p>Have questions about the application? I'm here to help you every step of the way.</p>
+<div class="ai-widget" id="ai-widget" role="region" aria-label="AI Assistant">
+  <div class="ai-panel" id="ai-panel" hidden aria-live="polite">
+    <div class="ai-header">
+      <div class="ai-avatar" aria-hidden="true"><img src="assets/hoorak-agent.png" alt="Hoorak"></div>
+      <div class="ai-header-text"><strong>Hoorak</strong><span>Provider Application Guide</span></div>
+      <div class="ai-status-dot" aria-label="Online" title="Online"></div>
+    </div>
+    <div class="ai-body" id="ai-body">
+      <div id="ai-intro">
+        <div class="ai-greeting">
+          <strong>👋 Hi, I'm Hoorak!</strong>
+          Ready to join Temple of Heal as a provider? I'll guide you through the application step by step.
+        </div>
+        <p style="font-size:.8rem;color:var(--text-lt);margin-bottom:.6rem">How can I help?</p>
+        <div class="ai-personas" id="ai-personas">
+          <button class="persona-btn" data-persona="provider" aria-label="Help me apply as a provider">
+            <span class="persona-icon provider" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </span>
+            <div class="persona-text"><strong>Help me apply</strong><span>Walk me through the application</span></div>
+          </button>
+          <button class="persona-btn" data-persona="seeker" aria-label="Learn about requirements">
+            <span class="persona-icon seeker" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </span>
+            <div class="persona-text"><strong>What are the requirements?</strong><span>Credentials, fees, onboarding</span></div>
+          </button>
+        </div>
+      </div>
+      <div id="ai-chat" style="display:none">
+        <div class="ai-chat-messages" id="ai-messages"></div>
+      </div>
+    </div>
+    <div class="ai-footer">
+      <input type="text" id="ai-input" placeholder="Ask me anything…" aria-label="Message Hoorak" autocomplete="off">
+      <button class="ai-send" id="ai-send" aria-label="Send message">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+      </button>
+    </div>
   </div>
-  <div class="hoorak-avatar-wrap" onclick="toggleHoorakBubble()" title="Chat with Layla — Hoorak AI">
-    <div class="hoorak-sparkles">
-      <span class="sparkle">✦</span>
-      <span class="sparkle">✦</span>
-      <span class="sparkle">✦</span>
-      <span class="sparkle">✦</span>
-      <span class="sparkle">✦</span>
-    </div>
-    <div class="hoorak-ring"></div>
-    <div class="hoorak-avatar">
-      <img src="https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-7.png"
-           onerror="this.src='https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&q=80&auto=format&fit=crop&crop=face'"
-           alt="Layla – Hoorak AI Assistant">
-    </div>
-    <div class="hoorak-badge">
-      <svg viewBox="0 0 24 24" fill="currentColor"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-    </div>
-    <span class="hoorak-label">Ask Layla</span>
+  <div class="ai-trigger-row">
+    <button class="ai-trigger" id="ai-trigger" aria-label="Chat with Hoorak" aria-expanded="false">
+      <span class="ai-pulse" aria-hidden="true"></span>
+      <img src="assets/hoorak-agent.png" alt="Hoorak" class="ai-trigger-img">
+      <svg class="ai-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+    </button>
+    <span class="ai-label" onclick="document.getElementById('ai-trigger').click()">Ask Hoorak ✨</span>
   </div>
 </div>
 
