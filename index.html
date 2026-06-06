@@ -668,7 +668,7 @@
     <div class="sessions-grid" id="sessions-grid">
 
       <!-- Card 1: Psychotherapy -->
-      <article class="session-card fade-in" data-format="all virtual" data-type="counselling">
+      <article class="session-card fade-in" data-format="all virtual" data-type="counselling" data-session="counselling">
         <img class="session-card-img" src="assets/sessions/session-therapy.png" alt="Psychotherapy and counselling session" loading="lazy">
         <div class="session-card-overlay" aria-hidden="true"></div>
         <div class="session-card-top">
@@ -687,7 +687,7 @@
       </article>
 
       <!-- Card 2: Coaching -->
-      <article class="session-card fade-in fade-in-delay-1" data-format="all virtual in-person" data-type="coaching">
+      <article class="session-card fade-in fade-in-delay-1" data-format="all virtual in-person" data-type="coaching" data-session="coaching">
         <img class="session-card-img" src="assets/sessions/session-coaching.png" alt="Life coaching session" loading="lazy">
         <div class="session-card-overlay" aria-hidden="true"></div>
         <div class="session-card-top">
@@ -706,7 +706,7 @@
       </article>
 
       <!-- Card 3: Yoga -->
-      <article class="session-card fade-in fade-in-delay-2" data-format="all in-person" data-type="practices">
+      <article class="session-card fade-in fade-in-delay-2" data-format="all in-person" data-type="practices" data-session="yoga">
         <img class="session-card-img" src="assets/sessions/session-yoga.png" alt="Yoga class and practice" loading="lazy">
         <div class="session-card-overlay" aria-hidden="true"></div>
         <div class="session-card-top">
@@ -725,7 +725,7 @@
       </article>
 
       <!-- Card 4: Meditation -->
-      <article class="session-card fade-in" data-format="all virtual in-person" data-type="practices">
+      <article class="session-card fade-in" data-format="all virtual in-person" data-type="practices" data-session="meditation">
         <img class="session-card-img" src="assets/sessions/session-meditation.png" alt="Meditation and mindfulness session" loading="lazy">
         <div class="session-card-overlay" aria-hidden="true"></div>
         <div class="session-card-top">
@@ -744,7 +744,7 @@
       </article>
 
       <!-- Card 5: Massage -->
-      <article class="session-card fade-in fade-in-delay-1" data-format="all in-person" data-type="wellness">
+      <article class="session-card fade-in fade-in-delay-1" data-format="all in-person" data-type="wellness" data-session="massage">
         <img class="session-card-img" src="assets/sessions/session-massage.png" alt="Massage therapy session" loading="lazy">
         <div class="session-card-overlay" aria-hidden="true"></div>
         <div class="session-card-top">
@@ -763,7 +763,7 @@
       </article>
 
       <!-- Card 6: Retreat -->
-      <article class="session-card fade-in fade-in-delay-2" data-format="all in-person" data-type="community">
+      <article class="session-card fade-in fade-in-delay-2" data-format="all in-person" data-type="community" data-session="retreat">
         <img class="session-card-img" src="assets/sessions/session-retreat.png" alt="Temple of Heal wellness retreat" loading="lazy">
         <div class="session-card-overlay" aria-hidden="true"></div>
         <div class="session-card-top">
@@ -1381,6 +1381,73 @@
 </button>
 
 <!-- ═══════════════════════════════════════════════
+     SESSION DETAIL MODAL
+════════════════════════════════════════════════ -->
+<div class="sd-overlay" id="sd-overlay" onclick="if(event.target===this)closeSession()">
+  <div class="sd-modal" role="dialog" aria-modal="true" aria-labelledby="sd-title">
+
+    <!-- Left: image + provider -->
+    <div class="sd-modal-left" id="sd-left">
+      <div class="sd-modal-img"><img id="sd-img" src="" alt=""></div>
+      <button class="sd-close" onclick="closeSession()" aria-label="Close">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+      <div class="sd-modal-left-content">
+        <div class="sd-badges" id="sd-badges"></div>
+        <h2 class="sd-title" id="sd-title"></h2>
+        <div class="sd-provider-row">
+          <div class="sd-provider-av"><img id="sd-pav" src="" alt=""></div>
+          <div>
+            <div class="sd-provider-name" id="sd-pname"></div>
+            <div class="sd-provider-role" id="sd-prole"></div>
+            <div class="sd-rating-row" id="sd-rating"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: details + booking -->
+    <div class="sd-modal-right">
+
+      <div class="sd-section">
+        <div class="sd-section-title">About this session</div>
+        <p class="sd-desc" id="sd-desc"></p>
+      </div>
+
+      <div class="sd-section">
+        <div class="sd-section-title">What's included</div>
+        <ul class="sd-includes" id="sd-includes"></ul>
+      </div>
+
+      <div class="sd-section">
+        <div class="sd-section-title">Choose duration</div>
+        <div class="sd-durations" id="sd-durations"></div>
+      </div>
+
+      <div class="sd-section">
+        <div class="sd-section-title">Next available slots</div>
+        <div class="sd-slots" id="sd-slots"></div>
+      </div>
+
+      <div class="sd-section" style="margin-bottom:1rem">
+        <div class="sd-price-row">
+          <div><div class="sd-price-val" id="sd-price"></div><div class="sd-price-unit" id="sd-punit"></div></div>
+          <div style="font-size:.72rem;color:var(--text-mid);text-align:right">Secure checkout<br>via Stripe</div>
+        </div>
+        <button class="sd-book-btn" onclick="sdBook()">Book This Session →</button>
+        <p class="sd-book-note">Free cancellation up to 24 hours before your session.</p>
+      </div>
+
+      <div class="sd-section">
+        <div class="sd-section-title">Client reviews</div>
+        <div id="sd-reviews"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════
      AI AGENT WIDGET
 ════════════════════════════════════════════════ -->
 <div class="ai-widget" id="ai-widget" role="region" aria-label="AI Assistant">
@@ -1460,6 +1527,315 @@
 <!-- Scripts -->
 <script src="js/cms-data.js"></script>
 <script src="js/main.js" defer></script>
+<script>
+/* ═══════════════════════════════════════
+   SESSION MOCK DATA
+═══════════════════════════════════════ */
+const SESSION_DATA = {
+  counselling: {
+    title: 'Psychotherapy & Counselling',
+    img: 'assets/sessions/session-therapy.png',
+    badges: [{ text:'Counselling', cls:'badge-teal' }, { text:'Virtual', cls:'badge-virtual' }],
+    provider: 'Shohreh Bashar',
+    providerRole: 'Master Coach & Energy Healing Practitioner',
+    providerPhoto: 'https://templeofheal.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-01-at-14.09.36_13721a8e-300x300.jpg',
+    rating: 5.0, reviews_count: 94,
+    desc: 'Deep, evidence-based therapeutic support for anxiety, depression, grief, trauma, relationship challenges, and life transitions. Each session is a confidential, compassionate space where you explore patterns, gain insight, and build lasting resilience. Sessions are tailored to your unique story and goals.',
+    includes: ['Personalised treatment plan', 'Secure private video call', 'Between-session resources & exercises', 'Session notes summary', 'Flexible rescheduling (24h notice)'],
+    durations: [{ label: '50 min', price: '$80' }, { label: '80 min', price: '$130' }],
+    slots: ['Tue Jun 10 · 10:00 AM', 'Wed Jun 11 · 2:00 PM', 'Thu Jun 12 · 4:00 PM', 'Fri Jun 13 · 11:00 AM'],
+    reviews: [
+      { name:'Emily Johnson', avatar:'https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-8.png', stars:5, text:'"Shohreh has a rare gift for holding space with warmth and wisdom. After just three sessions, I understood myself in ways I never had before."' },
+      { name:'Sarah Lin', avatar:'https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-7.png', stars:5, text:'"Every session leaves me feeling clearer, lighter, and more hopeful. This is the most impactful investment I've made in myself."' },
+      { name:'Michael Carter', avatar:'https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-3.png', stars:5, text:'"The compassion and insight Shohreh brings are unmatched. She helped me navigate one of the hardest periods of my life with grace."' },
+    ]
+  },
+  coaching: {
+    title: 'Life & NLP Coaching',
+    img: 'assets/sessions/session-coaching.png',
+    badges: [{ text:'Coaching', cls:'badge-green' }, { text:'Virtual', cls:'badge-virtual' }, { text:'In-Person', cls:'badge-person' }],
+    provider: 'Shohreh Bashar',
+    providerRole: 'Certified NLP Coach & ICI-Accredited Life Coach',
+    providerPhoto: 'https://templeofheal.com/wp-content/uploads/2025/10/WhatsApp-Image-2025-10-01-at-14.09.36_13721a8e-300x300.jpg',
+    rating: 5.0, reviews_count: 94,
+    desc: 'Breakthrough coaching rooted in Neuro-Linguistic Programming, Timeline Therapy™, and conscious leadership principles. Together we identify the unconscious patterns keeping you stuck, dissolve limiting beliefs, and design an empowered vision for your life, career, or relationships.',
+    includes: ['Personalised coaching roadmap', 'NLP pattern-breaking techniques', 'Accountability check-ins between sessions', 'Goal-tracking workbook', 'Replay recording (virtual sessions)'],
+    durations: [{ label: '45 min', price: '$60' }, { label: '60 min', price: '$120' }, { label: '90 min', price: '$170' }],
+    slots: ['Mon Jun 9 · 3:00 PM', 'Mon Jun 9 · 5:00 PM', 'Wed Jun 11 · 10:00 AM', 'Fri Jun 13 · 2:00 PM'],
+    reviews: [
+      { name:'James Okonkwo', avatar:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&q=80&auto=format&fit=crop&crop=face', stars:5, text:'"I came in feeling stuck in my career for years. After 6 sessions, I launched my business and couldn\'t be prouder. Shohreh changed my life."' },
+      { name:'Leila Ahmadi', avatar:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=60&q=80&auto=format&fit=crop&crop=face', stars:5, text:'"The NLP techniques she teaches are genuinely transformative. I now catch my limiting beliefs before they sabotage me."' },
+      { name:'David Miller', avatar:'https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-15.png', stars:5, text:'"Best investment I\'ve made in myself. Shohreh is equal parts insightful, practical, and deeply encouraging."' },
+    ]
+  },
+  yoga: {
+    title: 'Yoga Classes & Training',
+    img: 'assets/sessions/session-yoga.png',
+    badges: [{ text:'NEW', cls:'badge-new' }, { text:'In-Person', cls:'badge-person' }],
+    provider: 'Negar Sadeghi',
+    providerRole: 'E-RYT 500 Yoga Teacher & Breathwork Facilitator',
+    providerPhoto: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120&q=80&auto=format&fit=crop&crop=face',
+    rating: 4.9, reviews_count: 83,
+    desc: 'Studio yoga for all levels — from restorative yin and gentle hatha to dynamic vinyasa flows. Negar integrates breath awareness, somatic principles, and mindful movement to make every class both a physical and meditative experience. Props provided; no experience necessary.',
+    includes: ['All props provided (mat, blocks, straps)', 'Pre-class intake for modifications', 'Post-class integration guide', 'Access to recorded session (private link)', 'Community group chat access'],
+    durations: [{ label: '60 min', price: '$45' }, { label: '90 min', price: '$65' }],
+    slots: ['Mon Jun 9 · 9:00 AM', 'Wed Jun 11 · 7:00 PM', 'Fri Jun 13 · 8:00 AM', 'Sat Jun 14 · 10:00 AM'],
+    reviews: [
+      { name:'Priya Nair', avatar:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&q=80&auto=format&fit=crop&crop=face', stars:5, text:'"Negar\'s classes are the highlight of my week. The perfect balance of challenge and deep rest. I always leave feeling brand new."' },
+      { name:'Emily Johnson', avatar:'https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-8.png', stars:5, text:'"I\'ve tried many yoga teachers and Negar is exceptional. She cues with such clarity and always makes you feel seen."' },
+      { name:'Sarah Lin', avatar:'https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-7.png', stars:5, text:'"Even as a complete beginner, I never felt out of place. So welcoming, so healing."' },
+    ]
+  },
+  meditation: {
+    title: 'Meditation & Sound Healing',
+    img: 'assets/sessions/session-meditation.png',
+    badges: [{ text:'Mindfulness', cls:'badge-teal' }, { text:'Virtual', cls:'badge-virtual' }, { text:'In-Person', cls:'badge-person' }],
+    provider: 'Reza Fahimi',
+    providerRole: 'Sound Therapist & Meditation Guide',
+    providerPhoto: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120&q=80&auto=format&fit=crop&crop=face',
+    rating: 5.0, reviews_count: 47,
+    desc: 'Guided meditation and Tibetan singing bowl sound baths that bring the nervous system into deep rest and reset. Reza works with breath, intention, and resonant sound frequencies to dissolve stress, quiet the inner critic, and reconnect you with stillness. Suitable for complete beginners.',
+    includes: ['Live guided meditation (breath + visualisation)', 'Sound bath with Tibetan bowls & gongs', 'Downloadable audio recording', 'Post-session integration notes', 'Recommended daily practice guide'],
+    durations: [{ label: '30 min', price: '$30' }, { label: '45 min', price: '$50' }, { label: '60 min', price: '$80' }],
+    slots: ['Tue Jun 10 · 7:00 AM', 'Thu Jun 12 · 6:30 PM', 'Fri Jun 13 · 12:00 PM', 'Sun Jun 15 · 9:00 AM'],
+    reviews: [
+      { name:'Leila Ahmadi', avatar:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=60&q=80&auto=format&fit=crop&crop=face', stars:5, text:'"I walked in anxious and left feeling like I\'d slept for a week. The sound bath is absolutely transformative."' },
+      { name:'Michael Carter', avatar:'https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-3.png', stars:5, text:'"Reza\'s voice and presence are profoundly calming. The 60-min session is worth every penny — pure bliss."' },
+      { name:'David Miller', avatar:'https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-15.png', stars:5, text:'"I\'ve been meditating for years but Reza took me to depths I\'ve never reached alone. Highly recommend."' },
+    ]
+  },
+  massage: {
+    title: 'Massage Therapy',
+    img: 'assets/sessions/session-massage.png',
+    badges: [{ text:'Wellness', cls:'badge-green' }, { text:'In-Person', cls:'badge-person' }],
+    provider: 'Temple of Times',
+    providerRole: 'Registered Massage Therapists (RMT-certified)',
+    providerPhoto: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&q=80&auto=format&fit=crop&crop=face',
+    rating: 4.8, reviews_count: 112,
+    desc: 'Therapeutic massage blending Swedish relaxation, deep tissue, and myofascial release techniques. Our RMT-certified practitioners create a personalised treatment to address your specific areas of tension, injury recovery, or full-body restoration. All treatments in a warm, tranquil studio environment.',
+    includes: ['Health intake & postural assessment', 'Choice of massage style & pressure', 'Aromatherapy oils included', 'Post-session care instructions', 'Complimentary herbal tea'],
+    durations: [{ label: '60 min', price: '$120' }, { label: '90 min', price: '$165' }, { label: '120 min', price: '$210' }],
+    slots: ['Mon Jun 9 · 11:00 AM', 'Tue Jun 10 · 3:00 PM', 'Wed Jun 11 · 5:00 PM', 'Thu Jun 12 · 1:00 PM'],
+    reviews: [
+      { name:'Priya Nair', avatar:'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=60&q=80&auto=format&fit=crop&crop=face', stars:5, text:'"The 90-min deep tissue was everything my body needed. Professional, thorough, and genuinely healing."' },
+      { name:'James Okonkwo', avatar:'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=60&q=80&auto=format&fit=crop&crop=face', stars:5, text:'"Best massage I\'ve had in Toronto, hands down. The space is beautiful and the therapist was incredibly skilled."' },
+      { name:'Emily Johnson', avatar:'https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-8.png', stars:5, text:'"I come here monthly now. Consistent, professional, and truly therapeutic — not just relaxing."' },
+    ]
+  },
+  retreat: {
+    title: 'Wellness Retreat',
+    img: 'assets/sessions/session-retreat.png',
+    badges: [{ text:'NEW', cls:'badge-new' }, { text:'In-Person', cls:'badge-person' }],
+    provider: 'Temple of Times',
+    providerRole: 'Retreat Facilitators & Wellness Collective',
+    providerPhoto: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=120&q=80&auto=format&fit=crop&crop=face',
+    rating: 4.9, reviews_count: 38,
+    desc: 'Immersive multi-day healing retreats blending yoga, meditation, sound healing, group coaching, and nature connection in a sacred community space. Held in serene locations outside Toronto. Each retreat is intentionally small (max 12 participants) to ensure deep personal attention and genuine transformation.',
+    includes: ['All meals & accommodation', 'Daily yoga & meditation', 'Group coaching circles', 'Sound healing ceremony', 'Nature walks & integration time', 'Retreat workbook & resources', 'Post-retreat 1:1 integration call'],
+    durations: [{ label: '2 Days', price: '$350' }, { label: '3 Days', price: '$575' }, { label: '5 Days', price: '$950' }],
+    slots: ['Jul 5–6 · 2-Day Retreat', 'Jul 18–20 · 3-Day Retreat', 'Aug 1–5 · 5-Day Retreat'],
+    reviews: [
+      { name:'Michael Carter', avatar:'https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-3.png', stars:5, text:'"The most profound experience of my life. I arrived exhausted and left transformed. Worth every penny and more."' },
+      { name:'Leila Ahmadi', avatar:'https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=60&q=80&auto=format&fit=crop&crop=face', stars:5, text:'"The community energy was electric. The facilitators are masterful. I cried, I laughed, I healed. Thank you."' },
+      { name:'David Miller', avatar:'https://templeofheal.com/wp-content/uploads/2025/08/Exclusive-Customer-15.png', stars:5, text:'"Booked the 5-day and it completely reset my relationship with myself. Already signed up for the next one."' },
+    ]
+  }
+};
+
+/* ═══════════════════════════════════════
+   FILTER + SEARCH
+═══════════════════════════════════════ */
+(function() {
+  /* Map filter pill value → card data-type values */
+  const PILL_MAP = {
+    all:        null,
+    '1on1':     ['counselling','coaching'],
+    yoga:       ['practices'],
+    meditation: ['practices'],
+    coaching:   ['coaching'],
+    retreat:    ['community'],
+    massage:    ['wellness'],
+  };
+  /* Extra keyword match for sub-type filtering (yoga vs meditation both = practices) */
+  const PILL_KEYWORD = { yoga:'yoga', meditation:'meditation' };
+
+  const pills = document.querySelectorAll('#session-filters .filter-pill');
+  const cards = document.querySelectorAll('#sessions-grid .session-card');
+  const searchInput = document.getElementById('session-search');
+  let activeFilter = 'all';
+  let searchQuery  = '';
+
+  function applyFilters() {
+    cards.forEach(card => {
+      const type    = card.dataset.type || '';
+      const session = card.dataset.session || '';
+      const title   = (card.querySelector('h3')?.textContent || '').toLowerCase();
+      const desc    = (card.querySelector('.session-desc')?.textContent || '').toLowerCase();
+      const keyword = PILL_KEYWORD[activeFilter];
+
+      const filterMatch = activeFilter === 'all'
+        || (PILL_MAP[activeFilter] && PILL_MAP[activeFilter].includes(type)
+            && (!keyword || session.includes(keyword) || title.includes(keyword)));
+
+      const searchMatch = !searchQuery
+        || title.includes(searchQuery)
+        || desc.includes(searchQuery)
+        || type.includes(searchQuery)
+        || session.includes(searchQuery);
+
+      card.style.display = (filterMatch && searchMatch) ? '' : 'none';
+    });
+
+    /* Update visible count */
+    const visible = [...cards].filter(c => c.style.display !== 'none').length;
+    document.querySelectorAll('.visible-count').forEach(el => el.textContent = visible);
+  }
+
+  /* Filter pills */
+  pills.forEach(pill => {
+    pill.addEventListener('click', () => {
+      pills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      activeFilter = pill.dataset.filter;
+      applyFilters();
+    });
+  });
+
+  /* Real-time search */
+  if (searchInput) {
+    searchInput.addEventListener('input', () => {
+      searchQuery = searchInput.value.trim().toLowerCase();
+      applyFilters();
+    });
+    /* Also wire the search button */
+    const searchBtn = document.querySelector('.search-box button');
+    if (searchBtn) {
+      searchBtn.addEventListener('click', () => {
+        searchQuery = searchInput.value.trim().toLowerCase();
+        applyFilters();
+        /* Scroll down to session grid */
+        document.getElementById('sessions-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    }
+  }
+
+  /* Click on card or CTA → open session detail */
+  document.getElementById('sessions-grid')?.addEventListener('click', e => {
+    const cta  = e.target.closest('.session-cta');
+    const card = e.target.closest('.session-card');
+    if (!cta && !card) return;
+    const c = cta ? cta.closest('.session-card') : card;
+    const id = c?.dataset.session;
+    if (id) { e.preventDefault(); openSession(id); }
+  });
+
+  /* Category cards → filter + scroll */
+  document.getElementById('category-grid')?.addEventListener('click', e => {
+    const cat = e.target.closest('.category-card');
+    if (!cat) return;
+    e.preventDefault();
+    const map = { counselling:'1on1', coaching:'coaching', practices:'yoga', wellness:'massage', community:'retreat' };
+    const pill = document.querySelector(`#session-filters [data-filter="${map[cat.dataset.category] || 'all'}"]`);
+    if (pill) {
+      pills.forEach(p => p.classList.remove('active'));
+      pill.classList.add('active');
+      activeFilter = pill.dataset.filter;
+      applyFilters();
+    }
+    document.getElementById('sessions-grid')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+})();
+
+/* ═══════════════════════════════════════
+   SESSION DETAIL MODAL
+═══════════════════════════════════════ */
+let sdSelected = { duration: 0, slot: 0 };
+
+function openSession(id) {
+  const s = SESSION_DATA[id];
+  if (!s) return;
+
+  document.getElementById('sd-img').src = s.img;
+  document.getElementById('sd-img').alt = s.title;
+  document.getElementById('sd-title').textContent = s.title;
+  document.getElementById('sd-desc').textContent = s.desc;
+  document.getElementById('sd-pav').src = s.providerPhoto;
+  document.getElementById('sd-pname').textContent = s.provider;
+  document.getElementById('sd-prole').textContent = s.providerRole;
+  document.getElementById('sd-rating').innerHTML = '★'.repeat(Math.round(s.rating)) + ` <span>${s.rating} (${s.reviews_count} reviews)</span>`;
+
+  /* Badges */
+  document.getElementById('sd-badges').innerHTML = s.badges.map(b => `<span class="badge ${b.cls}">${b.text}</span>`).join('');
+
+  /* Includes */
+  document.getElementById('sd-includes').innerHTML = s.includes.map(i => `<li>${i}</li>`).join('');
+
+  /* Durations */
+  sdSelected.duration = 0;
+  document.getElementById('sd-durations').innerHTML = s.durations.map((d, i) =>
+    `<button class="sd-dur${i===0?' selected':''}" onclick="sdSelectDur(this,${i},'${s.durations[i].price}')">${d.label} — ${d.price}</button>`
+  ).join('');
+  document.getElementById('sd-price').textContent = s.durations[0].price;
+  document.getElementById('sd-punit').textContent = '/ session';
+
+  /* Slots */
+  sdSelected.slot = 0;
+  document.getElementById('sd-slots').innerHTML = s.slots.map((sl, i) =>
+    `<button class="sd-slot${i===0?' selected':''}" onclick="sdSelectSlot(this,${i})">${sl}</button>`
+  ).join('');
+
+  /* Reviews */
+  document.getElementById('sd-reviews').innerHTML = s.reviews.map(r =>
+    `<div class="sd-review">
+      <div class="sd-review-header">
+        <img class="sd-review-av" src="${r.avatar}" onerror="this.style.display='none'" alt="${r.name}">
+        <span class="sd-review-name">${r.name}</span>
+        <span class="sd-review-stars">${'★'.repeat(r.stars)}</span>
+      </div>
+      <div class="sd-review-text">${r.text}</div>
+    </div>`
+  ).join('');
+
+  document.getElementById('sd-overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeSession() {
+  document.getElementById('sd-overlay').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function sdSelectDur(btn, i, price) {
+  document.querySelectorAll('.sd-dur').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  sdSelected.duration = i;
+  document.getElementById('sd-price').textContent = price;
+}
+
+function sdSelectSlot(btn, i) {
+  document.querySelectorAll('.sd-slot').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  sdSelected.slot = i;
+}
+
+function sdBook() {
+  const overlay = document.getElementById('sd-overlay');
+  const titleEl = document.getElementById('sd-title');
+  overlay.classList.remove('open');
+  document.body.style.overflow = '';
+  /* Open booking modal from services page flow */
+  if (typeof openBooking !== 'undefined') {
+    openBooking();
+  } else {
+    window.location.href = 'services.html';
+  }
+}
+
+/* Close on Escape */
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeSession();
+});
+</script>
 <script>
   document.getElementById('contact-form').addEventListener('submit', function(e) {
     e.preventDefault();
