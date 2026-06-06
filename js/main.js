@@ -172,6 +172,111 @@
 
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
 
+  /* ── Auto-reveal: stagger-tag key elements site-wide ────────── */
+  function autoReveal() {
+    const NONE = ':not(.fade-in):not(.reveal-left):not(.reveal-right):not(.reveal-scale)';
+
+    /* Staggered groups — siblings get incremental delays */
+    const groups = [
+      '.session-card',
+      '.expert-card',
+      '.product-card',
+      '.testimonial-card',
+      '.stat-card',
+      '.cat-card',
+      '.svc-stat',
+      '.proof-stat',
+      '.why-item',
+      '.check-item',
+      '.contact-detail',
+      '.footer-col',
+      '.booking-row',
+      '.payout-row',
+      '.bk-date-pill',
+    ];
+
+    /* Process each group selector */
+    groups.forEach(sel => {
+      /* Group siblings by their immediate parent so delays reset per row */
+      const parentMap = new Map();
+      document.querySelectorAll(sel + NONE).forEach(el => {
+        const key = el.parentElement;
+        if (!parentMap.has(key)) parentMap.set(key, []);
+        parentMap.get(key).push(el);
+      });
+      parentMap.forEach(siblings => {
+        siblings.forEach((el, i) => {
+          el.classList.add('fade-in');
+          if (i > 0 && i <= 6) el.classList.add('fade-in-delay-' + i);
+          observer.observe(el);
+        });
+      });
+    });
+
+    /* Singletons — no stagger, just a clean fade-up */
+    const singles = [
+      '.section-label' + NONE,
+      'section h2' + NONE,
+      'section h3' + NONE,
+      '.svc-hero-title' + NONE,
+      '.contact-heading' + NONE,
+      '.auth-card-title' + NONE,
+      '.page-title' + NONE,
+      '.contact-lead' + NONE,
+      'section .lead' + NONE,
+      '.svc-hero-desc' + NONE,
+      '.card-title' + NONE,
+      '.acct-page-sub' + NONE,
+    ];
+    singles.forEach(sel => {
+      document.querySelectorAll(sel).forEach(el => {
+        el.classList.add('fade-in');
+        observer.observe(el);
+      });
+    });
+
+    /* Directional: left-column content slides in from left */
+    [
+      '.why-content > p',
+      '.why-content > .social-links',
+      '.contact-info-col > .contact-lead',
+      '.contact-info-col > .footer-social',
+      '.auth-brand-desc',
+      '.auth-brand-stats',
+    ].forEach(sel => {
+      document.querySelectorAll(sel + NONE).forEach(el => {
+        el.classList.add('reveal-left');
+        observer.observe(el);
+      });
+    });
+
+    /* Directional: right-column / image areas slide in from right */
+    [
+      '.why-right',
+      '.contact-form-card',
+      '.auth-form-panel',
+    ].forEach(sel => {
+      document.querySelectorAll(sel + NONE).forEach(el => {
+        el.classList.add('reveal-right');
+        observer.observe(el);
+      });
+    });
+
+    /* Scale-up: stat numbers, image wraps, avatar circles */
+    [
+      '.stat-card-num',
+      '.earnings-stat .big',
+      '.svc-stat-num',
+    ].forEach(sel => {
+      document.querySelectorAll(sel + NONE).forEach(el => {
+        el.classList.add('reveal-scale');
+        observer.observe(el);
+      });
+    });
+  }
+
+  autoReveal();
+
   /* ── Sign-up form ────────────────────────────────────────── */
   const signupForm = document.getElementById('signup-form');
   if (signupForm) {
