@@ -679,10 +679,10 @@
           <h3>Psychotherapy &amp; Counselling</h3>
           <p class="session-desc">One-on-one sessions with licensed therapists to support your emotional and mental wellbeing.</p>
           <p class="session-price">From $80 – $180 / session</p>
-          <a href="#" class="session-cta">
+          <button type="button" class="session-cta" style="background:none;border:none;cursor:pointer;font-family:inherit;font-size:inherit;padding:0;text-align:left">
             See the Sessions
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </a>
+          </button>
         </div>
       </article>
 
@@ -698,10 +698,10 @@
           <h3>Coaching</h3>
           <p class="session-desc">Life, NLP & performance coaching to break through limits and create meaningful change.</p>
           <p class="session-price">From $60 – $220 / session</p>
-          <a href="#" class="session-cta">
+          <button type="button" class="session-cta" style="background:none;border:none;cursor:pointer;font-family:inherit;font-size:inherit;padding:0;text-align:left">
             See the Sessions
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </a>
+          </button>
         </div>
       </article>
 
@@ -717,10 +717,10 @@
           <h3>Yoga</h3>
           <p class="session-desc">Studio classes for all levels — from restorative yin to dynamic vinyasa flows.</p>
           <p class="session-price">From $25 – $90 / class</p>
-          <a href="#" class="session-cta">
+          <button type="button" class="session-cta" style="background:none;border:none;cursor:pointer;font-family:inherit;font-size:inherit;padding:0;text-align:left">
             See the Sessions
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </a>
+          </button>
         </div>
       </article>
 
@@ -736,10 +736,10 @@
           <h3>Meditation &amp; Mindfulness</h3>
           <p class="session-desc">Guided practices to quiet the mind, reduce stress, and build lasting inner awareness.</p>
           <p class="session-price">From $30 – $100 / session</p>
-          <a href="#" class="session-cta">
+          <button type="button" class="session-cta" style="background:none;border:none;cursor:pointer;font-family:inherit;font-size:inherit;padding:0;text-align:left">
             See the Sessions
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </a>
+          </button>
         </div>
       </article>
 
@@ -755,10 +755,10 @@
           <h3>Massage Therapy</h3>
           <p class="session-desc">Therapeutic bodywork to release tension, restore balance, and renew your energy.</p>
           <p class="session-price">From $70 – $180 / session</p>
-          <a href="#" class="session-cta">
+          <button type="button" class="session-cta" style="background:none;border:none;cursor:pointer;font-family:inherit;font-size:inherit;padding:0;text-align:left">
             See the Sessions
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </a>
+          </button>
         </div>
       </article>
 
@@ -774,10 +774,10 @@
           <h3>Retreat</h3>
           <p class="session-desc">Immersive multi-day healing retreats blending multiple modalities in a sacred group space.</p>
           <p class="session-price">From $350 – $1,200 / retreat</p>
-          <a href="#" class="session-cta">
+          <button type="button" class="session-cta" style="background:none;border:none;cursor:pointer;font-family:inherit;font-size:inherit;padding:0;text-align:left">
             See the Sessions
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
-          </a>
+          </button>
         </div>
       </article>
 
@@ -1311,7 +1311,6 @@
           <li><a href="#why-us">About Us</a></li>
           <li><a href="#testimonials">Testimonials</a></li>
           <li><a href="#faq">FAQ</a></li>
-          <li><a href="admin/">CMS Admin</a></li>
           <li><a href="sitemap.xml">Sitemap</a></li>
         </ul>
       </div>
@@ -1349,8 +1348,8 @@
         <div style="margin-top:1.5rem">
           <h4>For Providers</h4>
           <ul>
-            <li><a href="#become-provider">Join as a Pro</a></li>
-            <li><a href="admin/">Provider CMS</a></li>
+            <li><a href="become-a-provider.html">Join as a Pro</a></li>
+            <li><a href="provider-portal.html">Provider Portal</a></li>
           </ul>
         </div>
       </div>
@@ -1722,12 +1721,9 @@ const SESSION_DATA = {
 
   /* Click on card or CTA → open session detail */
   document.getElementById('sessions-grid')?.addEventListener('click', e => {
-    const cta  = e.target.closest('.session-cta');
-    const card = e.target.closest('.session-card');
-    if (!cta && !card) return;
-    const c = cta ? cta.closest('.session-card') : card;
-    const id = c?.dataset.session;
-    if (id) { e.preventDefault(); openSession(id); }
+    const card = e.target.closest('.session-card[data-session]');
+    if (!card) return;
+    openSession(card.dataset.session);
   });
 
   /* Category cards → filter + scroll */

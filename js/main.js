@@ -613,4 +613,115 @@
     </div>`;
   }
 
+  /* ── Global Header Search ─────────────────────────────────── */
+  const GS_DATA = [
+    { type:'session',  title:'Life Coaching Session',          sub:'Shohreh Bashar · Virtual · From $60',    tag:'Coaching',    url:'services.html' },
+    { type:'session',  title:'Psychotherapy & Counselling',    sub:'Shohreh Bashar · Virtual · From $80',    tag:'Counselling', url:'services.html' },
+    { type:'session',  title:'Yoga Vinyasa Flow',              sub:'Negar Sadeghi · In-Person · From $45',   tag:'Yoga',        url:'services.html' },
+    { type:'session',  title:'Meditation & Sound Healing',     sub:'Reza Fahimi · Virtual · From $30',       tag:'Meditation',  url:'services.html' },
+    { type:'session',  title:'Massage Therapy',                sub:'Temple of Times · In-Person · From $120',tag:'Massage',     url:'services.html' },
+    { type:'session',  title:'Wellness Retreat',               sub:'Temple of Times · In-Person · From $350',tag:'Retreat',     url:'services.html' },
+    { type:'session',  title:'NLP Transformation Session',     sub:'Alireza Sharifi · Virtual · From $120',  tag:'NLP',         url:'services.html' },
+    { type:'session',  title:'Breathwork Journey',             sub:'Alireza Sharifi · Virtual · From $70',   tag:'Breathwork',  url:'services.html' },
+    { type:'session',  title:'Nutritional Wellness Coaching',  sub:'Maryam Hosseini · Virtual · From $80',   tag:'Nutrition',   url:'services.html' },
+    { type:'session',  title:'Reiki Energy Healing',           sub:'Temple of Times · In-Person · From $90', tag:'Healing',     url:'services.html' },
+    { type:'session',  title:'Couples Counselling',            sub:'Temple of Times · In-Person · From $150',tag:'Counselling', url:'services.html' },
+    { type:'session',  title:'Group Meditation Circle',        sub:'Shohreh Bashar · In-Person · From $30',  tag:'Group',       url:'services.html' },
+    { type:'session',  title:'Inner Child Healing',            sub:'Shohreh Bashar · Virtual · From $110',   tag:'Healing',     url:'services.html' },
+    { type:'session',  title:'Trauma-Informed Therapy',        sub:'Alireza Sharifi · Virtual · From $130',  tag:'Therapy',     url:'services.html' },
+    { type:'provider', title:'Shohreh Bashar',    sub:'Master Coach · NLP · Energy Healing · Gold Tier',       url:'index.html#our-experts' },
+    { type:'provider', title:'Alireza Sharifi',   sub:'NLP Coach · Breathwork · Yoga · Platinum Tier',          url:'index.html#our-experts' },
+    { type:'provider', title:'Negar Sadeghi',     sub:'E-RYT 500 Yoga Teacher · Breathwork · Platinum Tier',    url:'index.html#our-experts' },
+    { type:'provider', title:'Reza Fahimi',       sub:'Sound Healer · Meditation Guide · Gold Tier',             url:'index.html#our-experts' },
+    { type:'provider', title:'Maryam Hosseini',   sub:'Nutritional Wellness Coach · Silver Tier',                url:'index.html#our-experts' },
+    { type:'provider', title:'Sina Dejnabadi',    sub:'Performance & Business Coach · Silver Tier',              url:'index.html#our-experts' },
+    { type:'page',     title:'Become a Provider', sub:'Join Temple of Heal as a verified wellness provider',     url:'become-a-provider.html' },
+    { type:'page',     title:'Provider Portal',   sub:'Manage sessions, earnings, profile, and availability',    url:'provider-portal.html' },
+    { type:'page',     title:'My Account',        sub:'Manage bookings, saved providers, and messages',          url:'my-account.html' },
+    { type:'page',     title:'About Us',          sub:'Our mission, values, and team',                           url:'index.html#why-us' },
+    { type:'page',     title:'Contact',           sub:'Get in touch with the Temple of Heal team',               url:'index.html#contact' },
+  ];
+  const GS_POPULAR = ['Life Coaching','Yoga','Meditation','Sound Healing','Breathwork','NLP'];
+
+  function gsIcon(type) {
+    if (type === 'session')  return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>';
+    if (type === 'provider') return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>';
+  }
+
+  function gsRender(q) {
+    const body = document.getElementById('gs-body');
+    if (!body) return;
+    if (!q) {
+      body.innerHTML = `<div class="gs-section-title">Popular Searches</div>
+        <div class="gs-popular">${GS_POPULAR.map(p =>
+          `<button class="gs-popular-chip" onclick="gsPopular('${p}')">${p}</button>`).join('')}</div>`;
+      return;
+    }
+    const lq = q.toLowerCase();
+    const hits = GS_DATA.filter(d =>
+      d.title.toLowerCase().includes(lq) ||
+      d.sub.toLowerCase().includes(lq) ||
+      (d.tag && d.tag.toLowerCase().includes(lq))
+    ).slice(0, 9);
+    if (!hits.length) {
+      body.innerHTML = `<div class="gs-no-results">No results for "<strong>${q}</strong>". Try a session type, provider name, or topic.</div>`;
+      return;
+    }
+    const g = { session:[], provider:[], page:[] };
+    hits.forEach(r => g[r.type].push(r));
+    const labels = { session:'Sessions', provider:'Providers', page:'Pages' };
+    body.innerHTML = ['session','provider','page'].filter(t => g[t].length).map((type, ti) => `
+      <div class="gs-section-title"${ti > 0 ? ' style="margin-top:1.25rem"' : ''}>${labels[type]}</div>
+      <div class="gs-results">${g[type].map(r =>
+        `<a class="gs-result" href="${r.url}">
+          <div class="gs-result-icon ${r.type}">${gsIcon(r.type)}</div>
+          <div><div class="gs-result-title">${r.title}</div><div class="gs-result-sub">${r.sub}</div></div>
+          ${r.tag ? `<span class="gs-result-tag">${r.tag}</span>` : ''}
+        </a>`).join('')}</div>`).join('');
+  }
+
+  window.gsPopular = q => {
+    const inp = document.getElementById('gs-input');
+    if (inp) { inp.value = q; gsRender(q); inp.focus(); }
+  };
+
+  function gsOpen() {
+    if (!document.getElementById('gs-overlay')) {
+      const el = document.createElement('div');
+      el.className = 'gs-overlay'; el.id = 'gs-overlay';
+      el.innerHTML = `<div class="gs-panel" onclick="event.stopPropagation()">
+        <div class="gs-panel-inner">
+          <div class="gs-input-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            <input class="gs-input" id="gs-input" type="search" placeholder="Search sessions, providers, topics…" autocomplete="off">
+            <button class="gs-close-btn" onclick="gsClose()" aria-label="Close search">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+          <div id="gs-body"></div>
+        </div></div>`;
+      el.addEventListener('click', gsClose);
+      document.body.appendChild(el);
+      document.getElementById('gs-input').addEventListener('input', function() { gsRender(this.value.trim()); });
+    }
+    document.getElementById('gs-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+    gsRender('');
+    setTimeout(() => document.getElementById('gs-input')?.focus(), 60);
+  }
+
+  window.gsClose = function() {
+    const o = document.getElementById('gs-overlay');
+    if (o) o.classList.remove('open');
+    document.body.style.overflow = '';
+  };
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') window.gsClose(); });
+
+  /* Wire every search icon button across all pages */
+  document.querySelectorAll('.nav-icon-btn[aria-label="Search"]').forEach(btn => {
+    btn.addEventListener('click', gsOpen);
+  });
+
 })();
