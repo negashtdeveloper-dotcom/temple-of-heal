@@ -551,6 +551,64 @@
     .bk-next:hover { background: var(--primary-h); }
     .bk-next:disabled { opacity: .45; cursor: default; }
 
+    /* Payment step */
+    .bk-pay-summary {
+      background: var(--cream); border-radius: var(--radius);
+      padding: .85rem 1rem; margin-bottom: 1.25rem;
+      display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    }
+    .bk-pay-summary-info { font-size: .83rem; color: var(--text-mid); }
+    .bk-pay-summary-info strong { display: block; font-size: .9rem; color: var(--text); margin-bottom: .15rem; }
+    .bk-pay-total { font-family: var(--f-head); font-size: 1.5rem; font-weight: 500; color: var(--nav-bg); white-space: nowrap; }
+    .bk-pay-total.free { color: var(--gold); font-size: 1.1rem; }
+    .bk-pay-field { margin-bottom: .9rem; }
+    .bk-pay-label { display: block; font-size: .75rem; font-weight: 500; color: var(--text-mid); margin-bottom: .35rem; }
+    .bk-pay-row { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem; }
+    .bk-card-wrap { position: relative; }
+    .bk-pay-input {
+      width: 100%; padding: .7rem .95rem;
+      border: 1.5px solid var(--border); border-radius: var(--radius);
+      font-size: .9rem; font-family: var(--f-body); color: var(--text);
+      background: var(--white); outline: none; box-sizing: border-box;
+      transition: border-color .2s, box-shadow .2s; letter-spacing: .04em;
+    }
+    .bk-pay-input:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(46,107,74,.09); }
+    .bk-pay-input::placeholder { color: #A0ADB8; letter-spacing: normal; }
+    .bk-pay-input.error { border-color: #e53e3e; box-shadow: 0 0 0 3px rgba(229,62,62,.09); }
+    .bk-card-icons {
+      position: absolute; right: .75rem; top: 50%; transform: translateY(-50%);
+      display: flex; gap: .3rem; align-items: center; pointer-events: none;
+    }
+    .bk-security {
+      display: flex; align-items: flex-start; gap: .6rem;
+      background: rgba(56,161,105,.06); border: 1px solid rgba(56,161,105,.2);
+      border-radius: var(--radius); padding: .65rem .9rem;
+      font-size: .73rem; color: #2f855a; margin: 1rem 0;
+      line-height: 1.5;
+    }
+    .bk-security svg { width: 1rem; height: 1rem; flex-shrink: 0; margin-top: .05rem; }
+    .bk-pay-btn {
+      width: 100%; padding: .9rem;
+      background: var(--nav-bg); color: var(--white);
+      border: none; border-radius: var(--radius-pill);
+      font-size: 1rem; font-weight: 600; font-family: var(--f-body);
+      cursor: pointer; transition: background .2s;
+      display: flex; align-items: center; justify-content: center; gap: .5rem;
+    }
+    .bk-pay-btn:hover { background: var(--primary); }
+    .bk-pay-btn svg { width: 1rem; height: 1rem; }
+    .bk-pay-note { font-size: .7rem; color: var(--text-mid); text-align: center; margin-top: .5rem; }
+    .bk-free-note {
+      text-align: center; padding: 1rem 1.25rem;
+      background: rgba(196,155,60,.07); border: 1px solid rgba(196,155,60,.25);
+      border-radius: var(--radius); margin-bottom: 1rem;
+      font-size: .85rem; color: #92701a; line-height: 1.6;
+    }
+    .bk-powered-by {
+      display: flex; align-items: center; justify-content: center; gap: .5rem;
+      font-size: .7rem; color: var(--text-mid); margin-top: .75rem;
+    }
+
     /* ── RESPONSIVE ──────────────────────────────────── */
     @media (max-width: 900px) {
       .services-layout { grid-template-columns: 1fr; }
@@ -1294,9 +1352,11 @@
       <div class="bk-step-line"></div>
       <div class="bk-step-item" id="step-ind-2"><div class="bk-step-dot">2</div><span class="bk-step-label">Duration</span></div>
       <div class="bk-step-line"></div>
-      <div class="bk-step-item" id="step-ind-3"><div class="bk-step-dot">3</div><span class="bk-step-label">Your Details</span></div>
+      <div class="bk-step-item" id="step-ind-3"><div class="bk-step-dot">3</div><span class="bk-step-label">Details</span></div>
       <div class="bk-step-line"></div>
-      <div class="bk-step-item" id="step-ind-4"><div class="bk-step-dot">4</div><span class="bk-step-label">Confirm</span></div>
+      <div class="bk-step-item" id="step-ind-4"><div class="bk-step-dot">4</div><span class="bk-step-label">Review</span></div>
+      <div class="bk-step-line"></div>
+      <div class="bk-step-item" id="step-ind-5"><div class="bk-step-dot">5</div><span class="bk-step-label">Payment</span></div>
     </div>
 
     <!-- Step 1: Date & Time -->
@@ -1342,6 +1402,78 @@
       <div class="bk-section-title">Review &amp; Confirm</div>
       <div class="bk-summary" id="bk-summary"></div>
       <p style="font-size:.78rem;color:var(--text-mid);line-height:1.65">By confirming you agree to our <a href="/terms" style="color:var(--primary)">Terms of Service</a>. Payment is processed securely via Stripe. Free sessions require no payment.</p>
+    </div>
+
+    <!-- Step 5: Payment -->
+    <div class="bk-body" id="bk-step-5" style="display:none">
+
+      <!-- Order summary -->
+      <div class="bk-pay-summary" id="bk-pay-summary-bar">
+        <div class="bk-pay-summary-info">
+          <strong id="bk-pay-service">—</strong>
+          <span id="bk-pay-details">—</span>
+        </div>
+        <div class="bk-pay-total" id="bk-pay-total-val">—</div>
+      </div>
+
+      <!-- Free session: no card needed -->
+      <div id="bk-free-section" style="display:none">
+        <div class="bk-free-note">
+          🎁 <strong>This session is free!</strong><br>
+          No payment required. Simply confirm and your booking is secured.
+        </div>
+      </div>
+
+      <!-- Paid session: card form -->
+      <div id="bk-card-section">
+        <div class="bk-section-title">Card Details</div>
+
+        <div class="bk-pay-field">
+          <label class="bk-pay-label" for="bk-cardnum">Card Number</label>
+          <div class="bk-card-wrap">
+            <input class="bk-pay-input" id="bk-cardnum" type="text" placeholder="1234  5678  9012  3456" maxlength="19" autocomplete="cc-number" inputmode="numeric">
+            <div class="bk-card-icons">
+              <!-- Visa -->
+              <svg viewBox="0 0 28 18" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="28" height="18" rx="3" fill="#1A1F71"/><path d="M10.5 12.5H8.5L9.9 5.5H11.9L10.5 12.5ZM16.2 5.7C15.8 5.5 15.1 5.3 14.3 5.3C12.4 5.3 11 6.3 11 7.7C11 8.7 11.9 9.3 12.6 9.6C13.3 9.9 13.6 10.2 13.6 10.5C13.6 11 13 11.3 12.4 11.3C11.6 11.3 11.1 11.2 10.5 10.9L10.3 10.8L10 12.4C10.5 12.6 11.4 12.8 12.3 12.8C14.3 12.8 15.7 11.8 15.7 10.3C15.7 9.5 15.2 8.9 14.1 8.4C13.5 8.1 13.1 7.9 13.1 7.5C13.1 7.2 13.4 6.8 14.1 6.8C14.7 6.8 15.1 6.9 15.5 7.1L15.7 7.2L16.2 5.7ZM19.1 10.3C19.3 9.8 20 7.9 20 7.9C20 7.9 20.2 7.3 20.3 7L20.5 7.8C20.5 7.8 21.1 10.1 21.2 10.3H19.1ZM21.5 5.5H20C19.5 5.5 19.2 5.7 18.9 6.2L16 12.5H18L18.5 11H21C21.1 11.3 21.4 12.5 21.4 12.5H23.2L21.5 5.5ZM7 5.5L5.1 10.4L4.9 9.4C4.5 8.1 3.3 6.7 2 6L3.7 12.5H5.7L8.9 5.5H7Z" fill="white"/></svg>
+              <!-- Mastercard -->
+              <svg viewBox="0 0 28 18" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="28" height="18" rx="3" fill="#252525"/><circle cx="11" cy="9" r="5" fill="#EB001B"/><circle cx="17" cy="9" r="5" fill="#F79E1B"/><path d="M14 12.6A5 5 0 0 0 14 5.4A5 5 0 0 0 14 12.6Z" fill="#FF5F00"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="bk-pay-row">
+          <div class="bk-pay-field">
+            <label class="bk-pay-label" for="bk-expiry">Expiry Date</label>
+            <input class="bk-pay-input" id="bk-expiry" type="text" placeholder="MM / YY" maxlength="7" autocomplete="cc-exp" inputmode="numeric">
+          </div>
+          <div class="bk-pay-field">
+            <label class="bk-pay-label" for="bk-cvc">CVC / CVV
+              <svg viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" style="width:.8rem;height:.8rem;vertical-align:middle;margin-left:.2rem" title="3-digit code on back of card"><circle cx="7" cy="7" r="6"/><path d="M7 10V7M7 4.5v.01"/></svg>
+            </label>
+            <input class="bk-pay-input" id="bk-cvc" type="text" placeholder="123" maxlength="4" autocomplete="cc-csc" inputmode="numeric">
+          </div>
+        </div>
+
+        <div class="bk-pay-field">
+          <label class="bk-pay-label" for="bk-cardname">Cardholder Name</label>
+          <input class="bk-pay-input" id="bk-cardname" type="text" placeholder="Sarah Lin" autocomplete="cc-name">
+        </div>
+
+        <div class="bk-security">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+          Your payment is encrypted end-to-end. Card details are processed by <strong>Stripe</strong> and never stored on our servers.
+        </div>
+      </div>
+
+      <button class="bk-pay-btn" id="bk-pay-btn" onclick="processPayment()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+        <span id="bk-pay-btn-label">Pay Securely →</span>
+      </button>
+      <p class="bk-pay-note">Free cancellation up to 24 hours before your session. You will receive a receipt by email.</p>
+      <div class="bk-powered-by">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:.85rem;height:.85rem"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        Secured by Stripe · SSL encrypted
+      </div>
     </div>
 
     <!-- Success -->
@@ -1595,25 +1727,42 @@
   /* ── Steps ── */
   function goStep(n) {
     bk.step = n;
-    [1,2,3,4].forEach(i => {
-      document.getElementById('bk-step-' + i).style.display = i === n ? '' : 'none';
+    [1,2,3,4,5].forEach(i => {
+      const el = document.getElementById('bk-step-' + i);
+      if (el) el.style.display = i === n ? '' : 'none';
     });
     document.getElementById('bk-success').style.display = 'none';
-    document.getElementById('bk-footer').style.display = '';
-    // Update step indicators
-    [1,2,3,4].forEach(i => {
+    document.getElementById('bk-footer').style.display = n === 5 ? 'none' : '';
+    // Step indicators
+    [1,2,3,4,5].forEach(i => {
       const el = document.getElementById('step-ind-' + i);
-      el.classList.toggle('active', i === n);
-      el.classList.toggle('done',   i < n);
+      if (el) { el.classList.toggle('active', i === n); el.classList.toggle('done', i < n); }
     });
-    // Back button
     document.getElementById('bk-back-btn').style.visibility = n > 1 ? 'visible' : 'hidden';
+    // Populate payment step summary when arriving at step 5
+    if (n === 5) buildPaymentStep();
     updateNextBtn();
+  }
+
+  function buildPaymentStep() {
+    const priceStr = bk.isFree ? 'Free' : '$' + bk.durPrice;
+    document.getElementById('bk-pay-service').textContent = bk.service;
+    document.getElementById('bk-pay-details').textContent = bk.dateLabel + ' · ' + bk.time + ' · ' + bk.duration + ' min';
+    const totalEl = document.getElementById('bk-pay-total-val');
+    totalEl.textContent = priceStr;
+    totalEl.className = 'bk-pay-total' + (bk.isFree ? ' free' : '');
+    // Toggle free vs paid sections
+    document.getElementById('bk-free-section').style.display  = bk.isFree ? '' : 'none';
+    document.getElementById('bk-card-section').style.display  = bk.isFree ? 'none' : '';
+    // Update pay button label
+    document.getElementById('bk-pay-btn-label').textContent = bk.isFree
+      ? 'Confirm Free Booking →'
+      : 'Pay ' + priceStr + ' Securely →';
   }
 
   function updateNextBtn() {
     const btn = document.getElementById('bk-next-btn');
-    const labels = { 1:'Choose Time →', 2:'Your Details →', 3:'Review →', 4:'Confirm Booking' };
+    const labels = { 1:'Choose Time →', 2:'Your Details →', 3:'Review Booking →', 4:'Proceed to Payment →' };
     if (bk.step === 1) {
       const ready = bk.date && bk.time;
       btn.disabled = !ready;
@@ -1634,7 +1783,6 @@
     } else if (bk.step === 2) {
       goStep(3);
     } else if (bk.step === 3) {
-      // Validate
       const fn = document.getElementById('bk-fname').value.trim();
       const ln = document.getElementById('bk-lname').value.trim();
       const em = document.getElementById('bk-email').value.trim();
@@ -1645,7 +1793,6 @@
       bk.fname = fn; bk.lname = ln; bk.email = em;
       bk.phone = document.getElementById('bk-phone').value.trim();
       bk.notes = document.getElementById('bk-notes').value.trim();
-      // Build summary
       const priceStr = bk.isFree ? 'Free' : '$' + bk.durPrice;
       document.getElementById('bk-summary').innerHTML = `
         <div class="bk-summary-row"><span class="lbl">Service</span><span class="val">${bk.service}</span></div>
@@ -1658,27 +1805,84 @@
         <div class="bk-summary-row"><span class="lbl">Email</span><span class="val">${bk.email}</span></div>`;
       goStep(4);
     } else if (bk.step === 4) {
-      confirmBooking();
+      goStep(5);
     }
   }
 
   function bkBack() {
-    if (bk.step > 1) goStep(bk.step - 1);
+    if (bk.step === 5) { goStep(4); document.getElementById('bk-footer').style.display = ''; }
+    else if (bk.step > 1) goStep(bk.step - 1);
+  }
+
+  /* ── Payment processing ── */
+  function processPayment() {
+    if (bk.isFree) {
+      confirmBooking(); return;
+    }
+    // Validate card fields
+    const num  = (document.getElementById('bk-cardnum').value || '').replace(/\s/g,'');
+    const exp  = document.getElementById('bk-expiry').value.trim();
+    const cvc  = document.getElementById('bk-cvc').value.trim();
+    const name = document.getElementById('bk-cardname').value.trim();
+    let ok = true;
+    const mark = (id, valid) => {
+      document.getElementById(id).classList.toggle('error', !valid);
+      if (!valid) ok = false;
+    };
+    mark('bk-cardnum',  num.length >= 13 && num.length <= 19 && /^\d+$/.test(num));
+    mark('bk-expiry',   /^\d{2}\s?\/\s?\d{2}$/.test(exp));
+    mark('bk-cvc',      /^\d{3,4}$/.test(cvc));
+    mark('bk-cardname', name.length >= 2);
+    if (!ok) return;
+
+    // Simulate processing
+    const btn = document.getElementById('bk-pay-btn');
+    btn.disabled = true;
+    btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width:1rem;height:1rem;animation:spin 1s linear infinite"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>&nbsp;Processing…';
+    if (!document.getElementById('spin-style')) {
+      const s = document.createElement('style'); s.id = 'spin-style';
+      s.textContent = '@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}';
+      document.head.appendChild(s);
+    }
+    setTimeout(() => { btn.disabled = false; confirmBooking(); }, 1800);
   }
 
   function confirmBooking() {
     const ref = 'TOH-' + Date.now().toString(36).toUpperCase().slice(-6);
-    // Save to localStorage
     const bookings = JSON.parse(localStorage.getItem('toh_bookings') || '[]');
     bookings.push({ ref, ...bk, bookedAt: new Date().toISOString() });
     localStorage.setItem('toh_bookings', JSON.stringify(bookings));
-    // Show success
-    [1,2,3,4].forEach(i => document.getElementById('bk-step-' + i).style.display = 'none');
+    [1,2,3,4,5].forEach(i => { const el = document.getElementById('bk-step-' + i); if(el) el.style.display = 'none'; });
     document.getElementById('bk-footer').style.display = 'none';
-    [1,2,3,4].forEach(i => document.getElementById('step-ind-' + i).classList.add('done'));
+    [1,2,3,4,5].forEach(i => { const el = document.getElementById('step-ind-' + i); if(el) el.classList.add('done'); });
     document.getElementById('bk-success').style.display = '';
     document.getElementById('bk-ref').textContent = 'Booking ref: ' + ref;
   }
+
+  /* ── Card input formatters ── */
+  document.addEventListener('DOMContentLoaded', () => {
+    const cardNum = document.getElementById('bk-cardnum');
+    if (cardNum) {
+      cardNum.addEventListener('input', function() {
+        let v = this.value.replace(/\D/g,'').substring(0,16);
+        this.value = v.replace(/(.{4})/g,'$1  ').trim();
+      });
+    }
+    const expiry = document.getElementById('bk-expiry');
+    if (expiry) {
+      expiry.addEventListener('input', function() {
+        let v = this.value.replace(/\D/g,'').substring(0,4);
+        if (v.length >= 3) v = v.substring(0,2) + ' / ' + v.substring(2);
+        this.value = v;
+      });
+    }
+    const cvc = document.getElementById('bk-cvc');
+    if (cvc) {
+      cvc.addEventListener('input', function() {
+        this.value = this.value.replace(/\D/g,'').substring(0,4);
+      });
+    }
+  });
 
   // Back to top
   const backTop = document.getElementById('back-top');
