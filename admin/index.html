@@ -206,7 +206,7 @@
       </div>
       <div class="nav-item" data-panel="experts">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-        Experts / Providers
+        Providers
       </div>
       <div class="nav-item" data-panel="testimonials">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
@@ -372,17 +372,17 @@
     return `
     <div class="stats-grid">
       <div class="stat-card"><span class="num">${activeServices}</span><div class="lbl">Active Services</div><div class="chg">↑ ${cms.services.filter(s=>s.isNew).length} new</div></div>
-      <div class="stat-card"><span class="num">${activeExperts}</span><div class="lbl">Active Experts</div></div>
+      <div class="stat-card"><span class="num">${activeExperts}</span><div class="lbl">Active Providers</div></div>
       <div class="stat-card"><span class="num">${cms.testimonials.filter(t=>t.isActive).length}</span><div class="lbl">Testimonials</div></div>
       <div class="stat-card"><span class="num">${cms.faqs.filter(f=>f.isActive).length}</span><div class="lbl">Active FAQs</div></div>
     </div>
     <div class="card">
       <div class="card-header"><h2>Quick Actions</h2></div>
       <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem">
-        ${['services','experts','testimonials','faqs','settings'].map(p=>`
+        ${[['services','Services'],['experts','Providers'],['testimonials','Testimonials'],['faqs','FAQs'],['settings','Settings']].map(([p,lbl])=>`
           <button class="btn btn-secondary" onclick="document.querySelector('[data-panel=${p}]').click()"
             style="justify-content:flex-start;gap:.5rem;padding:.75rem">
-            ${p.charAt(0).toUpperCase()+p.slice(1)}
+            ${lbl}
           </button>`).join('')}
       </div>
     </div>
@@ -581,8 +581,8 @@
     return `
     <div class="card">
       <div class="card-header">
-        <h2>Experts / Providers (${cms.experts.length})</h2>
-        <button class="btn btn-primary btn-sm" id="add-expert-btn">+ Add Expert</button>
+        <h2>Providers (${cms.experts.length})</h2>
+        <button class="btn btn-primary btn-sm" id="add-expert-btn">+ Add Provider</button>
       </div>
       <div class="table-wrap">
         <table>
@@ -649,7 +649,7 @@
 
   function bindExpertEvents() {
     document.getElementById('add-expert-btn').addEventListener('click', () => {
-      openModal('Add Expert', expertModalHTML({isActive:true}), () => {
+      openModal('Add Provider', expertModalHTML({isActive:true}), () => {
         const ex = collectExpertForm();
         if (!ex.name) return;
         cms.experts.push(ex);
@@ -658,14 +658,14 @@
     document.querySelectorAll('.edit-expert').forEach(btn => {
       btn.addEventListener('click', () => {
         const i = +btn.dataset.idx;
-        openModal('Edit Expert: ' + cms.experts[i].name, expertModalHTML(cms.experts[i]), () => {
+        openModal('Edit Provider: ' + cms.experts[i].name, expertModalHTML(cms.experts[i]), () => {
           cms.experts[i] = { ...cms.experts[i], ...collectExpertForm() };
         });
       });
     });
     document.querySelectorAll('.del-expert').forEach(btn => {
       btn.addEventListener('click', () => {
-        if (!confirm('Delete this expert?')) return;
+        if (!confirm('Delete this provider?')) return;
         cms.experts.splice(+btn.dataset.idx, 1);
         saveCMS(); renderPanel('experts');
       });
@@ -1032,12 +1032,12 @@
   const RESPONSES = {
     'how do i add':     "To add a service, click **Services** in the left sidebar → **Add New Service** button. Fill in the name, category, description, price range, session type, and required fields, then click Save.",
     'edit a service':   "Click **Services** in the sidebar, find the service in the list and click **Edit**. Update any fields and hit **Save Changes**. Changes go live instantly.",
-    'provider':         "Go to **Experts** in the sidebar. You can add a new provider with their photo, bio, specialty, rating and tier, or click an existing one to edit. Toggle **Active** to show or hide them on the site.",
+    'provider':         "Go to **Providers** in the sidebar. You can add a new provider with their photo, bio, specialty, rating and tier, or click an existing one to edit. Toggle **Active** to show or hide them on the site.",
     'testimonial':      "Click **Testimonials** in the sidebar. Add or edit client quotes, their name, avatar URL, and star rating. Inactive testimonials are hidden from the homepage.",
     'faq':              "Go to **FAQs** in the sidebar. Each FAQ has a question and answer. Toggle **Active** to control which ones appear on the site.",
     'site setting':     "Click **Settings** in the sidebar. You can update the site name, tagline, about text, contact info, social links, and logo URL.",
     'logo':             "In **Settings**, paste the URL of your new logo into the **Logo URL** field and click Save. Leave it blank to use the default.",
-    'how do i change':  "Navigate to the relevant section in the sidebar (Services, Experts, Testimonials, FAQs, or Settings), edit the fields you need, and click **Save**.",
+    'how do i change':  "Navigate to the relevant section in the sidebar (Services, Providers, Testimonials, FAQs, or Settings), edit the fields you need, and click **Save**.",
     'delete':           "Find the item in its section, click **Edit**, then scroll to the bottom and click **Delete**. This cannot be undone.",
     'publish':          "All changes are saved to your browser's localStorage and go live on the site immediately — no extra publish step needed.",
   };
@@ -1045,7 +1045,7 @@
   let open = false;
   let idx  = 0;
   const DEFAULT = [
-    "Great question! The CMS lets you manage Services, Experts, Testimonials, FAQs and Site Settings from the sidebar. Which section can I help you with?",
+    "Great question! The CMS lets you manage Services, Providers, Testimonials, FAQs and Site Settings from the sidebar. Which section can I help you with?",
     "You can update any content by clicking the relevant section in the left sidebar. Would you like step-by-step instructions?",
     "All your changes save instantly to localStorage and reflect on the live site. Is there a specific section you're working on?",
   ];
